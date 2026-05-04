@@ -10,7 +10,7 @@
     "extra": {
       "eas": {
         "projectId": "dd35e184-c545-49be-853d-cf7223e7be47",
-        "owner": "komalsoftiatric"
+        "owner": "JohnStack44"
       },
       "note": "Replace YOUR_PROJECT_ID with actual EAS project ID from https://expo.dev",
       "pushNotifications": "Push notifications do NOT work in Expo Go. Use 'npx expo run:android' or 'npx expo run:ios' or EAS build for device testing"
