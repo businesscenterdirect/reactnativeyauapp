@@ -73,7 +73,8 @@ export const sendReply = async (postId: string, userId: string, userName: string
         adminUnreadCount: increment(1),
         lastActivity: serverTimestamp(),
         lastMessageId: newReplyRef.id,
-        lastMessage: content
+        lastMessage: content,
+        lastSenderId: userId
       });
     } else {
       // Admin replied: increase user's unread counter and clear admin's counter

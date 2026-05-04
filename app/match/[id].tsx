@@ -13,6 +13,8 @@ import {
   ImageBackground,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 import { useScheduleStore } from '../../src/store/useScheduleStore';
 import { Schedule } from '../../src/services/schedule';
 
@@ -23,6 +25,13 @@ export default function MatchDetailScreen() {
   const schedules = useScheduleStore((state: any) => state.schedules);
   const [match, setMatch] = useState<Schedule | null>(null);
   const [loading, setLoading] = useState(true);
+  const [region, setRegion] = useState({
+    latitude: 37.0902,
+    longitude: -95.7129,
+    latitudeDelta: 50,
+    longitudeDelta: 50,
+  });
+  const [markerCoord, setMarkerCoord] = useState<{latitude: number, longitude: number} | null>(null);
 
   useEffect(() => {
     const found = schedules.find((s: Schedule) => s.id === id);
@@ -31,6 +40,39 @@ export default function MatchDetailScreen() {
     }
     setLoading(false);
   }, [id, schedules]);
+
+  useEffect(() => {
+    const geocode = async () => {
+      if (match?.location) {
+        try {
+          const results = await Location.geocodeAsync(match.location);
+          if (results.length > 0) {
+            const { latitude, longitude } = results[0];
+            setRegion({
+              latitude,
+              longitude,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+            });
+            setMarkerCoord({ latitude, longitude });
+          } else {
+            // Default USA view if no results
+            setRegion({
+              latitude: 37.0902,
+              longitude: -95.7129,
+              latitudeDelta: 50,
+              longitudeDelta: 50,
+            });
+            setMarkerCoord(null);
+          }
+        } catch (err) {
+          console.warn('Geocoding failed:', err);
+          setMarkerCoord(null);
+        }
+      }
+    };
+    geocode();
+  }, [match?.location]);
 
   if (loading) {
     return (
@@ -192,10 +234,18 @@ export default function MatchDetailScreen() {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Location Details</Text>
           
-          {/* Map Placeholder */}
-          <View style={styles.mapPlaceholder}>
-            <MaterialIcons name="map" size={40} color="#94A3B8" />
-            <Text style={styles.mapText}>Location Map</Text>
+          {/* Map View */}
+          <View style={styles.mapContainer}>
+            <MapView 
+              style={styles.map}
+              region={region}
+              scrollEnabled={true}
+              zoomEnabled={true}
+            >
+              {markerCoord && (
+                <Marker coordinate={markerCoord} title={match.location} />
+              )}
+            </MapView>
           </View>
 
           <View style={styles.listContainer}>
@@ -402,15 +452,17 @@ const styles = StyleSheet.create({
   },
 
   // Map
-  mapPlaceholder: {
-    height: 180,
+  mapContainer: {
+    height: 220,
     backgroundColor: '#F1F5F9',
     borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: 'hidden',
     marginBottom: 15,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
   mapText: {
     marginTop: 10,

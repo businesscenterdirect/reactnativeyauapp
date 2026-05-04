@@ -151,7 +151,8 @@ const Messaging: React.FC = () => {
         replyCount: 0,
         unreadCount: 1,
         adminUnreadCount: 0,
-        lastActivity: serverTimestamp()
+        lastActivity: serverTimestamp(),
+        lastSenderId: 'admin'
       });
       const tokens = await fetchTokensForTargetGroups(targetGroups);
       if (tokens.length > 0) {
@@ -169,7 +170,7 @@ const Messaging: React.FC = () => {
     if (!replyText.trim() || !selectedPost || sendingReply) return;
     setSendingReply(true);
     try {
-      await addDoc(collection(db, 'admin_posts', selectedPost.id, 'replies'), {
+      const newReplyRef = await addDoc(collection(db, 'admin_posts', selectedPost.id, 'replies'), {
         userId: 'admin',
         userName: 'YAU Admin',
         userRole: 'admin',
@@ -180,7 +181,10 @@ const Messaging: React.FC = () => {
       await updateDoc(postRef, {
         unreadCount: increment(1),
         adminUnreadCount: 0,
-        lastActivity: serverTimestamp()
+        lastActivity: serverTimestamp(),
+        lastMessageId: newReplyRef.id,
+        lastMessage: replyText.trim(),
+        lastSenderId: 'admin'
       });
       if (selectedPost.targetGroups) {
         const tokens = await fetchTokensForTargetGroups(selectedPost.targetGroups);

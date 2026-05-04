@@ -4,6 +4,7 @@ import { Tabs, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
+import { useMessageStore } from '../../src/store/useMessageStore';
 
 export default function TabLayout() {
   const { user, loading } = useUser();
@@ -13,6 +14,7 @@ export default function TabLayout() {
   // and leaves a ghost screen from the previous session in the nav stack.
   const hasRedirected = useRef(false);
   const insets = useSafeAreaInsets();
+  const totalUnread = useMessageStore((state: any) => state.totalUnread);
 
   // ── Always reset the redirect guard when this layout mounts ─────────────
   useEffect(() => {
@@ -89,6 +91,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons name={focused ? 'chat-bubble' : 'chat-bubble-outline'} size={focused ? 26 : 24} color={color} />
           ),
+          tabBarBadge: totalUnread > 0 ? totalUnread : undefined,
+          tabBarBadgeStyle: { 
+            backgroundColor: '#E31B23', 
+            color: '#FFFFFF',
+            fontSize: 10,
+            fontWeight: '800',
+          },
         }}
       />
       <Tabs.Screen

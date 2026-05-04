@@ -20,6 +20,7 @@ interface MessageGroup {
   senderId?: string;
   type?: string;
   unreadCount?: number; // Calculated per-user
+  lastSenderId?: string;
 }
 
 interface MessageState {
@@ -29,6 +30,7 @@ interface MessageState {
   error: string | null;
   initialized: boolean;
   totalUnread: number;
+  currentUserId: string | null;
   
   // Actions
   initSync: (userStudents: any[], userId: string) => () => void;
@@ -51,6 +53,7 @@ export const useMessageStore = create<MessageState>((set, get) => ({
   error: null,
   initialized: false,
   totalUnread: 0,
+  currentUserId: null,
 
   initSync: (userStudents, userId) => {
     if (!userId) {
@@ -59,6 +62,7 @@ export const useMessageStore = create<MessageState>((set, get) => ({
     }
 
     console.log('[Message Store] Initializing sync for user:', userId);
+    set({ currentUserId: userId });
 
     // 1. Listen to User Read States
     const readStatesRef = collection(db, 'users', userId, 'messageReads');
@@ -125,7 +129,13 @@ export const useMessageStore = create<MessageState>((set, get) => ({
       const currentLastId = group.lastMessageId || group.id;
 
       let count = 0;
-      if (!readState) {
+      const currentUserId = get().currentUserId;
+      const isLastSender = currentUserId && group.lastSenderId === currentUserId;
+
+      if (isLastSender) {
+        // Current user sent the last message, so it's not unread for them
+        count = 0;
+      } else if (!readState) {
         // Never opened: always unread (1)
         count = 1;
       } else if (lastSeenId !== currentLastId) {
@@ -136,7 +146,8 @@ export const useMessageStore = create<MessageState>((set, get) => ({
       return { ...group, unreadCount: count };
     });
 
-    set({ groups: updatedGroups, totalUnread: updatedGroups.reduce((acc, g) => acc + (g.unreadCount || 0), 0) });
+    const total = updatedGroups.reduce((acc, g) => acc + (g.unreadCount || 0), 0);
+    set({ groups: updatedGroups, totalUnread: total });
   },
 
   markAsRead: async (userId, groupId, lastMessageId) => {
