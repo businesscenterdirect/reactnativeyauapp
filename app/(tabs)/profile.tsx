@@ -107,8 +107,13 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.headerTitle}>PROFILE</Text>
+          <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>PROFILE</Text>
+          </View>
+          <View style={styles.rightPlaceholder} />
         </View>
 
         <View style={styles.userCard}>
@@ -242,9 +247,12 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FFFFFF' },
   header: { paddingBottom: 40, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 30 },
-  logo: { width: 32, height: 32 },
-  headerTitle: { color: '#FFF', fontSize: 13, fontWeight: '900', letterSpacing: 1.5 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 25 },
+  logoContainer: { flex: 1, alignItems: 'flex-start' },
+  logo: { width: 40, height: 40 },
+  titleContainer: { flex: 2, alignItems: 'center' },
+  rightPlaceholder: { flex: 1 },
+  headerTitle: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
   userCard: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 25, gap: 15 },
   avatar: { width: 60, height: 60, borderRadius: 30, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: 'rgba(255,255,255,0.2)' },
   avatarText: { color: '#FFF', fontSize: 20, fontWeight: '900' },

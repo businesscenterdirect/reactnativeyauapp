@@ -64,7 +64,7 @@ const MessageItem = React.memo(({
         </View>
 
         <Text style={[styles.messagePreview, showBadge && styles.unreadPreview]} numberOfLines={1}>
-          {item.senderName ? `${item.senderName}: ` : ''}{item.lastMessage || item.description || item.message || 'No preview available'}
+          {item.lastMessage || item.description || item.message || 'No preview available'}
         </Text>
       </View>
     </TouchableOpacity>
@@ -108,16 +108,62 @@ export default function MessagesScreen() {
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
 
-  const displayedMessages = messages;
+  const [activeTab, setActiveTab] = useState<'All Messages' | 'From Admin' | 'From Coaches'>('All Messages');
+
+  const displayedMessages = messages.filter((m: any) => {
+    if (activeTab === 'All Messages') return true;
+    if (activeTab === 'From Coaches') return m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach';
+    if (activeTab === 'From Admin') {
+      const role = m.role || m.senderRole || m.type || 'admin';
+      return role === 'admin';
+    }
+    return true;
+  });
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.headerTitle}>Messages</Text>
+          <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>MESSAGES</Text>
+          </View>
+          <View style={styles.rightPlaceholder} />
         </View>
         <Text style={styles.headerSubtitle}>Stay up to date with the latest from your coach and YAU</Text>
+        
+        <View style={styles.tabsRow}>
+          {(['All Messages', 'From Admin', 'From Coaches'] as const).map((tab) => {
+            const pool = tab === 'All Messages'
+              ? messages
+              : tab === 'From Coaches'
+              ? messages.filter((m: any) => m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach')
+              : messages.filter((m: any) => {
+                  const role = m.role || m.senderRole || m.type || 'admin';
+                  return role === 'admin';
+                });
+            const count = (pool as any[]).reduce((acc: number, m: any) => acc + (m.unreadCount || 0), 0);
+
+            return (
+              <TouchableOpacity
+                key={tab}
+                onPress={() => setActiveTab(tab)}
+                style={[styles.tab, activeTab === tab && styles.tabActive]}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                  <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>{tab}</Text>
+                  {count > 0 && (
+                    <View style={styles.tabBadge}>
+                      <Text style={styles.tabBadgeText}>{count}</Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </LinearGradient>
 
       {loading ? (
@@ -153,20 +199,35 @@ export default function MessagesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FFFFFF' },
   header: { paddingBottom: 0 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 10 },
-  logo: { width: 32, height: 32 },
-  headerTitle: { color: '#FFF', fontSize: 24, fontWeight: '900' },
-  headerSubtitle: { color: 'rgba(255,255,255,0.8)', fontSize: 13, paddingHorizontal: 20, marginBottom: 20, lineHeight: 18 },
-  tabsRow: { flexDirection: 'row', paddingHorizontal: 10 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 10 },
+  logoContainer: { flex: 1, alignItems: 'flex-start' },
+  logo: { width: 40, height: 40 },
+  titleContainer: { flex: 2, alignItems: 'center' },
+  rightPlaceholder: { flex: 1 },
+  headerTitle: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
+  headerSubtitle: { color: '#E2E8F0', fontSize: 13, paddingHorizontal: 20, marginBottom: 15, fontWeight: '400' },
+  tabsRow: { flexDirection: 'row', paddingHorizontal: 0, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.1)' },
   tab: {
+    flex: 1,
     paddingVertical: 12,
-    paddingHorizontal: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderBottomWidth: 3,
     borderBottomColor: 'transparent'
   },
   tabActive: { borderBottomColor: '#E31B23' },
-  tabText: { color: 'rgba(255,255,255,0.6)', fontSize: 13, fontWeight: '700' },
-  tabTextActive: { color: '#FFF' },
+  tabText: { color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '700', textAlign: 'center' },
+  tabTextActive: { color: '#FFF', fontWeight: '900' },
+  tabBadge: {
+    backgroundColor: '#E31B23',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    minWidth: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabBadgeText: { color: '#FFF', fontSize: 10, fontWeight: '900' },
   listContent: { paddingBottom: 100 },
   messageItem: {
     flexDirection: 'row',
@@ -177,20 +238,22 @@ const styles = StyleSheet.create({
   },
   avatarContainer: { marginRight: 16 },
   avatarBg: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#EFF6FF',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F8FAFC',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0'
   },
-  avatarLogo: { width: 24, height: 24 },
+  avatarLogo: { width: 28, height: 28 },
   messageContent: { flex: 1 },
   messageHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
 
-  messageTime: { fontSize: 12, color: '#94A3B8', fontWeight: '600' },
+  messageTime: { fontSize: 11, color: '#94A3B8', fontWeight: '700', marginBottom: 2 },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 },
-  messageTitle: { fontSize: 15, fontWeight: '800', color: '#1E293B', flex: 1, marginRight: 10 },
+  messageTitle: { fontSize: 16, fontWeight: '900', color: '#1E293B', flex: 1, marginRight: 10, letterSpacing: -0.2 },
   unreadBadge: {
     width: 20,
     height: 20,
@@ -200,11 +263,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   unreadCount: { color: '#FFF', fontSize: 10, fontWeight: '900' },
-  messagePreview: { fontSize: 13, color: '#64748B', lineHeight: 18 },
+  messagePreview: { fontSize: 13, color: '#64748B', fontWeight: '500' },
   unreadMessageItem: {
     backgroundColor: '#F0F9FF',
     borderLeftWidth: 4,
-    borderLeftColor: '#0047AB',
+    borderLeftColor: '#E31B23', // red border to match dot
   },
   unreadDot: {
     position: 'absolute',
@@ -213,16 +276,16 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#0047AB',
+    backgroundColor: '#E31B23', // Red dot instead of blue
     borderWidth: 2,
     borderColor: '#FFF',
   },
   unreadTextStrong: {
     fontWeight: '900',
-    color: '#0047AB',
+    color: '#000000', // Black for unread
   },
   unreadPreview: {
-    color: '#1E293B',
+    color: '#000000', // Black for unread
     fontWeight: '700',
   },
   loading: { flex: 1, justifyContent: 'center' },

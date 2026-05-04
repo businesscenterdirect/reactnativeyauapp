@@ -8,15 +8,23 @@ import { useUser } from '../../src/context/UserContext';
 export default function TabLayout() {
   const { user, loading } = useUser();
   const router = useRouter();
+  // Reset this ref on every mount so re-login works correctly after logout.
+  // If it is not reset, the guard fires 'return' immediately on second mount
+  // and leaves a ghost screen from the previous session in the nav stack.
   const hasRedirected = useRef(false);
   const insets = useSafeAreaInsets();
 
+  // ── Always reset the redirect guard when this layout mounts ─────────────
   useEffect(() => {
-    // Navigation guard: only run after loading completes to prevent unmatched route errors
+    hasRedirected.current = false;
+  }, []);
+
+  // ── Navigation guard ────────────────────────────────────────────────────
+  useEffect(() => {
     if (loading) return;
     if (hasRedirected.current) return;
 
-    // If no user is logged in, send to login screen
+    // No user → go to login
     if (!user) {
       if (__DEV__) console.log('[TabLayout] No user, redirecting to login');
       hasRedirected.current = true;
@@ -24,10 +32,9 @@ export default function TabLayout() {
       return;
     }
 
-    // If user is a parent (default) but has no students, they might need to complete registration
-    const isCoach = user?.role === 'coach';
-    const hasStudents = user.students && user.students.length > 0;
-
+    // Parent with no students → complete registration
+    const isCoach = user.role === 'coach';
+    const hasStudents = Array.isArray(user.students) && user.students.length > 0;
     if (!isCoach && !hasStudents) {
       if (__DEV__) console.log('[TabLayout] Parent with no students, redirecting to register');
       hasRedirected.current = true;
@@ -45,7 +52,7 @@ export default function TabLayout() {
 
   const isCoach = user?.role === 'coach';
   if (!user || (!isCoach && (!user.students || user.students.length === 0))) {
-    return null; // Redirecting in useEffect
+    return null; // Redirecting in useEffect above
   }
 
   return (
@@ -59,7 +66,7 @@ export default function TabLayout() {
         paddingTop: 8,
         paddingBottom: 8 + insets.bottom,
         height: 64 + insets.bottom,
-        elevation: 0,
+        elevation: 8, // Increased elevation to ensure it sits above content on Android
         shadowColor: '#000',
         shadowOpacity: 0.05,
         shadowRadius: 10,

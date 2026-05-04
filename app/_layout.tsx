@@ -41,8 +41,14 @@ export default function RootLayout() {
             <Stack.Screen 
               name="messages/[id]" 
               options={{ 
-                presentation: 'modal',
+                // Use 'card' instead of 'modal' — modal presentation on iOS
+                // can leave a ghost (transparent) screen in the stack when
+                // the user swipe-dismisses instead of using the back button.
+                // That ghost screen sits on top of the tab navigator and
+                // intercepts all touches, making the app appear completely frozen.
+                presentation: 'card',
                 headerShown: false,
+                gestureEnabled: true,
                 title: 'Message Details'
               }} 
             />

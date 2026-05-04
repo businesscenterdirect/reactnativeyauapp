@@ -115,8 +115,13 @@ export default function StandingsScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.headerTitle}>Standings</Text>
+          <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>STANDINGS</Text>
+          </View>
+          <View style={styles.rightPlaceholder} />
         </View>
 
         <View style={styles.tabsRow}>
@@ -215,9 +220,12 @@ export default function StandingsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FFFFFF' },
   header: { paddingBottom: 0 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 25 },
-  logo: { width: 35, height: 35 },
-  headerTitle: { color: '#FFF', fontSize: 22, fontWeight: '900' },
+  headerTop: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 25 },
+  logoContainer: { flex: 1, alignItems: 'flex-start' },
+  logo: { width: 40, height: 40 },
+  titleContainer: { flex: 2, alignItems: 'center' },
+  rightPlaceholder: { flex: 1 },
+  headerTitle: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
   tabsRow: { flexDirection: 'row', paddingHorizontal: 20, justifyContent: 'space-between' },
   tab: { paddingVertical: 12, alignItems: 'center', flex: 1, position: 'relative' },
   tabUnderline: { position: 'absolute', bottom: 0, width: '100%', height: 3, backgroundColor: '#E31B23' },

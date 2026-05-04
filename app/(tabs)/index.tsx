@@ -66,33 +66,29 @@ export default function HomeScreen() {
 
   const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
-  const upcomingSchedules = schedules
-    .filter((s: Schedule) => {
-      // 1. Basic upcoming filter (Strict: Exclude past matches)
-      if (s.date < todayStr) return false;
+  // Same filter logic as the schedule screen — checks grade_band, all students, school & grade
+  const filteredSchedules = schedules.filter((s: Schedule) => {
+    if (!user?.students || user.students.length === 0) return true;
 
-      // 2. Strict Student Filter (School, Sport, Grade Band)
-      if (!user?.students?.[0]) return true; // Show all for guests/missing student data
-
-      const student = user.students[0];
-
-      // School Match
+    return user.students.some((student: any) => {
+      // School / Team Name Match
       const schoolMatch = !student.school_name ||
-        s.location?.toLowerCase().includes(student.school_name.toLowerCase()) ||
         s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase());
+        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+        s.location?.toLowerCase().includes(student.school_name.toLowerCase());
 
-      // Sport Match
-      const sportMatch = !student.sport ||
-        s.sport?.toLowerCase() === student.sport.toLowerCase();
-
-      // Grade Match (Check ageGroups array or ageGroup string)
+      // Grade / Grade Band Match — uses grade_band direct field (same as schedule screen)
       const gradeMatch = !student.grade ||
+        (s.grade_band && s.grade_band === student.grade) ||
         s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
         (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
 
-      return schoolMatch && sportMatch && gradeMatch;
-    })
+      return schoolMatch && gradeMatch;
+    });
+  });
+
+  const upcomingSchedules = filteredSchedules
+    .filter((s: Schedule) => s.date > todayStr)
     .sort((a: Schedule, b: Schedule) => a.date.localeCompare(b.date))
     .slice(0, 3);
 
@@ -100,8 +96,13 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.headerBrand}>YOUTH ATHLETE UNIVERSITY</Text>
+          <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerBrand}>YAU APP</Text>
+          </View>
+          <View style={styles.rightPlaceholder} />
         </View>
         <View style={styles.welcomeSection}>
           <Text style={styles.greetingText}>Good Evening 👋</Text>
@@ -201,9 +202,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFC' },
   header: { paddingHorizontal: 20, paddingBottom: 35 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 20 },
-  logo: { width: 35, height: 35 },
-  headerBrand: { color: '#FFF', fontSize: 20, fontWeight: '800', letterSpacing: 1 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  logoContainer: { flex: 1, alignItems: 'flex-start' },
+  logo: { width: 40, height: 40 },
+  titleContainer: { flex: 2, alignItems: 'center' },
+  rightPlaceholder: { flex: 1 },
+  headerBrand: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
   welcomeSection: { marginTop: 10 },
   greetingText: { color: '#FFF', fontSize: 16, opacity: 0.9 },
   userNameText: { color: '#FFF', fontSize: 28, fontWeight: '900', marginTop: 4 },

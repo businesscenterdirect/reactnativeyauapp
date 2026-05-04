@@ -57,27 +57,24 @@ export default function ScheduleScreen() {
   const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
   const filteredSchedules = schedules.filter((s: Schedule) => {
-    // 1. Basic Student Filter (School, Sport, Grade Band)
-    if (!user?.students?.[0]) return true;
+    // 1. Basic Student Filter (School, Grade Band)
+    if (!user?.students || user.students.length === 0) return true;
 
-    const student = user.students[0];
+    return user.students.some(student => {
+      // School / Team Name Match
+      const schoolMatch = !student.school_name ||
+        s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+        s.location?.toLowerCase().includes(student.school_name.toLowerCase());
 
-    // School Match
-    const schoolMatch = !student.school_name ||
-      s.location?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-      s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-      s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase());
+      // Grade / Grade Band Match
+      const gradeMatch = !student.grade ||
+        (s.grade_band && s.grade_band === student.grade) ||
+        s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
+        (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
 
-    // Sport Match
-    const sportMatch = !student.sport ||
-      s.sport?.toLowerCase() === student.sport.toLowerCase();
-
-    // Grade Match (Check ageGroups array or ageGroup string)
-    const gradeMatch = !student.grade ||
-      s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
-      (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
-
-    return schoolMatch && sportMatch && gradeMatch;
+      return schoolMatch && gradeMatch;
+    });
   });
 
   const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date > todayStr);
@@ -110,8 +107,13 @@ export default function ScheduleScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.headerTitle}>GAME SCHEDULE</Text>
+          <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>GAME SCHEDULE</Text>
+          </View>
+          <View style={styles.rightPlaceholder} />
         </View>
 
         {/* Custom Tabs */}
@@ -207,8 +209,11 @@ export default function ScheduleScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFC' },
   header: { paddingBottom: 25, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, marginBottom: 25 },
-  logo: { width: 35, height: 35 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 25 },
+  logoContainer: { flex: 1, alignItems: 'flex-start' },
+  logo: { width: 40, height: 40 },
+  titleContainer: { flex: 2, alignItems: 'center' },
+  rightPlaceholder: { flex: 1 },
   headerTitle: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
   filterBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center' },
   tabsRow: { flexDirection: 'row', paddingHorizontal: 20, marginTop: 10 },

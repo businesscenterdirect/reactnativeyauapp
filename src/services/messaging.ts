@@ -57,7 +57,7 @@ export const sendReply = async (postId: string, userId: string, userName: string
     
     // Add reply to sub-collection
     const repliesRef = collection(db, "admin_posts", postId, "replies");
-    await addDoc(repliesRef, {
+    const newReplyRef = await addDoc(repliesRef, {
       userId,
       userName,
       userRole,
@@ -70,13 +70,19 @@ export const sendReply = async (postId: string, userId: string, userName: string
     if (userRole !== 'admin') {
       // User replied: increase admin's unread counter
       await updateDoc(postRef, {
-        adminUnreadCount: increment(1)
+        adminUnreadCount: increment(1),
+        lastActivity: serverTimestamp(),
+        lastMessageId: newReplyRef.id,
+        lastMessage: content
       });
     } else {
       // Admin replied: increase user's unread counter and clear admin's counter
       await updateDoc(postRef, {
         unreadCount: increment(1),
-        adminUnreadCount: 0
+        adminUnreadCount: 0,
+        lastActivity: serverTimestamp(),
+        lastMessageId: newReplyRef.id,
+        lastMessage: content
       });
     }
   } catch (error) {

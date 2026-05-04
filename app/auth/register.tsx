@@ -232,7 +232,7 @@ export default function RegisterScreen() {
         style={styles.gradientBg}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
+        <View style={styles.overlay} pointerEvents="none" />
         <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
           <Image source={require('../../assets/images/logo1.png')} style={styles.logoIcon} resizeMode="contain" />
           <Text style={styles.yauHeaderText}>YOUTH ATHLETE UNIVERSITY</Text>
@@ -570,7 +570,18 @@ const styles = StyleSheet.create({
   yauHeaderText: { color: '#FFF', fontSize: 14, fontWeight: '800', letterSpacing: 1.5 },
   mainTitle: { color: '#FFF', fontSize: 32, fontWeight: '900', marginTop: 12, textAlign: 'center' },
   subTitle: { color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 6, textAlign: 'center' },
-  cardContainer: { flex: 1, marginTop: height * 0.38, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: '#FFFFFF', elevation: 20, shadowColor: '#000', shadowOffset: { width: 0, height: -10 }, shadowOpacity: 0.1, shadowRadius: 20 },
+  cardContainer: { 
+    flex: 1, 
+    marginTop: height * 0.38, 
+    borderTopLeftRadius: 30, 
+    borderTopRightRadius: 30, 
+    backgroundColor: '#FFFFFF', 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: -10 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 20,
+    // Elevation removed to prevent blocking the tab bar on Android
+  },
   progressWrapper: { alignItems: 'center', marginTop: 20 },
   stepIndicator: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   stepCircle: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#FFFFFF', borderWidth: 2, borderColor: '#E5E7EB', justifyContent: 'center', alignItems: 'center' },

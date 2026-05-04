@@ -13,6 +13,7 @@ export interface Schedule {
   location: string;
   ageGroups?: string[]; // Array of grades (e.g., ["K", "1", "2"])
   ageGroup?: string; // Fallback string field
+  grade_band?: string;
   coachName?: string;
 }
 
@@ -35,6 +36,7 @@ export async function fetchSchedules(): Promise<Schedule[]> {
         location: data.location || '',
         ageGroups: data.ageGroups || [],
         ageGroup: data.ageGroup || '',
+        grade_band: data.grade_band || '',
         coachName: data.coachName
       });
     });
@@ -65,6 +67,7 @@ export function subscribeToSchedules(callback: (schedules: Schedule[]) => void):
           location: data.location || '',
           ageGroups: data.ageGroups || [],
           ageGroup: data.ageGroup || '',
+          grade_band: data.grade_band || '',
           coachName: data.coachName
         });
       });

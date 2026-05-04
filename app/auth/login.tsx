@@ -155,7 +155,7 @@ export default function LoginScreen() {
           await AsyncStorage.removeItem('@yau_remember_password');
         }
 
-        router.replace('/(tabs)/' as any);
+        router.replace('/(tabs)/messages' as any);
       } catch (apiError: any) {
         console.error('[Login] API Error:', apiError);
         Alert.alert('System Error', 'Unable to retrieve your profile. Please try again later.');
@@ -188,7 +188,8 @@ export default function LoginScreen() {
         style={styles.gradientBg}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
+        {/* Overlay — pointerEvents='none' ensures it NEVER blocks touch events */}
+        <View style={styles.overlay} pointerEvents="none" />
         <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
           <Image
             source={require('../../assets/images/logo1.png')}
@@ -374,7 +375,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
-    elevation: 20,
+    // NOTE: elevation intentionally removed — a high elevation value on Android
+    // causes this container to render above the tab bar (elevation:0) and block
+    // all tab bar touch events even after navigation has moved away from login.
   },
   scrollContent: {
     paddingHorizontal: 24,

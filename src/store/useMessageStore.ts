@@ -118,15 +118,21 @@ export const useMessageStore = create<MessageState>((set, get) => ({
 
   calculateUnread: () => {
     const { groups, userReadStates } = get();
-    // Simplified: No complex filtering during debug
     const updatedGroups = groups.map(group => {
       const readState = userReadStates[group.id];
       const lastSeenId = readState?.lastSeenMessageId;
+      // Use lastMessageId if present, otherwise fall back to the group's own id (the broadcast itself)
       const currentLastId = group.lastMessageId || group.id;
-      
-      const isUnread = currentLastId && lastSeenId !== currentLastId;
-      const count = isUnread ? 1 : 0;
-      
+
+      let count = 0;
+      if (!readState) {
+        // Never opened: always unread (1)
+        count = 1;
+      } else if (lastSeenId !== currentLastId) {
+        // Has been opened before, but there's a new message since last seen
+        count = 1;
+      }
+
       return { ...group, unreadCount: count };
     });
 
