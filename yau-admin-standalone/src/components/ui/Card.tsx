@@ -8,6 +8,7 @@ interface CardProps {
   footer?: React.ReactNode;
   headerAction?: React.ReactNode;
   contentClassName?: string;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -18,9 +19,13 @@ export const Card: React.FC<CardProps> = ({
   footer,
   headerAction,
   contentClassName = 'p-6',
+  onClick,
 }) => {
   return (
-    <div className={`bg-white dark:bg-black border border-gray-100 dark:border-white/10 rounded-2xl shadow-sm transition-colors duration-300 ${!className.includes('overflow-') ? 'overflow-hidden' : ''} ${className}`}>
+    <div 
+      className={`bg-white dark:bg-black border border-gray-100 dark:border-white/10 rounded-2xl shadow-sm transition-colors duration-300 ${!className.includes('overflow-') ? 'overflow-hidden' : ''} ${className}`}
+      onClick={onClick}
+    >
       {(title || headerAction) && (
         <div className="px-6 py-4 border-b border-gray-50 dark:border-white/10 flex items-center justify-between">
           <div>

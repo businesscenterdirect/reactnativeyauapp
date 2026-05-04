@@ -1,12 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
   FlatList,
   Image,
   ImageBackground,
+  Keyboard,
   KeyboardAvoidingView,
   Linking,
   Modal,
@@ -33,13 +34,7 @@ import { Member } from '../../src/types';
 
 const { width, height } = Dimensions.get('window');
 
-// ─── Grade band → Band key ────────────────────────────────────────────────────
-const GRADE_BAND_TO_KEY: Record<string, string> = {
-  'K / 1st Grade': 'Band 1',
-  '2nd / 3rd Grade': 'Band 2',
-  '4th / 5th Grade': 'Band 3',
-  'Middle School': 'Band 4',
-};
+// Grade bands and sports are imported from services/registration.ts
 
 // ─── Phone masking ─────────────────────────────────────────────────────────────
 function formatPhoneDisplay(digits: string): string {
@@ -68,6 +63,14 @@ function emptyStudent(): StudentForm {
 export default function RegisterScreen() {
   const { setUser } = useUser();
   const insets = useSafeAreaInsets();
+
+  // Scroll + keyboard refs
+  const scrollRef = useRef<ScrollView>(null);
+  const lastNameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
+  const phoneRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -98,6 +101,15 @@ export default function RegisterScreen() {
   const [schools, setSchools] = useState<School[]>([]);
   const [schoolsLoading, setSchoolsLoading] = useState(true);
   const [students, setStudents] = useState<StudentForm[]>([emptyStudent()]);
+
+  const goToStep2 = () => {
+    Keyboard.dismiss();
+    setStep(2);
+    // Scroll to top of form when moving to step 2
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
+    }, 100);
+  };
 
   useEffect(() => {
     const unsub = subscribeToSchools((s) => { setSchools(s); setSchoolsLoading(false); });
@@ -143,7 +155,7 @@ export default function RegisterScreen() {
           gradeBand: s.gradeBand,
           schoolName: s.schoolName,
           sports: s.sports,
-          ageGroup: GRADE_BAND_TO_KEY[s.gradeBand] || 'Band 1',
+          ageGroup: GRADE_BANDS.find(g => g.value === s.gradeBand)?.band || 'Band 1',
         })),
         expoPushTokens: pushToken ? [pushToken] : undefined,
       });
@@ -222,14 +234,17 @@ export default function RegisterScreen() {
       >
         <View style={styles.overlay} />
         <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
-          <Image source={require('../../assets/favicon.png')} style={styles.logoIcon} resizeMode="contain" />
+          <Image source={require('../../assets/images/logo1.png')} style={styles.logoIcon} resizeMode="contain" />
           <Text style={styles.yauHeaderText}>YOUTH ATHLETE UNIVERSITY</Text>
           <Text style={styles.mainTitle}>Create Your Account</Text>
           <Text style={styles.subTitle}>Let’s get started with your information</Text>
         </View>
       </ImageBackground>
 
-      <View style={styles.cardContainer}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={styles.cardContainer}
+      >
         {/* Progress Indicator */}
         <View style={styles.progressWrapper}>
           <View style={styles.stepIndicator}>
@@ -244,8 +259,8 @@ export default function RegisterScreen() {
           <Text style={styles.stepText}>STEP {step} OF 2</Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView ref={scrollRef} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+          <View>
             <Text style={styles.sectionTitle}>{step === 1 ? 'Parent Information' : 'Child Information'}</Text>
 
             {step === 1 ? (
@@ -253,16 +268,53 @@ export default function RegisterScreen() {
                 <View style={styles.row}>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.inputLabel}>First Name</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.input} placeholder="Niki" value={parentFirstName} onChangeText={setParentFirstName} /></View>
+                    <View style={styles.inputWrapper}>
+                      <TextInput 
+                        style={styles.input} 
+                        placeholder="First Name" 
+                        placeholderTextColor="#9CA3AF"
+                        value={parentFirstName} 
+                        onChangeText={setParentFirstName}
+                        returnKeyType="next"
+                        onSubmitEditing={() => lastNameRef.current?.focus()}
+                        blurOnSubmit={false}
+                      />
+                    </View>
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.inputLabel}>Last Name</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.input} placeholder="Zefanya" value={parentLastName} onChangeText={setParentLastName} /></View>
+                    <View style={styles.inputWrapper}>
+                      <TextInput 
+                        ref={lastNameRef}
+                        style={styles.input} 
+                        placeholder="Last Name" 
+                        placeholderTextColor="#9CA3AF"
+                        value={parentLastName} 
+                        onChangeText={setParentLastName}
+                        returnKeyType="next"
+                        onSubmitEditing={() => emailRef.current?.focus()}
+                        blurOnSubmit={false}
+                      />
+                    </View>
                   </View>
                 </View>
 
                 <Text style={styles.inputLabel}>Email</Text>
-                <View style={styles.inputWrapper}><TextInput style={styles.input} placeholder="zefanya@niki.com" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" /></View>
+                <View style={styles.inputWrapper}>
+                  <TextInput 
+                    ref={emailRef}
+                    style={styles.input} 
+                    placeholder="Email" 
+                    placeholderTextColor="#9CA3AF"
+                    value={email} 
+                    onChangeText={setEmail} 
+                    keyboardType="email-address" 
+                    autoCapitalize="none" 
+                    returnKeyType="next"
+                    onSubmitEditing={() => phoneRef.current?.focus()}
+                    blurOnSubmit={false}
+                  />
+                </View>
 
                 <Text style={styles.inputLabel}>Phone Number</Text>
                 <View style={styles.inputWrapper}>
@@ -275,12 +327,34 @@ export default function RegisterScreen() {
                     <MaterialIcons name="keyboard-arrow-down" size={18} color="#6B7280" style={{ marginLeft: 2 }} />
                   </TouchableOpacity>
                   <View style={styles.phoneDivider} />
-                  <TextInput style={styles.input} placeholder="(333) 123 - 4567" value={formatPhoneDisplay(phoneDigits)} onChangeText={handlePhoneChange} keyboardType="phone-pad" />
+                  <TextInput 
+                    ref={phoneRef}
+                    style={styles.input} 
+                    placeholder="Phone Number" 
+                    placeholderTextColor="#9CA3AF"
+                    value={formatPhoneDisplay(phoneDigits)} 
+                    onChangeText={handlePhoneChange} 
+                    keyboardType="phone-pad" 
+                    returnKeyType="next"
+                    onSubmitEditing={() => passwordRef.current?.focus()}
+                    blurOnSubmit={false}
+                  />
                 </View>
 
                 <Text style={styles.inputLabel}>Create Password</Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput style={styles.input} placeholder="*******" secureTextEntry={!showPassword} value={password} onChangeText={setPassword} />
+                  <TextInput 
+                    ref={passwordRef}
+                    style={styles.input} 
+                    placeholder="Create Password" 
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry={!showPassword} 
+                    value={password} 
+                    onChangeText={setPassword} 
+                    returnKeyType="next"
+                    onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                    blurOnSubmit={false}
+                  />
                   <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeBtn}>
                     <MaterialIcons name={showPassword ? 'visibility' : 'visibility-off'} size={20} color="#9CA3AF" />
                   </TouchableOpacity>
@@ -291,7 +365,17 @@ export default function RegisterScreen() {
 
                 <Text style={styles.inputLabel}>Confirm Password</Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput style={styles.input} placeholder="*******" secureTextEntry={!showConfirmPassword} value={confirmPassword} onChangeText={setConfirmPassword} />
+                  <TextInput 
+                    ref={confirmPasswordRef}
+                    style={styles.input} 
+                    placeholder="Confirm Password" 
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry={!showConfirmPassword} 
+                    value={confirmPassword} 
+                    onChangeText={setConfirmPassword} 
+                    returnKeyType="done"
+                    onSubmitEditing={Keyboard.dismiss}
+                  />
                   <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeBtn}>
                     <MaterialIcons name={showConfirmPassword ? 'visibility' : 'visibility-off'} size={20} color="#9CA3AF" />
                   </TouchableOpacity>
@@ -302,7 +386,7 @@ export default function RegisterScreen() {
 
                 <TouchableOpacity
                   style={[styles.primaryBtn, !isStep1Valid() && styles.btnDisabled]}
-                  onPress={() => setStep(2)}
+                  onPress={goToStep2}
                   disabled={!isStep1Valid()}
                 >
                   <Text style={styles.primaryBtnText}>Continue</Text>
@@ -315,11 +399,27 @@ export default function RegisterScreen() {
                     <View style={styles.row}>
                       <View style={{ flex: 1 }}>
                         <Text style={styles.inputLabel}>Child First Name</Text>
-                        <View style={styles.inputWrapper}><TextInput style={styles.input} placeholder="Niki" value={student.firstName} onChangeText={v => updateStudent(idx, { firstName: v })} /></View>
+                        <View style={styles.inputWrapper}>
+                          <TextInput 
+                            style={styles.input} 
+                            placeholder="Child First Name" 
+                            placeholderTextColor="#9CA3AF"
+                            value={student.firstName} 
+                            onChangeText={v => updateStudent(idx, { firstName: v })} 
+                          />
+                        </View>
                       </View>
                       <View style={{ flex: 1 }}>
                         <Text style={styles.inputLabel}>Child Last Name</Text>
-                        <View style={styles.inputWrapper}><TextInput style={styles.input} placeholder="Zefanya" value={student.lastName} onChangeText={v => updateStudent(idx, { lastName: v })} /></View>
+                        <View style={styles.inputWrapper}>
+                          <TextInput 
+                            style={styles.input} 
+                            placeholder="Child Last Name" 
+                            placeholderTextColor="#9CA3AF"
+                            value={student.lastName} 
+                            onChangeText={v => updateStudent(idx, { lastName: v })} 
+                          />
+                        </View>
                       </View>
                     </View>
 
@@ -335,7 +435,7 @@ export default function RegisterScreen() {
                       <MaterialIcons name="keyboard-arrow-down" size={20} color="#9CA3AF" />
                     </TouchableOpacity>
 
-                    <Text style={styles.inputLabel}>Interested Sports (Select multiple)</Text>
+                    <Text style={styles.inputLabel}>Select one or multiple sports</Text>
                     <View style={styles.chipsRow}>
                       {SPORTS.map(sport => (
                         <TouchableOpacity
@@ -384,7 +484,7 @@ export default function RegisterScreen() {
 
                 <TouchableOpacity
                   style={[styles.primaryBtn, (!isStep2Valid() || loading) && styles.btnDisabled]}
-                  onPress={handleRegister}
+                  onPress={() => { Keyboard.dismiss(); handleRegister(); }}
                   disabled={!isStep2Valid() || loading}
                 >
                   {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryBtnText}>Create Account</Text>}
@@ -400,9 +500,9 @@ export default function RegisterScreen() {
               <Text style={styles.footerText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => router.push('/auth/login' as any)}><Text style={styles.loginLink}>Log In</Text></TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
+          </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
 
       {/* Re-use existing Modals (Grade, School) from legacy code */}
       <Modal visible={isGradeModalOpen} transparent animationType="slide">

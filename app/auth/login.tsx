@@ -35,6 +35,37 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const slides = [
+    {
+      title: 'WELCOME TO',
+      highlight: 'YAU',
+      subtitle: 'Log in or create an account to stay connected with your team.',
+    },
+    {
+      title: 'STAY',
+      highlight: 'UPDATED',
+      subtitle: 'Get real-time schedules, standings, and messages from your coaches.',
+    },
+    {
+      title: 'TRACK',
+      highlight: 'PROGRESS',
+      subtitle: 'Monitor your athlete\'s performance and growth throughout the season.',
+    },
+    {
+      title: 'JOIN THE',
+      highlight: 'COMMUNITY',
+      subtitle: 'Experience the premium youth sports platform designed for excellence.',
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const loadCredentials = async () => {
@@ -152,7 +183,6 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Stadium Background Mimic */}
       <ImageBackground
         source={require('../../assets/images/background.png')}
         style={styles.gradientBg}
@@ -161,29 +191,51 @@ export default function LoginScreen() {
         <View style={styles.overlay} />
         <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
           <Image
-            source={require('../../assets/favicon.png')}
+            source={require('../../assets/images/logo1.png')}
             style={styles.logoIcon}
             resizeMode="contain"
           />
           <Text style={styles.yauText}>YOUTH ATHLETE UNIVERSITY</Text>
+          
           <View style={styles.welcomeContainer}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Text style={styles.welcomeText}>WELCOME TO </Text>
-              <Text style={[styles.welcomeText, styles.yauRed]}>YAU</Text>
+            {slides.map((slide, index) => (
+              <View 
+                key={index} 
+                style={[
+                  styles.slideWrapper, 
+                  { display: activeSlide === index ? 'flex' : 'none' }
+                ]}
+              >
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <Text style={styles.welcomeText}>{slide.title} </Text>
+                  <Text style={[styles.welcomeText, styles.yauRed]}>{slide.highlight}</Text>
+                </View>
+                <Text style={styles.subTitleText}>{slide.subtitle}</Text>
+              </View>
+            ))}
+            
+            <View style={styles.pagination}>
+              {slides.map((_, i) => (
+                <View 
+                  key={i} 
+                  style={[styles.dot, activeSlide === i && styles.activeDot]} 
+                />
+              ))}
             </View>
-            <Text style={styles.subTitleText}>Log in or create an account to stay connected with your team.</Text>
           </View>
         </View>
       </ImageBackground>
 
-      <View style={styles.cardContainer}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={styles.cardContainer}
+      >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-            <View style={styles.formCard}>
+          <View style={styles.formCard}>
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Email</Text>
                 <View style={styles.inputWrapper}>
@@ -256,10 +308,9 @@ export default function LoginScreen() {
                   <Text style={styles.signupBtnText}>Sign Up</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          </KeyboardAvoidingView>
+          </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -329,6 +380,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 30,
     paddingBottom: 80,
+  },
+  slideWrapper: {
+    alignItems: 'center',
+    width: width - 60,
+  },
+  pagination: {
+    flexDirection: 'row',
+    marginTop: 20,
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+  activeDot: {
+    backgroundColor: '#E31B23',
+    width: 20,
   },
   formCard: {
     width: '100%',

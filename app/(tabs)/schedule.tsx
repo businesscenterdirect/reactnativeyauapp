@@ -1,6 +1,6 @@
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
-import { fetchSchedules, Schedule } from '../../src/services/schedule';
+import { Schedule } from '../../src/services/schedule';
 
 const SPORT_ICONS: Record<string, string> = {
   soccer: '⚽',
@@ -42,22 +42,46 @@ function formatSectionDate(dateStr: string) {
   return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
 }
 
+import { useRouter } from 'expo-router';
 import { useScheduleStore } from '../../src/store/useScheduleStore';
 
 export default function ScheduleScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
-  const schedules = useScheduleStore(state => state.schedules);
-  const loading = useScheduleStore(state => state.loading);
+  const schedules = useScheduleStore((state: any) => state.schedules);
+  const loading = useScheduleStore((state: any) => state.loading);
 
-  const today = new Date();
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
-  // Split real schedules into upcoming and past using string comparison
-  const realUpcoming = schedules.filter(s => s.date > todayStr);
-  const realPast = schedules.filter(s => s.date <= todayStr);
+  const filteredSchedules = schedules.filter((s: Schedule) => {
+    // 1. Basic Student Filter (School, Sport, Grade Band)
+    if (!user?.students?.[0]) return true;
+
+    const student = user.students[0];
+
+    // School Match
+    const schoolMatch = !student.school_name ||
+      s.location?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+      s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+      s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase());
+
+    // Sport Match
+    const sportMatch = !student.sport ||
+      s.sport?.toLowerCase() === student.sport.toLowerCase();
+
+    // Grade Match (Check ageGroups array or ageGroup string)
+    const gradeMatch = !student.grade ||
+      s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
+      (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
+
+    return schoolMatch && sportMatch && gradeMatch;
+  });
+
+  const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date > todayStr);
+  const realPast = filteredSchedules.filter((s: Schedule) => s.date <= todayStr);
 
   // Use real data
   const displayedItems = activeTab === 'upcoming' ? realUpcoming : realPast;
@@ -86,9 +110,8 @@ export default function ScheduleScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
+          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
           <Text style={styles.headerTitle}>GAME SCHEDULE</Text>
-          <TouchableOpacity style={styles.filterBtn}><MaterialIcons name="filter-list" size={20} color="#FFF" /></TouchableOpacity>
         </View>
 
         {/* Custom Tabs */}
@@ -123,8 +146,9 @@ export default function ScheduleScreen() {
           )}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <MaterialIcons name="event-busy" size={60} color="#E5E7EB" />
-              <Text style={styles.emptyText}>No {activeTab} games found</Text>
+              <MaterialIcons name="event-busy" size={80} color="#E2E8F0" />
+              <Text style={styles.emptyTitle}>NO {activeTab.toUpperCase()} GAMES</Text>
+              <Text style={styles.emptyText}>There are no {activeTab} matches scheduled for this group at the moment.</Text>
             </View>
           }
           renderItem={({ item }) => {
@@ -134,11 +158,14 @@ export default function ScheduleScreen() {
             const statusColor = isPast ? '#E31B23' : '#002C61';
 
             return (
-              <View style={[styles.gameCard, { borderColor: headerColor }]}>
+              <TouchableOpacity
+                style={[styles.gameCard, { borderColor: headerColor }]}
+                onPress={() => router.push({ pathname: '/match/[id]' as any, params: { id: item.id } })}
+              >
                 <View style={[styles.cardHeader, { backgroundColor: headerColor }]}>
                   <Text style={styles.cardHeaderDate}>{formatHeaderDate(item.date)}</Text>
                 </View>
-                
+
                 <View style={styles.cardBody}>
                   <Text style={styles.leagueName}>{item.sport}</Text>
                   <Text style={styles.locationSubtext}>{item.location}</Text>
@@ -168,7 +195,7 @@ export default function ScheduleScreen() {
                     </View>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           }}
         />
@@ -207,6 +234,7 @@ const styles = StyleSheet.create({
   statusLabel: { fontSize: 11, fontWeight: '800', marginBottom: 8, letterSpacing: 0.5 },
   scoreText: { fontSize: 32, fontWeight: '900', color: '#0F172A', letterSpacing: 5 },
   timeText: { fontSize: 18, fontWeight: '900', color: '#0F172A' },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 120 },
-  emptyText: { color: '#64748B', fontSize: 16, fontWeight: '700', marginTop: 15 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 120, paddingHorizontal: 40 },
+  emptyTitle: { fontSize: 18, fontWeight: '900', color: '#1E293B', marginTop: 20, marginBottom: 8 },
+  emptyText: { color: '#94A3B8', fontSize: 14, fontWeight: '600', textAlign: 'center', lineHeight: 20 },
 });

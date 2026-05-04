@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
-import { apiService } from '../services/api';
 import { registerForPushNotificationsAsync } from '../services/notifications';
+import Constants from 'expo-constants';
 import { Member } from '../types';
 
 interface UserContextType {
@@ -17,137 +17,140 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 const USER_STORAGE_KEY = '@yau_user_data';
-const AUTH_STATE_KEY = '@yau_auth_state';
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<Member | null>(null);
+  const [user, setUserState] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
-  const [storageAvailable, setStorageAvailable] = useState(Platform.OS !== 'web');
 
+  // Holds the active Firestore member listener so we can unsub on uid change / logout
+  const memberUnsubRef = useRef<(() => void) | null>(null);
+
+  // ── Attach a real-time Firestore listener for the given member document ID ────
+  const attachMemberListener = (memberId: string) => {
+    // Clean up any previous listener first
+    if (memberUnsubRef.current) {
+      memberUnsubRef.current();
+      memberUnsubRef.current = null;
+    }
+
+    const memberRef = doc(db, 'members', memberId);
+    const unsub = onSnapshot(
+      memberRef,
+      (snap) => {
+        if (snap.exists()) {
+          const freshUser: Member = { id: snap.id, ...(snap.data() as Omit<Member, 'id'>) };
+          setUserState(freshUser);
+          // Mirror to AsyncStorage so cold-start hydration has latest data
+          AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(freshUser)).catch(() => {});
+        } else {
+          // Document deleted — clear session
+          clearUser();
+        }
+      },
+      (err) => {
+        if (__DEV__) console.error('[UserContext] Member listener error:', err);
+      }
+    );
+
+    memberUnsubRef.current = unsub;
+  };
+
+  // ── Bootstrap: hydrate from cache, then let Firebase Auth drive state ─────────
   useEffect(() => {
-    loadUserData();
-    setupAuthListener();
+    let authUnsub: (() => void) | undefined;
+
+    const init = async () => {
+      // 1. Show cached user immediately to avoid blank screen on cold start
+      try {
+        const cached = await AsyncStorage.getItem(USER_STORAGE_KEY);
+        if (cached) {
+          const parsed: Member = JSON.parse(cached);
+          setUserState(parsed);
+          // If we have a cached id, attach the live Firestore listener right away
+          if (parsed.id) attachMemberListener(parsed.id);
+        }
+      } catch (e) {
+        if (__DEV__) console.error('[UserContext] Hydration error:', e);
+      }
+
+      // 2. Subscribe to Firebase Auth — source of truth for session validity
+      authUnsub = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (!firebaseUser) {
+          // Signed out — drop listener + clear state
+          if (memberUnsubRef.current) {
+            memberUnsubRef.current();
+            memberUnsubRef.current = null;
+          }
+          setUserState(null);
+          AsyncStorage.removeItem(USER_STORAGE_KEY).catch(() => {});
+        }
+        // When signed in: the member listener (attached above or via updateUser)
+        // already keeps state fresh — no manual fetch needed.
+        setLoading(false);
+      });
+    };
+
+    init();
+
+    return () => {
+      authUnsub?.();
+      if (memberUnsubRef.current) memberUnsubRef.current();
+    };
   }, []);
 
+  // ── Register push token whenever user logs in ─────────────────────────────────
   useEffect(() => {
-    if (user && !loading) {
+    if (user?.id && !loading) {
       registerPushToken();
     }
-  }, [user, loading]);
+  }, [user?.id, loading]);
 
   const registerPushToken = async () => {
     try {
-      // Only register token if we're on a real device (not Expo Go)
-      if (Platform.OS === 'web') {
-        return;
-      }
+      if (Platform.OS === 'web' || !user?.id) return;
+      const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+      const token = await registerForPushNotificationsAsync(projectId);
+      if (!token) return;
 
-      const token = await registerForPushNotificationsAsync();
-      
-      if (!token) {
-        return;
-      }
-      
-      if (user) {
-        // Update user with push tokens array (support multiple devices)
-        const existingTokens = user.expoPushTokens || [];
-        // Add token if not already present
-        if (!existingTokens.includes(token)) {
-          const updatedTokens = [...existingTokens, token];
-          const updatedUser = { ...user, expoPushTokens: updatedTokens };
-          
-          // Update AsyncStorage
-          await updateUser(updatedUser);
-          
-          // Sync to Firebase directly if user has an ID
-          if (user.id) {
-            try {
-              const memberRef = doc(db, (user as any).collection || 'members', user.id);
-              await updateDoc(memberRef, {
-                expoPushTokens: updatedTokens
-              });
-            } catch (apiError) {
-              // Firebase update failed, but AsyncStorage update succeeded
-              // This is acceptable as the token is still stored locally
-              console.warn('[UserContext] Failed to sync push tokens to Firebase:', apiError);
-            }
-          }
-        }
+      const existingTokens = user.expoPushTokens || [];
+      if (!existingTokens.includes(token)) {
+        const updatedTokens = [...existingTokens, token];
+        // Write directly to Firestore — the onSnapshot listener will update local state
+        const memberRef = doc(db, 'members', user.id);
+        await updateDoc(memberRef, { expoPushTokens: updatedTokens });
       }
     } catch (error) {
-      // Don't throw error - push notifications are optional
+      if (__DEV__) console.warn('[UserContext] Push token sync failed:', error);
     }
   };
 
-  const loadUserData = async () => {
-    try {
-      if (!storageAvailable) {
-        setLoading(false);
-        return;
-      }
-      const userData = await AsyncStorage.getItem(USER_STORAGE_KEY);
-      if (userData) {
-        const parsedUser = JSON.parse(userData);
-        
-        // DEV logging for debugging
-        if (__DEV__) {
-          console.log('[UserContext] User state:', parsedUser);
-          console.log('[UserContext] Students:', parsedUser?.students);
-        }
-        
-        setUser(parsedUser);
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-      setStorageAvailable(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const setupAuthListener = () => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        // Only load if we don't already have a user state
-        // This prevents race conditions during sign-up/login
-        if (!user) {
-          loadUserData();
-        }
-      } else {
-        // Firebase user is logged out
-        setUser(null);
-      }
-    });
-
-    return unsubscribe;
-  };
-
+  // ── updateUser: called after login / registration to anchor the listener ──────
   const updateUser = async (newUser: Member | null) => {
-    try {
-      // Intentionally update React state BEFORE saving to persistent storage 
-      // so routing redirects don't mount early with stale null contexts
-      setUser(newUser);
-      
-      if (newUser && storageAvailable) {
-        await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
-      } else if (storageAvailable) {
-        await AsyncStorage.removeItem(USER_STORAGE_KEY);
-      }
-    } catch (error) {
-      console.error('Error saving user data:', error);
-      // State is already updated, which is fine
+    if (!newUser) {
+      await clearUser();
+      return;
     }
+    // Cache immediately so UI is instant
+    setUserState(newUser);
+    try {
+      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
+    } catch (e) {
+      if (__DEV__) console.error('[UserContext] Cache write error:', e);
+    }
+    // Attach live listener so any admin changes propagate in real time
+    if (newUser.id) attachMemberListener(newUser.id);
   };
 
   const clearUser = async () => {
+    if (memberUnsubRef.current) {
+      memberUnsubRef.current();
+      memberUnsubRef.current = null;
+    }
+    setUserState(null);
     try {
-      if (storageAvailable) {
-        await AsyncStorage.removeItem(USER_STORAGE_KEY);
-      }
-      setUser(null);
-    } catch (error) {
-      console.error('Error clearing user data:', error);
-      setUser(null);
+      await AsyncStorage.removeItem(USER_STORAGE_KEY);
+    } catch (e) {
+      if (__DEV__) console.error('[UserContext] Cache clear error:', e);
     }
   };
 

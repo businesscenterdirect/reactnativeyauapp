@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, X, Loader2, UserCircle, Mail, Phone, Search, Award, DollarSign, Clock } from 'lucide-react';
+import { Award, Clock, DollarSign, Edit2, Loader2, Mail, Phone, Plus, Search, Trash2, UserCircle, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import type { Coach } from '../lib/api';
+import { coachService } from '../lib/api';
+import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
 import { Card } from './ui/Card';
 import { Input } from './ui/Input';
-import { Badge } from './ui/Badge';
 import { Select } from './ui/Select';
-import { coachService } from '../lib/api';
-import type { Coach } from '../lib/api';
-import toast from 'react-hot-toast';
 
 const CoachManager: React.FC = () => {
   const [coaches, setCoaches] = useState<Coach[]>([]);
@@ -16,7 +16,7 @@ const CoachManager: React.FC = () => {
   const [editingCoach, setEditingCoach] = useState<Coach | null>(null);
   const [saving, setSaving] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -83,13 +83,13 @@ const CoachManager: React.FC = () => {
   };
 
   const resetForm = () => {
-    setFormData({ 
-      firstName: '', 
-      lastName: '', 
-      email: '', 
-      phone: '', 
-      primarySport: '', 
-      experience: '', 
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      primarySport: '',
+      experience: '',
       hourlyRate: 0,
       status: 'approved',
       isActive: true,
@@ -125,7 +125,7 @@ const CoachManager: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const filteredCoaches = Array.isArray(coaches) ? coaches.filter(c => 
+  const filteredCoaches = Array.isArray(coaches) ? coaches.filter(c =>
     `${c.firstName} ${c.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.primarySport.toLowerCase().includes(searchTerm.toLowerCase())
@@ -147,29 +147,29 @@ const CoachManager: React.FC = () => {
           <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Coaching Registry</h1>
           <p className="text-gray-500 dark:text-white/60 font-medium tracking-tight">Manage your roster of professional coaches and trainers.</p>
         </div>
-        <Button 
-          variant="primary" 
+        <Button
+          variant="primary"
           onClick={() => { setEditingCoach(null); resetForm(); setIsModalOpen(true); }}
           leftIcon={<Plus size={18} />}
           className="h-12 shadow-lg"
         >
-          Enlist Coach
+          Add Coach
         </Button>
       </div>
 
       <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-           <div className="w-full sm:w-96">
-              <Input 
-                placeholder="Search coaches by name, email or sport..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                leftIcon={<Search size={16} className="text-gray-400 dark:text-white/60" />}
-              />
-           </div>
-           <div className="flex items-center gap-3">
-             <Badge variant="info" className="px-4 py-2 text-xs">{filteredCoaches.length} Enlisted Coaches</Badge>
-           </div>
+          <div className="w-full sm:w-96">
+            <Input
+              placeholder="Search coaches by name, email or sport..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              leftIcon={<Search size={16} className="text-gray-400 dark:text-white/60" />}
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="info" className="px-4 py-2 text-xs">{filteredCoaches.length} Enlisted Coaches</Badge>
+          </div>
         </div>
 
         <div className="overflow-x-auto custom-scrollbar">
@@ -195,8 +195,8 @@ const CoachManager: React.FC = () => {
                           {coach.firstName} {coach.lastName}
                         </p>
                         <div className="flex items-center gap-2 mt-0.5">
-                           <span className="text-[10px] text-gray-400 dark:text-white/40 flex items-center"><Mail size={10} className="mr-1" /> {coach.email}</span>
-                           <span className="text-[10px] text-gray-400 dark:text-white/40 flex items-center"><Phone size={10} className="mr-1" /> {coach.phone}</span>
+                          <span className="text-[10px] text-gray-400 dark:text-white/40 flex items-center"><Mail size={10} className="mr-1" /> {coach.email}</span>
+                          <span className="text-[10px] text-gray-400 dark:text-white/40 flex items-center"><Phone size={10} className="mr-1" /> {coach.phone}</span>
                         </div>
                       </div>
                     </div>
@@ -204,7 +204,7 @@ const CoachManager: React.FC = () => {
                   <td className="px-6 py-4">
                     <div className="flex flex-col gap-1">
                       <Badge variant="secondary" className="bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-none font-bold w-fit">
-                         {(coach.primarySport || 'NO SPORT').toUpperCase()}
+                        {(coach.primarySport || 'NO SPORT').toUpperCase()}
                       </Badge>
                       <span className="text-[10px] font-bold text-gray-400 flex items-center">
                         <Clock size={10} className="mr-1" /> ${coach.hourlyRate}/hr
@@ -244,10 +244,10 @@ const CoachManager: React.FC = () => {
         </div>
       </div>
 
-              {/* Modal */}
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-[200] p-4 animate-in fade-in duration-200">
-          <Card 
+          <Card
             className="w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-visible"
             title={editingCoach ? 'Refine Staff Records' : 'Enlist New Coach'}
             headerAction={
@@ -263,14 +263,14 @@ const CoachManager: React.FC = () => {
                   placeholder="e.g. John"
                   required
                   value={formData.firstName}
-                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                 />
                 <Input
                   label="Last Name"
                   placeholder="e.g. Madden"
                   required
                   value={formData.lastName}
-                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                 />
               </div>
 
@@ -281,7 +281,7 @@ const CoachManager: React.FC = () => {
                   placeholder="coach@yau.com"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   leftIcon={<Mail size={16} />}
                 />
                 <Input
@@ -289,7 +289,7 @@ const CoachManager: React.FC = () => {
                   placeholder="9087654321"
                   required
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   leftIcon={<Phone size={16} />}
                 />
               </div>
@@ -300,7 +300,7 @@ const CoachManager: React.FC = () => {
                   placeholder="e.g. Soccer"
                   required
                   value={formData.primarySport}
-                  onChange={(e) => setFormData({...formData, primarySport: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, primarySport: e.target.value })}
                   leftIcon={<Award size={16} />}
                 />
                 <Input
@@ -309,7 +309,7 @@ const CoachManager: React.FC = () => {
                   placeholder="0"
                   required
                   value={formData.hourlyRate}
-                  onChange={(e) => setFormData({...formData, hourlyRate: Number(e.target.value)})}
+                  onChange={(e) => setFormData({ ...formData, hourlyRate: Number(e.target.value) })}
                   leftIcon={<DollarSign size={16} />}
                 />
               </div>
@@ -321,7 +321,7 @@ const CoachManager: React.FC = () => {
                   placeholder="Describe coaching background..."
                   className="w-full px-4 py-3 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white transition-all outline-none resize-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 placeholder:text-gray-400 dark:placeholder:text-white/20"
                   value={formData.experience}
-                  onChange={(e) => setFormData({...formData, experience: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                 />
               </div>
 
@@ -329,7 +329,7 @@ const CoachManager: React.FC = () => {
                 <Select
                   label="Approval Status"
                   value={formData.status}
-                  onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                   options={[
                     { label: 'Pending', value: 'pending' },
                     { label: 'Approved', value: 'approved' },
@@ -340,7 +340,7 @@ const CoachManager: React.FC = () => {
                   <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Active Status</label>
                   <button
                     type="button"
-                    onClick={() => setFormData({...formData, isActive: !formData.isActive})}
+                    onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
                     className={`h-11 px-4 rounded-xl border font-bold text-xs uppercase tracking-widest transition-all ${formData.isActive ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-gray-50 border-gray-100 text-gray-400'}`}
                   >
                     {formData.isActive ? 'Active Member' : 'Deactivated'}
@@ -349,17 +349,17 @@ const CoachManager: React.FC = () => {
               </div>
 
               <div className="flex gap-3 pt-6 border-t border-gray-50 dark:border-white/5">
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  className="flex-1 font-bold" 
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex-1 font-bold"
                   onClick={() => { setIsModalOpen(false); resetForm(); }}
                 >
                   Discard
                 </Button>
-                <Button 
-                  type="submit" 
-                  variant="primary" 
+                <Button
+                  type="submit"
+                  variant="primary"
                   className="flex-1 h-12 shadow-lg uppercase tracking-widest font-black"
                   loading={saving}
                 >

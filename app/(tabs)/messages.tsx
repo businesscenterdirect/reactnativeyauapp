@@ -1,4 +1,4 @@
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -19,9 +19,9 @@ import React, { useCallback } from 'react';
 
 import { useMessageStore, shouldShowBadge } from '../../src/store/useMessageStore';
 
-type MessageTab = 'all' | 'admin' | 'coaches';
 
-// 1. Memoized List Item for Performance
+
+// Memoized List Item
 const MessageItem = React.memo(({ 
   item, 
   onPress, 
@@ -31,7 +31,6 @@ const MessageItem = React.memo(({
   onPress: (msg: any) => void; 
   formatTime: (ts: any) => string;
 }) => {
-  const isCoach = item.role === 'coach';
   const showBadge = shouldShowBadge(item.unreadCount);
 
   return (
@@ -48,11 +47,6 @@ const MessageItem = React.memo(({
 
       <View style={styles.messageContent}>
         <View style={styles.messageHeader}>
-          <View style={[styles.roleTag, isCoach ? styles.coachTag : styles.adminTag]}>
-            <Text style={[styles.roleTagText, isCoach ? styles.coachTagText : styles.adminTagText]}>
-              {item.role?.toUpperCase() || 'ADMIN'}
-            </Text>
-          </View>
           <Text style={[styles.messageTime, showBadge && styles.unreadTextStrong]}>
             {formatTime(item.lastActivity || item.createdAt || item.timestamp)}
           </Text>
@@ -82,10 +76,10 @@ export default function MessagesScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
   
-  const messages = useMessageStore(state => state.groups);
-  const loading = useMessageStore(state => state.loading);
-  const markAsRead = useMessageStore(state => state.markAsRead);
-  const [activeTab, setActiveTab] = useState<MessageTab>('all');
+  const messages = useMessageStore((state: any) => state.groups);
+  const loading = useMessageStore((state: any) => state.loading);
+  const markAsRead = useMessageStore((state: any) => state.markAsRead);
+
 
   const handleOpenMessage = (msg: any) => {
     if (user?.id) {
@@ -114,47 +108,16 @@ export default function MessagesScreen() {
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
 
-  const displayedMessages = messages.filter(m => {
-    if (activeTab === 'all') return true;
-    
-    const isAdmin = m.role === 'admin' || 
-                    m.role === undefined || 
-                    m.senderName === 'Admin' || 
-                    m.type === 'admin_email';
-                    
-    const isCoach = m.role === 'coach' || m.senderName?.toLowerCase().includes('coach');
-
-    if (activeTab === 'admin') return isAdmin;
-    if (activeTab === 'coaches') return isCoach;
-    return true;
-  });
+  const displayedMessages = messages;
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
+          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
           <Text style={styles.headerTitle}>Messages</Text>
         </View>
-        <Text style={styles.headerSubtitle}>Stay up to date with important updates from your coaches and YAU</Text>
-
-        <View style={styles.tabsRow}>
-          {[
-            { id: 'all', label: 'All Messages' },
-            { id: 'admin', label: 'From Admin' },
-            { id: 'coaches', label: 'From Coaches' }
-          ].map((t) => (
-            <TouchableOpacity
-              key={t.id}
-              style={[styles.tab, activeTab === t.id && styles.tabActive]}
-              onPress={() => setActiveTab(t.id as any)}
-            >
-              <Text style={[styles.tabText, activeTab === t.id && styles.tabTextActive]}>
-                {t.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Text style={styles.headerSubtitle}>Stay up to date with the latest from your coach and YAU</Text>
       </LinearGradient>
 
       {loading ? (
@@ -169,8 +132,9 @@ export default function MessagesScreen() {
           windowSize={5}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <MaterialIcons name="mail-outline" size={60} color="#E5E7EB" />
-              <Text style={styles.emptyText}>No messages yet</Text>
+              <MaterialIcons name="mail-outline" size={80} color="#E2E8F0" />
+              <Text style={styles.emptyTitle}>NO MESSAGES</Text>
+              <Text style={styles.emptyText}>You're all caught up! Updates from your coach and YAU will appear here.</Text>
             </View>
           }
           renderItem={({ item }) => (
@@ -223,17 +187,7 @@ const styles = StyleSheet.create({
   avatarLogo: { width: 24, height: 24 },
   messageContent: { flex: 1 },
   messageHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  roleTag: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    borderWidth: 1
-  },
-  adminTag: { borderColor: '#0047AB', backgroundColor: '#EFF6FF' },
-  coachTag: { borderColor: '#10B981', backgroundColor: '#ECFDF5' },
-  roleTagText: { fontSize: 10, fontWeight: '800' },
-  adminTagText: { color: '#0047AB' },
-  coachTagText: { color: '#10B981' },
+
   messageTime: { fontSize: 12, color: '#94A3B8', fontWeight: '600' },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 },
   messageTitle: { fontSize: 15, fontWeight: '800', color: '#1E293B', flex: 1, marginRight: 10 },
@@ -272,6 +226,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   loading: { flex: 1, justifyContent: 'center' },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 },
-  emptyText: { color: '#94A3B8', fontSize: 15, fontWeight: '700', marginTop: 15 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100, paddingHorizontal: 40 },
+  emptyTitle: { fontSize: 18, fontWeight: '900', color: '#1E293B', marginTop: 20, marginBottom: 8 },
+  emptyText: { color: '#94A3B8', fontSize: 14, fontWeight: '600', textAlign: 'center', lineHeight: 20 },
 });

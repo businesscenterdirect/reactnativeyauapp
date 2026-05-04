@@ -1,3 +1,4 @@
+import { ActivityIndicator, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
@@ -24,8 +25,7 @@ export default function TabLayout() {
     }
 
     // If user is a parent (default) but has no students, they might need to complete registration
-    // However, if they are a coach, they don't have students.
-    const isCoach = user.role === 'coach';
+    const isCoach = user?.role === 'coach';
     const hasStudents = user.students && user.students.length > 0;
 
     if (!isCoach && !hasStudents) {
@@ -36,10 +36,15 @@ export default function TabLayout() {
   }, [user, loading, router]);
 
   if (loading) {
-    return null; // Let root layout handle loading state
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#002C61' }}>
+        <ActivityIndicator size="large" color="#FFFFFF" />
+      </View>
+    );
   }
 
-  if (!user || (user.role !== 'coach' && (!user.students || user.students.length === 0))) {
+  const isCoach = user?.role === 'coach';
+  if (!user || (!isCoach && (!user.students || user.students.length === 0))) {
     return null; // Redirecting in useEffect
   }
 
@@ -73,7 +78,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="messages"
         options={{
-          title: 'Chats',
+          title: 'Messages',
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons name={focused ? 'chat-bubble' : 'chat-bubble-outline'} size={focused ? 26 : 24} color={color} />
           ),
@@ -100,7 +105,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'ME',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons name={focused ? 'person' : 'person-outline'} size={focused ? 26 : 24} color={color} />
           ),

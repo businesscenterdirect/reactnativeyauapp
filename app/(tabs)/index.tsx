@@ -1,27 +1,24 @@
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
-import { subscribeToSchedules, Schedule } from '../../src/services/schedule';
-import { subscribeToMessages, getTotalUnreadCount, AdminPost } from '../../src/services/messaging';
-import { useEffect, useState, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { Schedule } from '../../src/services/schedule';
 
 const { width } = Dimensions.get('window');
 
-import { useScheduleStore } from '../../src/store/useScheduleStore';
 import { useMessageStore } from '../../src/store/useMessageStore';
+import { useScheduleStore } from '../../src/store/useScheduleStore';
 
 export default function HomeScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
-  
+
   // Use centralized state
-  const schedules = useScheduleStore(state => state.schedules);
-  const loading = useScheduleStore(state => state.loading);
-  const totalUnread = useMessageStore(state => state.totalUnread);
+  const schedules = useScheduleStore((state: any) => state.schedules);
+  const loading = useScheduleStore((state: any) => state.loading);
+  const totalUnread = useMessageStore((state: any) => state.totalUnread);
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : 'Guest User';
 
@@ -67,19 +64,43 @@ export default function HomeScreen() {
     }
   };
 
-  const today = new Date();
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
   const upcomingSchedules = schedules
-    .filter(s => s.date > todayStr)
-    .sort((a, b) => a.date.localeCompare(b.date))
+    .filter((s: Schedule) => {
+      // 1. Basic upcoming filter (Strict: Exclude past matches)
+      if (s.date < todayStr) return false;
+
+      // 2. Strict Student Filter (School, Sport, Grade Band)
+      if (!user?.students?.[0]) return true; // Show all for guests/missing student data
+
+      const student = user.students[0];
+
+      // School Match
+      const schoolMatch = !student.school_name ||
+        s.location?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+        s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
+        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase());
+
+      // Sport Match
+      const sportMatch = !student.sport ||
+        s.sport?.toLowerCase() === student.sport.toLowerCase();
+
+      // Grade Match (Check ageGroups array or ageGroup string)
+      const gradeMatch = !student.grade ||
+        s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
+        (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
+
+      return schoolMatch && sportMatch && gradeMatch;
+    })
+    .sort((a: Schedule, b: Schedule) => a.date.localeCompare(b.date))
     .slice(0, 3);
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
-          <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
+          <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
           <Text style={styles.headerBrand}>YOUTH ATHLETE UNIVERSITY</Text>
         </View>
         <View style={styles.welcomeSection}>
@@ -120,18 +141,24 @@ export default function HomeScreen() {
 
         <View style={styles.feedHeader}>
           <Text style={styles.feedTitle}>Upcoming Match</Text>
-          <TouchableOpacity><Text style={styles.viewAll}>View All</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/schedule' as any)}>
+            <Text style={styles.viewAll}>View All</Text>
+          </TouchableOpacity>
         </View>
 
         {loading ? (
           <ActivityIndicator color="#0047AB" size="large" style={{ marginTop: 20 }} />
         ) : upcomingSchedules.length > 0 ? (
-          upcomingSchedules.map((item) => (
-            <View key={item.id} style={styles.matchCard}>
+          upcomingSchedules.map((item: Schedule) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.matchCard}
+              onPress={() => router.push({ pathname: '/match/[id]' as any, params: { id: item.id } })}
+            >
               <View style={styles.cardHeader}>
                 <Text style={styles.cardHeaderDate}>{formatDate(item.date)}</Text>
               </View>
-              
+
               <View style={styles.cardBody}>
                 <Text style={styles.leagueName}>{item.sport}</Text>
                 <Text style={styles.locationSubtext}>{item.location}</Text>
@@ -157,12 +184,13 @@ export default function HomeScreen() {
                   </View>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <View style={styles.emptyContainer}>
-            <MaterialIcons name="event-busy" size={50} color="#CBD5E1" />
-            <Text style={styles.emptyText}>No upcoming matches found</Text>
+            <MaterialIcons name="event-busy" size={80} color="#E2E8F0" />
+            <Text style={styles.emptyTitle}>NO UPCOMING MATCHES</Text>
+            <Text style={styles.emptyText}>You're all caught up! New matches will appear here once they are scheduled.</Text>
           </View>
         )}
       </ScrollView>
@@ -238,19 +266,27 @@ const styles = StyleSheet.create({
   timeText: { fontSize: 16, fontWeight: '900', color: '#0F172A' },
   emptyContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 24,
     padding: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#F1F5F9',
-    marginTop: 10
+    marginTop: 10,
+    marginHorizontal: 10
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#1E293B',
+    marginTop: 15,
+    marginBottom: 5
   },
   emptyText: {
-    color: '#64748B',
-    fontSize: 14,
-    fontWeight: '700',
-    marginTop: 12,
-    textAlign: 'center'
+    color: '#94A3B8',
+    fontSize: 13,
+    fontWeight: '600',
+    textAlign: 'center',
+    lineHeight: 18
   },
 });

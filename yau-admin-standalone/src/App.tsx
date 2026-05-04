@@ -1,4 +1,4 @@
-import { Bell, Calendar, LayoutDashboard, LogOut, Menu, MessageSquare, Moon, School, Shirt, Sun, Trophy, User as UserIcon, Users, X } from 'lucide-react';
+import { Bell, Calendar, LayoutDashboard, LogOut, Menu, MessageSquare, Moon, School, Sun, Trophy, User as UserIcon, Users, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
@@ -8,7 +8,7 @@ import Messaging from './components/Messaging';
 import ScheduleManager from './components/ScheduleManager';
 import SchoolsManager from './components/SchoolsManager';
 import CoachManager from './components/CoachManager';
-import UniformManager from './components/UniformManager';
+
 import StandingsManager from './components/StandingsManager';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
@@ -21,7 +21,6 @@ function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItem
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/members', label: 'Members', icon: Users },
     { path: '/coaches', label: 'Coaching staff', icon: UserIcon },
-    { path: '/uniforms', label: 'Uniforms', icon: Shirt },
     { path: '/messaging', label: 'Messaging', icon: MessageSquare },
     { path: '/schedules', label: 'Schedules', icon: Calendar },
     { path: '/schools', label: 'Schools', icon: School },
@@ -283,7 +282,7 @@ function AppLayout() {
               <Route path="/members" element={<MembersList />} />
               <Route path="/messaging" element={<Messaging />} />
               <Route path="/coaches" element={<CoachManager />} />
-              <Route path="/uniforms" element={<UniformManager />} />
+              <Route path="/uniforms" element={<Navigate to="/" replace />} />
               <Route path="/schedules" element={<ScheduleManager />} />
               <Route path="/schools" element={<SchoolsManager />} />
               <Route path="/standings" element={<StandingsManager />} />
