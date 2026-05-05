@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 // import { LinearGradient } from 'expo-linear-gradient';
 import { router, Link } from 'expo-router';
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ActivityIndicator,
@@ -18,6 +18,8 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Animated,
+  Keyboard,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
@@ -181,134 +183,183 @@ export default function LoginScreen() {
     }
   };
 
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const headerHeight = useRef(new Animated.Value(height * 0.5)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const showListener = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideListener = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showListener, (event) => {
+      setKeyboardVisible(true);
+      Animated.parallel([
+        Animated.timing(headerHeight, {
+          toValue: height * 0.22,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(headerOpacity, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        })
+      ]).start();
+    });
+
+    const hideSub = Keyboard.addListener(hideListener, () => {
+      setKeyboardVisible(false);
+      Animated.parallel([
+        Animated.timing(headerHeight, {
+          toValue: height * 0.5,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(headerOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        })
+      ]).start();
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/images/background.png')}
-        style={styles.gradientBg}
-        resizeMode="cover"
-      >
-        {/* Overlay — pointerEvents='none' ensures it NEVER blocks touch events */}
-        <View style={styles.overlay} pointerEvents="none" />
-        <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
-          <Image
-            source={require('../../assets/images/logo1.png')}
-            style={styles.logoIcon}
-            resizeMode="contain"
-          />
-          <Text style={styles.yauText}>YOUTH ATHLETE UNIVERSITY</Text>
-          
-          <View style={styles.welcomeContainer}>
-            {slides.map((slide, index) => (
-              <View 
-                key={index} 
-                style={[
-                  styles.slideWrapper, 
-                  { display: activeSlide === index ? 'flex' : 'none' }
-                ]}
-              >
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <Text style={styles.welcomeText}>{slide.title} </Text>
-                  <Text style={[styles.welcomeText, styles.yauRed]}>{slide.highlight}</Text>
-                </View>
-                <Text style={styles.subTitleText}>{slide.subtitle}</Text>
-              </View>
-            ))}
-            
-            <View style={styles.pagination}>
-              {slides.map((_, i) => (
-                <View 
-                  key={i} 
-                  style={[styles.dot, activeSlide === i && styles.activeDot]} 
-                />
-              ))}
-            </View>
-          </View>
-        </View>
-      </ImageBackground>
+      <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
+        <ImageBackground
+          source={require('../../assets/images/background.png')}
+          style={{ flex: 1 }}
+          resizeMode="cover"
+        >
+          <View style={styles.overlay} pointerEvents="none" />
+          <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 25 : 40) }]}>
+            <Image
+              source={require('../../assets/favicon.png')}
+              style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]}
+              resizeMode="contain"
+            />
+            <Text style={[styles.yauText, keyboardVisible && { fontSize: 12, marginBottom: 5 }]}>YAU SPORTS</Text>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
-        style={styles.cardContainer}
+            <Animated.View style={[styles.welcomeContainer, { opacity: headerOpacity }]}>
+              {!keyboardVisible && slides.map((slide, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.slideWrapper,
+                    { display: activeSlide === index ? 'flex' : 'none' }
+                  ]}
+                >
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <Text style={styles.welcomeText}>{slide.title} </Text>
+                    <Text style={[styles.welcomeText, styles.yauRed]}>{slide.highlight}</Text>
+                  </View>
+                  <Text style={styles.subTitleText}>{slide.subtitle}</Text>
+                </View>
+              ))}
+
+              {!keyboardVisible && (
+                <View style={styles.pagination}>
+                  {slides.map((_, i) => (
+                    <View
+                      key={i}
+                      style={[styles.dot, activeSlide === i && styles.activeDot]}
+                    />
+                  ))}
+                </View>
+              )}
+            </Animated.View>
+          </View>
+        </ImageBackground>
+      </Animated.View>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={[styles.cardContainer, { marginTop: keyboardVisible ? height * 0.2 : height * 0.44 }]}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, keyboardVisible && { paddingTop: 20 }]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formCard}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Email</Text>
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Loisbecket@gmail.com"
-                    placeholderTextColor="#9CA3AF"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                  />
-                </View>
+            <View style={[styles.inputGroup, { marginTop: keyboardVisible ? 10 : 24 }]}>
+              <Text style={styles.inputLabel}>Email</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#9CA3AF"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
               </View>
+            </View>
 
-              <View style={{ marginTop: 16 }}>
-                <Text style={styles.inputLabel}>Password</Text>
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="*******"
-                    placeholderTextColor="#9CA3AF"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!showPassword}
-                  />
-                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeBtn}>
-                    <MaterialIcons name={showPassword ? 'visibility' : 'visibility-off'} size={20} color="#9CA3AF" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.actionRow}>
-                <TouchableOpacity
-                  style={styles.checkboxRow}
-                  activeOpacity={0.7}
-                  onPress={() => setRememberMe(!rememberMe)}
-                >
-                  <View style={[
-                    styles.checkbox,
-                    { alignItems: 'center', justifyContent: 'center' },
-                    rememberMe && { backgroundColor: '#002C61', borderColor: '#002C61' }
-                  ]}>
-                    {rememberMe && <MaterialIcons name="check" size={16} color="#fff" />}
-                  </View>
-                  <Text style={styles.rememberText}>Remember me</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleForgotPassword}>
-                  <Text style={styles.forgotText}>Forgot Password ?</Text>
+            <View style={{ marginTop: 16 }}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="*******"
+                  placeholderTextColor="#9CA3AF"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeBtn}>
+                  <MaterialIcons name={showPassword ? 'visibility' : 'visibility-off'} size={20} color="#9CA3AF" />
                 </TouchableOpacity>
               </View>
+            </View>
 
+            <View style={styles.actionRow}>
               <TouchableOpacity
-                style={[styles.loginBtn, loading && styles.btnDisabled]}
-                onPress={handleLogin}
-                disabled={loading}
+                style={styles.checkboxRow}
+                activeOpacity={0.7}
+                onPress={() => setRememberMe(!rememberMe)}
               >
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.loginBtnText}>Log In</Text>}
+                <View style={[
+                  styles.checkbox,
+                  { alignItems: 'center', justifyContent: 'center' },
+                  rememberMe && { backgroundColor: '#002C61', borderColor: '#002C61' }
+                ]}>
+                  {rememberMe && <MaterialIcons name="check" size={16} color="#fff" />}
+                </View>
+                <Text style={styles.rememberText}>Remember me</Text>
               </TouchableOpacity>
+              <TouchableOpacity onPress={handleForgotPassword}>
+                <Text style={styles.forgotText}>Forgot Password ?</Text>
+              </TouchableOpacity>
+            </View>
 
-              <View style={styles.signupPrompt}>
-                <TouchableOpacity
-                  style={styles.signupBtn}
-                  onPress={() => {
-                    console.log('Navigating to register...');
-                    router.push('/auth/register');
-                  }}
-                >
-                  <Text style={styles.noAccountText}>Don't have an Account ?</Text>
-                  <Text style={styles.signupBtnText}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
+            <TouchableOpacity
+              style={[styles.loginBtn, loading && styles.btnDisabled]}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.loginBtnText}>Log In</Text>}
+            </TouchableOpacity>
+
+            <View style={styles.signupPrompt}>
+              <TouchableOpacity
+                style={styles.signupBtn}
+                onPress={() => {
+                  console.log('Navigating to register...');
+                  router.push('/auth/register');
+                }}
+              >
+                <Text style={styles.noAccountText}>Don't have an Account ?</Text>
+                <Text style={styles.signupBtnText}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -375,13 +426,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
-    // NOTE: elevation intentionally removed — a high elevation value on Android
-    // causes this container to render above the tab bar (elevation:0) and block
-    // all tab bar touch events even after navigation has moved away from login.
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 30,
+    paddingTop: 80,
     paddingBottom: 80,
   },
   slideWrapper: {
@@ -411,7 +459,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: '#4B5563',
     fontWeight: '600',
     marginBottom: 8,
     marginLeft: 4,

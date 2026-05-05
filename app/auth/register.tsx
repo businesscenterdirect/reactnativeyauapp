@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Animated,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppInput from '../../src/components/AppInput';
@@ -110,6 +111,52 @@ export default function RegisterScreen() {
       scrollRef.current?.scrollTo({ y: 0, animated: true });
     }, 100);
   };
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const headerHeight = useRef(new Animated.Value(height * 0.45)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const showListener = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideListener = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showListener, () => {
+      setKeyboardVisible(true);
+      Animated.parallel([
+        Animated.timing(headerHeight, {
+          toValue: height * 0.2,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(headerOpacity, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        })
+      ]).start();
+    });
+
+    const hideSub = Keyboard.addListener(hideListener, () => {
+      setKeyboardVisible(false);
+      Animated.parallel([
+        Animated.timing(headerHeight, {
+          toValue: height * 0.45,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(headerOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        })
+      ]).start();
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const unsub = subscribeToSchools((s) => { setSchools(s); setSchoolsLoading(false); });
@@ -227,26 +274,32 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/images/background.png')}
-        style={styles.gradientBg}
-        resizeMode="cover"
-      >
-        <View style={styles.overlay} pointerEvents="none" />
-        <View style={[styles.headerSection, { paddingTop: insets.top + 40 }]}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.logoIcon} resizeMode="contain" />
-          <Text style={styles.yauHeaderText}>YOUTH ATHLETE UNIVERSITY</Text>
-          <Text style={styles.mainTitle}>Create Your Account</Text>
-          <Text style={styles.subTitle}>Let’s get started with your information</Text>
-        </View>
-      </ImageBackground>
+      <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
+        <ImageBackground
+          source={require('../../assets/images/background.png')}
+          style={{ flex: 1 }}
+          resizeMode="cover"
+        >
+          <View style={styles.overlay} pointerEvents="none" />
+          <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 10 : 40) }]}>
+            <Image source={require('../../assets/favicon.png')} style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]} resizeMode="contain" />
+            <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 12 }]}>YAU SPORTS</Text>
+            <Animated.View style={{ opacity: headerOpacity, alignItems: 'center' }}>
+              {!keyboardVisible && <Text style={styles.mainTitle}>Create Your Account</Text>}
+              {!keyboardVisible && <Text style={styles.subTitle}>Let’s get started with your information</Text>}
+            </Animated.View>
+          </View>
+        </ImageBackground>
+      </Animated.View>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
-        style={styles.cardContainer}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+        style={[styles.cardContainer, { marginTop: keyboardVisible ? height * 0.15 : height * 0.45 }]}
       >
         {/* Progress Indicator */}
         <View style={styles.progressWrapper}>
+          <Text style={styles.stepText}>STEP {step} OF 2</Text>
           <View style={styles.stepIndicator}>
             <View style={[styles.stepCircle, step >= 1 && styles.stepCircleActive]}>
               <Text style={[styles.stepNum, step >= 1 && styles.stepNumActive]}>01</Text>
@@ -256,10 +309,13 @@ export default function RegisterScreen() {
               <Text style={[styles.stepNum, step >= 2 && styles.stepNumActive]}>02</Text>
             </View>
           </View>
-          <Text style={styles.stepText}>STEP {step} OF 2</Text>
         </View>
 
-        <ScrollView ref={scrollRef} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        <ScrollView 
+          ref={scrollRef} 
+          contentContainerStyle={[styles.scrollContent, { paddingBottom: keyboardVisible ? 80 : 40 }]} 
+          keyboardShouldPersistTaps="handled"
+        >
           <View>
             <Text style={styles.sectionTitle}>{step === 1 ? 'Parent Information' : 'Child Information'}</Text>
 
@@ -269,11 +325,11 @@ export default function RegisterScreen() {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.inputLabel}>First Name</Text>
                     <View style={styles.inputWrapper}>
-                      <TextInput 
-                        style={styles.input} 
-                        placeholder="First Name" 
+                      <TextInput
+                        style={styles.input}
+                        placeholder="First Name"
                         placeholderTextColor="#9CA3AF"
-                        value={parentFirstName} 
+                        value={parentFirstName}
                         onChangeText={setParentFirstName}
                         returnKeyType="next"
                         onSubmitEditing={() => lastNameRef.current?.focus()}
@@ -284,12 +340,12 @@ export default function RegisterScreen() {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.inputLabel}>Last Name</Text>
                     <View style={styles.inputWrapper}>
-                      <TextInput 
+                      <TextInput
                         ref={lastNameRef}
-                        style={styles.input} 
-                        placeholder="Last Name" 
+                        style={styles.input}
+                        placeholder="Last Name"
                         placeholderTextColor="#9CA3AF"
-                        value={parentLastName} 
+                        value={parentLastName}
                         onChangeText={setParentLastName}
                         returnKeyType="next"
                         onSubmitEditing={() => emailRef.current?.focus()}
@@ -301,15 +357,15 @@ export default function RegisterScreen() {
 
                 <Text style={styles.inputLabel}>Email</Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput 
+                  <TextInput
                     ref={emailRef}
-                    style={styles.input} 
-                    placeholder="Email" 
+                    style={styles.input}
+                    placeholder="Email"
                     placeholderTextColor="#9CA3AF"
-                    value={email} 
-                    onChangeText={setEmail} 
-                    keyboardType="email-address" 
-                    autoCapitalize="none" 
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                     returnKeyType="next"
                     onSubmitEditing={() => phoneRef.current?.focus()}
                     blurOnSubmit={false}
@@ -327,14 +383,14 @@ export default function RegisterScreen() {
                     <MaterialIcons name="keyboard-arrow-down" size={18} color="#6B7280" style={{ marginLeft: 2 }} />
                   </TouchableOpacity>
                   <View style={styles.phoneDivider} />
-                  <TextInput 
+                  <TextInput
                     ref={phoneRef}
-                    style={styles.input} 
-                    placeholder="Phone Number" 
+                    style={styles.input}
+                    placeholder="Phone Number"
                     placeholderTextColor="#9CA3AF"
-                    value={formatPhoneDisplay(phoneDigits)} 
-                    onChangeText={handlePhoneChange} 
-                    keyboardType="phone-pad" 
+                    value={formatPhoneDisplay(phoneDigits)}
+                    onChangeText={handlePhoneChange}
+                    keyboardType="phone-pad"
                     returnKeyType="next"
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     blurOnSubmit={false}
@@ -343,14 +399,14 @@ export default function RegisterScreen() {
 
                 <Text style={styles.inputLabel}>Create Password</Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput 
+                  <TextInput
                     ref={passwordRef}
-                    style={styles.input} 
-                    placeholder="Create Password" 
+                    style={styles.input}
+                    placeholder="Create Password"
                     placeholderTextColor="#9CA3AF"
-                    secureTextEntry={!showPassword} 
-                    value={password} 
-                    onChangeText={setPassword} 
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
                     returnKeyType="next"
                     onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                     blurOnSubmit={false}
@@ -365,14 +421,14 @@ export default function RegisterScreen() {
 
                 <Text style={styles.inputLabel}>Confirm Password</Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput 
+                  <TextInput
                     ref={confirmPasswordRef}
-                    style={styles.input} 
-                    placeholder="Confirm Password" 
+                    style={styles.input}
+                    placeholder="Confirm Password"
                     placeholderTextColor="#9CA3AF"
-                    secureTextEntry={!showConfirmPassword} 
-                    value={confirmPassword} 
-                    onChangeText={setConfirmPassword} 
+                    secureTextEntry={!showConfirmPassword}
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
                     returnKeyType="done"
                     onSubmitEditing={Keyboard.dismiss}
                   />
@@ -400,24 +456,24 @@ export default function RegisterScreen() {
                       <View style={{ flex: 1 }}>
                         <Text style={styles.inputLabel}>Child First Name</Text>
                         <View style={styles.inputWrapper}>
-                          <TextInput 
-                            style={styles.input} 
-                            placeholder="Child First Name" 
+                          <TextInput
+                            style={styles.input}
+                            placeholder="Child First Name"
                             placeholderTextColor="#9CA3AF"
-                            value={student.firstName} 
-                            onChangeText={v => updateStudent(idx, { firstName: v })} 
+                            value={student.firstName}
+                            onChangeText={v => updateStudent(idx, { firstName: v })}
                           />
                         </View>
                       </View>
                       <View style={{ flex: 1 }}>
                         <Text style={styles.inputLabel}>Child Last Name</Text>
                         <View style={styles.inputWrapper}>
-                          <TextInput 
-                            style={styles.input} 
-                            placeholder="Child Last Name" 
+                          <TextInput
+                            style={styles.input}
+                            placeholder="Child Last Name"
                             placeholderTextColor="#9CA3AF"
-                            value={student.lastName} 
-                            onChangeText={v => updateStudent(idx, { lastName: v })} 
+                            value={student.lastName}
+                            onChangeText={v => updateStudent(idx, { lastName: v })}
                           />
                         </View>
                       </View>
@@ -570,31 +626,30 @@ const styles = StyleSheet.create({
   yauHeaderText: { color: '#FFF', fontSize: 14, fontWeight: '800', letterSpacing: 1.5 },
   mainTitle: { color: '#FFF', fontSize: 32, fontWeight: '900', marginTop: 12, textAlign: 'center' },
   subTitle: { color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 6, textAlign: 'center' },
-  cardContainer: { 
-    flex: 1, 
-    marginTop: height * 0.38, 
-    borderTopLeftRadius: 30, 
-    borderTopRightRadius: 30, 
-    backgroundColor: '#FFFFFF', 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: -10 }, 
-    shadowOpacity: 0.1, 
+  cardContainer: {
+    flex: 1,
+    marginTop: height * 0.38,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.1,
     shadowRadius: 20,
-    // Elevation removed to prevent blocking the tab bar on Android
   },
   progressWrapper: { alignItems: 'center', marginTop: 20 },
-  stepIndicator: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+  stepIndicator: { flexDirection: 'row', alignItems: 'center' },
   stepCircle: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#FFFFFF', borderWidth: 2, borderColor: '#E5E7EB', justifyContent: 'center', alignItems: 'center' },
   stepCircleActive: { backgroundColor: '#0047AB', borderColor: '#0047AB' },
   stepNum: { color: '#9CA3AF', fontSize: 14, fontWeight: '800' },
   stepNumActive: { color: '#FFFFFF' },
   stepLine: { width: 50, height: 2, backgroundColor: '#E5E7EB', marginHorizontal: 0 },
   stepLineActive: { backgroundColor: '#0047AB' },
-  stepText: { fontSize: 13, fontWeight: '800', color: '#0047AB', marginTop: 12, textTransform: 'uppercase' },
-  scrollContent: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 60 },
+  stepText: { fontSize: 13, fontWeight: '800', color: '#0047AB', marginBottom: 12, textTransform: 'uppercase' },
+  scrollContent: { paddingHorizontal: 24, paddingTop: 80, paddingBottom: 60 },
   sectionTitle: { fontSize: 22, fontWeight: '900', color: '#111827', textAlign: 'center', marginBottom: 20 },
   row: { flexDirection: 'row', gap: 12, marginBottom: 12 },
-  inputLabel: { fontSize: 13, color: '#6B7280', fontWeight: '700', marginBottom: 8, marginTop: 16, marginLeft: 4 },
+  inputLabel: { fontSize: 13, color: '#4B5563', fontWeight: '700', marginBottom: 8, marginTop: 16, marginLeft: 4 },
   inputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: '#F3F4F6', borderRadius: 16, paddingHorizontal: 16, height: 58 },
   input: { flex: 1, fontSize: 15, color: '#111827', fontWeight: '600' },
   inputValue: { flex: 1, fontSize: 15, color: '#111827', fontWeight: '600' },

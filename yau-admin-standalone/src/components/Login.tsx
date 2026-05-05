@@ -59,8 +59,8 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black p-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-19 h-16 bg-indigo-600 rounded-2xs flex items-center justify-center shadow-xl shadow-indigo-500/20 mb-4 scale-110 overflow-hidden">
-            <img src="/favicon.png" alt="YAU Logo" className="w-full h-full object-cover" />
+          <div className="w-19 h-16 flex items-center justify-center mb-4 scale-110 overflow-hidden">
+            <img src="/favicon.png" alt="YAU Logo" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">YAU Admin</h1>
           <p className="text-gray-500 dark:text-white/40 font-bold uppercase tracking-widest text-[10px] mt-1">Control Center Access</p>

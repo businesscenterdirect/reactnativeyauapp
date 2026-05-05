@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, doc, updateDoc, increment, getDocs, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, updateDoc, increment, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { broadcastPushNotification } from '../lib/push';
 import { Send, Target, Plus, Trash2, History, ChevronDown, ChevronUp, MessageSquare, X } from 'lucide-react';
@@ -25,6 +25,9 @@ interface SentMessage {
   targetGroups?: TargetGroup[];
   createdAt: any;
   replyCount?: number;
+  lastActivity?: any;
+  updatedAt?: any;
+  timestamp?: any;
   adminUnreadCount?: number;
 }
 
@@ -72,9 +75,34 @@ const Messaging: React.FC = () => {
       );
     });
 
-    const qHistory = query(collection(db, 'admin_posts'), orderBy('createdAt', 'desc'), limit(50));
+    const qHistory = query(collection(db, 'admin_posts'));
     const unsubHistory = onSnapshot(qHistory, (snap) => {
-      setHistory(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SentMessage)));
+      const msgs = snap.docs.map(doc => {
+        const data = doc.data();
+        return { 
+          id: doc.id, 
+          ...data,
+          // Fallback fields for robust display
+          title: data.title || data.subject || 'Direct Message / Untitled',
+          description: data.description || data.content || data.message || '(No preview)',
+        } as SentMessage;
+      });
+      
+      // Resilient sorting by any available timestamp field
+      const getMillis = (ts: any) => {
+        if (!ts) return 0;
+        if (ts.toMillis) return ts.toMillis();
+        if (ts.seconds) return ts.seconds * 1000;
+        return new Date(ts).getTime() || 0;
+      };
+
+      const sorted = msgs.sort((a, b) => {
+        const timeA = Math.max(getMillis(a.createdAt), getMillis(a.lastActivity), getMillis(a.updatedAt), getMillis(a.timestamp));
+        const timeB = Math.max(getMillis(b.createdAt), getMillis(b.lastActivity), getMillis(b.updatedAt), getMillis(b.timestamp));
+        return timeB - timeA;
+      });
+
+      setHistory(sorted);
     });
 
     return () => { unsubSchools(); unsubHistory(); };

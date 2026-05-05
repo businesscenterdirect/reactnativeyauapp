@@ -10,7 +10,7 @@ export function YauHeader({ subtitle }: YauHeaderProps) {
     <View style={styles.container}>
       <View style={styles.logoRow}>
         <Image
-          source={require('../../assets/images/logo1.png')}
+          source={require('../../assets/favicon.png')}
           style={styles.logoIcon}
           resizeMode="contain"
         />
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingTop: 16,
-    paddingBottom: subtitle => subtitle ? 8 : 16,
+    paddingBottom: 16,
   },
   logoRow: {
     flexDirection: 'row',
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
   logoIcon: {
     width: 44,
     height: 44,
-    borderRadius: 8,
   },
   logoText: {
     fontSize: 26,

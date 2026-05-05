@@ -33,6 +33,7 @@ export default function MessageDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState('');
   const [sendingReply, setSendingReply] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     const loadMessage = async () => {
@@ -59,6 +60,19 @@ export default function MessageDetailScreen() {
     }
   }, [id]);
 
+  useEffect(() => {
+    const showListener = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideListener = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showListener, () => setKeyboardVisible(true));
+    const hideSub = Keyboard.addListener(hideListener, () => setKeyboardVisible(false));
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
   const handleSendReply = async () => {
     if (!replyText.trim() || !user || !id || sendingReply) return;
     setSendingReply(true);
@@ -72,7 +86,11 @@ export default function MessageDetailScreen() {
   if (loading) return <View style={styles.center}><ActivityIndicator size="large" color="#002C61" /></View>;
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={0}
+    >
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
@@ -105,7 +123,7 @@ export default function MessageDetailScreen() {
         </View>
       </ScrollView>
 
-      <View style={[styles.inputBar, { paddingBottom: insets.bottom + 10 }]}>
+      <View style={[styles.inputBar, { paddingBottom: keyboardVisible ? 10 : insets.bottom + 10 }]}>
         <TextInput 
           style={styles.input} 
           placeholder="Write a message..." 

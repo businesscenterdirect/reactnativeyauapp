@@ -17,7 +17,7 @@ import { GRADE_BANDS, SPORTS } from '../../src/services/registration';
 export default function ProfileScreen() {
   const { user, loading, clearUser, setUser } = useUser();
   const insets = useSafeAreaInsets();
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [phone, setPhone] = useState(user?.phone || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -41,12 +41,12 @@ export default function ProfileScreen() {
     setIsUpdating(true);
     try {
       const updates: any = { phone, email };
-      
+
       if (user.students && user.students.length > 0) {
         const updatedStudents = [...user.students];
-        updatedStudents[0] = { 
-          ...updatedStudents[0], 
-          firstName: studentFirstName, 
+        updatedStudents[0] = {
+          ...updatedStudents[0],
+          firstName: studentFirstName,
           lastName: studentLastName,
           grade: studentGrade,
           sport: studentSport
@@ -57,7 +57,7 @@ export default function ProfileScreen() {
       const memberRef = doc(db, 'members', user.id);
       await updateDoc(memberRef, updates);
       // No manual setUser needed - UserContext onSnapshot will catch it
-      
+
       Alert.alert('Success', 'Profile updated successfully!');
       setIsEditing(false);
     } catch (e) {
@@ -86,7 +86,7 @@ export default function ProfileScreen() {
             data={options}
             keyExtractor={item => item}
             renderItem={({ item }) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.optionItem}
                 onPress={() => {
                   onSelect(item);
@@ -108,7 +108,7 @@ export default function ProfileScreen() {
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <View style={styles.logoContainer}>
-            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+            <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.headerTitle}>PROFILE</Text>
@@ -180,8 +180,8 @@ export default function ProfileScreen() {
               </>
             )}
 
-            <TouchableOpacity 
-              style={[styles.saveBtn, isUpdating && { opacity: 0.7 }]} 
+            <TouchableOpacity
+              style={[styles.saveBtn, isUpdating && { opacity: 0.7 }]}
               onPress={handleUpdateProfile}
               disabled={isUpdating}
             >
@@ -201,12 +201,12 @@ export default function ProfileScreen() {
               </View>
               <View style={{ alignItems: 'flex-end', gap: 8 }}>
                 <View style={styles.sportTag}><Text style={styles.sportTagText}>{student.sport}</Text></View>
-                <TouchableOpacity 
+                <TouchableOpacity
                   onPress={() => {
                     Alert.alert('Delete Athlete', `Are you sure?`, [
                       { text: 'Cancel', style: 'cancel' },
-                      { 
-                        text: 'Delete', 
+                      {
+                        text: 'Delete',
                         style: 'destructive',
                         onPress: async () => {
                           if (!user?.id) return;

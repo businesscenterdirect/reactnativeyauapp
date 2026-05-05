@@ -22,25 +22,25 @@ import { useMessageStore, shouldShowBadge } from '../../src/store/useMessageStor
 
 
 // Memoized List Item
-const MessageItem = React.memo(({ 
-  item, 
-  onPress, 
-  formatTime 
-}: { 
-  item: any; 
-  onPress: (msg: any) => void; 
+const MessageItem = React.memo(({
+  item,
+  onPress,
+  formatTime
+}: {
+  item: any;
+  onPress: (msg: any) => void;
   formatTime: (ts: any) => string;
 }) => {
   const showBadge = shouldShowBadge(item.unreadCount);
 
   return (
-    <TouchableOpacity 
-      style={[styles.messageItem, showBadge && styles.unreadMessageItem]} 
+    <TouchableOpacity
+      style={[styles.messageItem, showBadge && styles.unreadMessageItem]}
       onPress={() => onPress(item)}
     >
       <View style={styles.avatarContainer}>
         <View style={styles.avatarBg}>
-          <Image source={require('../../assets/images/logo1.png')} style={styles.avatarLogo} resizeMode="contain" />
+          <Image source={require('../../assets/images/favicon.png')} style={styles.avatarLogo} resizeMode="contain" />
         </View>
         {showBadge && <View style={styles.unreadDot} />}
       </View>
@@ -75,7 +75,7 @@ export default function MessagesScreen() {
   const router = useRouter();
   const { user } = useUser();
   const insets = useSafeAreaInsets();
-  
+
   const messages = useMessageStore((state: any) => state.groups);
   const loading = useMessageStore((state: any) => state.loading);
   const markAsRead = useMessageStore((state: any) => state.markAsRead);
@@ -83,11 +83,11 @@ export default function MessagesScreen() {
 
   const handleOpenMessage = (msg: any) => {
     if (user?.id) {
-      markAsRead(user.id, msg.id, msg.lastMessageId || msg.id); 
+      markAsRead(user.id, msg.id, msg.lastMessageId || msg.id);
     }
-    router.push({ 
-      pathname: '/messages/[id]' as any, 
-      params: { id: msg.id, message: JSON.stringify(msg) } 
+    router.push({
+      pathname: '/messages/[id]' as any,
+      params: { id: msg.id, message: JSON.stringify(msg) }
     });
   };
 
@@ -95,7 +95,7 @@ export default function MessagesScreen() {
     if (!ts) return '';
     const date = ts.toDate ? ts.toDate() : (ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts));
     if (isNaN(date.getTime())) return '';
-    
+
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const oneDay = 24 * 60 * 60 * 1000;
@@ -125,7 +125,7 @@ export default function MessagesScreen() {
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <View style={styles.logoContainer}>
-            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+            <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.headerTitle}>MESSAGES</Text>
@@ -133,14 +133,14 @@ export default function MessagesScreen() {
           <View style={styles.rightPlaceholder} />
         </View>
         <Text style={styles.headerSubtitle}>Stay up to date with the latest from your coach and YAU</Text>
-        
+
         <View style={styles.tabsRow}>
           {(['All Messages', 'From Admin', 'From Coaches'] as const).map((tab) => {
             const pool = tab === 'All Messages'
               ? messages
               : tab === 'From Coaches'
-              ? messages.filter((m: any) => m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach')
-              : messages.filter((m: any) => {
+                ? messages.filter((m: any) => m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach')
+                : messages.filter((m: any) => {
                   const role = m.role || m.senderRole || m.type || 'admin';
                   return role === 'admin';
                 });
@@ -184,10 +184,10 @@ export default function MessagesScreen() {
             </View>
           }
           renderItem={({ item }) => (
-            <MessageItem 
-              item={item} 
-              onPress={handleOpenMessage} 
-              formatTime={formatTime} 
+            <MessageItem
+              item={item}
+              onPress={handleOpenMessage}
+              formatTime={formatTime}
             />
           )}
         />

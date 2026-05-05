@@ -30,7 +30,7 @@ function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItem
   return (
     <div className="flex flex-col h-full bg-indigo-900 dark:bg-indigo-950 text-indigo-100 transition-colors duration-300">
       <div className={`p-2 flex items-center ${collapsed ? 'justify-center' : 'space-x-3'}`}>
-        <img src="/favicon.png" alt="Logo" className="w-15 h-10 rounded-xl shadow-lg border border-white/10" />
+        <img src="/favicon.png" alt="Logo" className="w-15 h-10 object-contain" />
         {!collapsed && <span className="font-black text-xl tracking-tighter text-white uppercase">YAU Panel</span>}
       </div>
 

@@ -47,8 +47,8 @@ export default function StandingsScreen() {
       }
       if (student.grade) {
         // Try to match grade band
-        const matchedBand = GRADE_BANDS.find(b => 
-          b.value.toLowerCase().includes(student.grade.toLowerCase()) || 
+        const matchedBand = GRADE_BANDS.find(b =>
+          b.value.toLowerCase().includes(student.grade.toLowerCase()) ||
           student.grade.toLowerCase().includes(b.value.split(' ')[0].toLowerCase())
         );
         if (matchedBand) setSelectedBand(matchedBand.value);
@@ -75,8 +75,8 @@ export default function StandingsScreen() {
   };
 
   // Filter real data
-  const filteredData = standings.filter(s => 
-    s.sport === selectedSport && 
+  const filteredData = standings.filter(s =>
+    s.sport === selectedSport &&
     (s.gradeBand.includes(selectedBand.split(' ')[0]) || selectedBand.includes(s.gradeBand))
   );
 
@@ -95,7 +95,7 @@ export default function StandingsScreen() {
   const renderItem = ({ item, index }: { item: Standing; index: number }) => (
     <View style={styles.row}>
       <Text style={styles.rankText}>{index + 1}</Text>
-      
+
       <View style={styles.clubCol}>
         <View style={styles.clubBadge}>
           <Text style={styles.clubInitials}>{getInitials(item.teamName)}</Text>
@@ -116,7 +116,7 @@ export default function StandingsScreen() {
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <View style={styles.logoContainer}>
-            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+            <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.headerTitle}>STANDINGS</Text>
@@ -140,7 +140,7 @@ export default function StandingsScreen() {
 
       <View style={styles.filterSection}>
         <Text style={styles.filterLabel}>Select Grade Band</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.filterDropdown}
           onPress={() => setIsDropdownOpen(true)}
         >
@@ -156,9 +156,9 @@ export default function StandingsScreen() {
         animationType="fade"
         onRequestClose={() => setIsDropdownOpen(false)}
       >
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
-          activeOpacity={1} 
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
           onPress={() => setIsDropdownOpen(false)}
         >
           <View style={styles.modalContent}>

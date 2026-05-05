@@ -97,10 +97,10 @@ export default function HomeScreen() {
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
           <View style={styles.logoContainer}>
-            <Image source={require('../../assets/images/logo1.png')} style={styles.logo} resizeMode="contain" />
+            <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.headerBrand}>YAU APP</Text>
+            <Text style={styles.headerBrand}>YAU SPORTS</Text>
           </View>
           <View style={styles.rightPlaceholder} />
         </View>
