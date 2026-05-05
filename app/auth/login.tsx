@@ -157,7 +157,7 @@ export default function LoginScreen() {
           await AsyncStorage.removeItem('@yau_remember_password');
         }
 
-        router.replace('/(tabs)/messages' as any);
+        router.replace('/(tabs)');
       } catch (apiError: any) {
         console.error('[Login] API Error:', apiError);
         Alert.alert('System Error', 'Unable to retrieve your profile. Please try again later.');
@@ -231,51 +231,52 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/images/background.png')}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
+      >
+        <View style={[styles.overlay, { backgroundColor: 'rgba(0, 26, 61, 0.85)' }]} pointerEvents="none" />
+      </ImageBackground>
+
       <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
-        <ImageBackground
-          source={require('../../assets/images/background.png')}
-          style={{ flex: 1 }}
-          resizeMode="cover"
-        >
-          <View style={styles.overlay} pointerEvents="none" />
-          <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 25 : 40) }]}>
-            <Image
-              source={require('../../assets/favicon.png')}
-              style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]}
-              resizeMode="contain"
-            />
-            <Text style={[styles.yauText, keyboardVisible && { fontSize: 12, marginBottom: 5 }]}>YAU SPORTS</Text>
+        <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 25 : 40) }]}>
+          <Image
+            source={require('../../assets/favicon.png')}
+            style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]}
+            resizeMode="contain"
+          />
+          <Text style={[styles.yauText, keyboardVisible && { fontSize: 12, marginBottom: 5 }]}>YAU SPORTS</Text>
 
-            <Animated.View style={[styles.welcomeContainer, { opacity: headerOpacity }]}>
-              {!keyboardVisible && slides.map((slide, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.slideWrapper,
-                    { display: activeSlide === index ? 'flex' : 'none' }
-                  ]}
-                >
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <Text style={styles.welcomeText}>{slide.title} </Text>
-                    <Text style={[styles.welcomeText, styles.yauRed]}>{slide.highlight}</Text>
-                  </View>
-                  <Text style={styles.subTitleText}>{slide.subtitle}</Text>
+          <Animated.View style={[styles.welcomeContainer, { opacity: headerOpacity }]}>
+            {!keyboardVisible && slides.map((slide, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.slideWrapper,
+                  { display: activeSlide === index ? 'flex' : 'none' }
+                ]}
+              >
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <Text style={styles.welcomeText}>{slide.title} </Text>
+                  <Text style={[styles.welcomeText, styles.yauRed]}>{slide.highlight}</Text>
                 </View>
-              ))}
+                <Text style={styles.subTitleText}>{slide.subtitle}</Text>
+              </View>
+            ))}
 
-              {!keyboardVisible && (
-                <View style={styles.pagination}>
-                  {slides.map((_, i) => (
-                    <View
-                      key={i}
-                      style={[styles.dot, activeSlide === i && styles.activeDot]}
-                    />
-                  ))}
-                </View>
-              )}
-            </Animated.View>
-          </View>
-        </ImageBackground>
+            {!keyboardVisible && (
+              <View style={styles.pagination}>
+                {slides.map((_, i) => (
+                  <View
+                    key={i}
+                    style={[styles.dot, activeSlide === i && styles.activeDot]}
+                  />
+                ))}
+              </View>
+            )}
+          </Animated.View>
+        </View>
       </Animated.View>
 
       <KeyboardAvoidingView
@@ -358,6 +359,16 @@ export default function LoginScreen() {
               >
                 <Text style={styles.noAccountText}>Don't have an Account ?</Text>
                 <Text style={styles.signupBtnText}>Sign Up</Text>
+              </TouchableOpacity>
+
+              {/* Testing Button */}
+              <TouchableOpacity
+                style={{ marginTop: 20 }}
+                onPress={() => router.push('/onboarding' as any)}
+              >
+                <Text style={{ color: '#9CA3AF', fontSize: 12, textDecorationLine: 'underline' }}>
+                  Check Onboarding (Testing)
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -274,22 +274,23 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/images/background.png')}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
+      >
+        <View style={[styles.overlay, { backgroundColor: 'rgba(0, 26, 61, 0.85)' }]} pointerEvents="none" />
+      </ImageBackground>
+
       <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
-        <ImageBackground
-          source={require('../../assets/images/background.png')}
-          style={{ flex: 1 }}
-          resizeMode="cover"
-        >
-          <View style={styles.overlay} pointerEvents="none" />
-          <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 10 : 40) }]}>
-            <Image source={require('../../assets/favicon.png')} style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]} resizeMode="contain" />
-            <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 12 }]}>YAU SPORTS</Text>
-            <Animated.View style={{ opacity: headerOpacity, alignItems: 'center' }}>
-              {!keyboardVisible && <Text style={styles.mainTitle}>Create Your Account</Text>}
-              {!keyboardVisible && <Text style={styles.subTitle}>Let’s get started with your information</Text>}
-            </Animated.View>
-          </View>
-        </ImageBackground>
+        <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 10 : 40) }]}>
+          <Image source={require('../../assets/favicon.png')} style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]} resizeMode="contain" />
+          <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 12 }]}>YAU SPORTS</Text>
+          <Animated.View style={{ opacity: headerOpacity, alignItems: 'center' }}>
+            {!keyboardVisible && <Text style={styles.mainTitle}>Create Your Account</Text>}
+            {!keyboardVisible && <Text style={styles.subTitle}>Let’s get started with your information</Text>}
+          </Animated.View>
+        </View>
       </Animated.View>
 
       <KeyboardAvoidingView
