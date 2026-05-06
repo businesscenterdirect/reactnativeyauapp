@@ -108,17 +108,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const registerPushToken = async () => {
     try {
       if (Platform.OS === 'web' || !user?.id) return;
-      const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+      
+      // Improved Project ID retrieval for EAS builds across different Expo versions
+      const projectId = 
+        Constants.expoConfig?.extra?.eas?.projectId ?? 
+        Constants.easConfig?.projectId ?? 
+        'dd35e184-c545-49be-853d-cf7223e7be47'; // Fallback to hardcoded ID from app.json
+        
       const token = await registerForPushNotificationsAsync(projectId);
       if (!token) return;
 
-      const existingTokens = user.expoPushTokens || [];
-      if (!existingTokens.includes(token)) {
-        const updatedTokens = [...existingTokens, token];
-        // Write directly to Firestore — the onSnapshot listener will update local state
-        const memberRef = doc(db, 'members', user.id);
-        await updateDoc(memberRef, { expoPushTokens: updatedTokens });
-      }
+      // Use arrayUnion to safely add the new token without overwriting existing ones.
+      // This is much safer than manual array management as it avoids race conditions.
+      const { arrayUnion } = await import('firebase/firestore');
+      const memberRef = doc(db, 'members', user.id);
+      await updateDoc(memberRef, { 
+        expoPushTokens: arrayUnion(token),
+        lastTokenUpdate: new Date().toISOString() // Track when the token was last refreshed
+      });
+
+      if (__DEV__) console.log('[UserContext] Push token synced to Firestore');
     } catch (error) {
       if (__DEV__) console.warn('[UserContext] Push token sync failed:', error);
     }
