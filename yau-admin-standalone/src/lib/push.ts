@@ -39,8 +39,10 @@ export const sendPushNotification = async (payload: PushNotificationPayload) => 
 export const broadcastPushNotification = async (tokens: string[], title: string, body: string, data?: any) => {
   if (!tokens || tokens.length === 0) return;
 
-  // Deduplicate tokens
-  const uniqueTokens = Array.from(new Set(tokens.filter(t => t.startsWith('ExponentPushToken'))));
+  // Deduplicate tokens - allow both older ExponentPushToken and newer ExpoPushToken formats
+  const uniqueTokens = Array.from(new Set(tokens.filter(t => 
+    t.startsWith('ExponentPushToken') || t.startsWith('ExpoPushToken')
+  )));
   if (uniqueTokens.length === 0) return;
 
   // Chunk tokens into groups of 100

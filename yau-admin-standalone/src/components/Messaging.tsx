@@ -148,9 +148,18 @@ const Messaging: React.FC = () => {
         const normalize = (str: any) => String(str || '').toLowerCase().trim().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "_");
         let isTargeted = false;
         for (const g of groups) {
-          const matchesSchool = g.school === 'all' || (data.students || []).some((s: any) => normalize(s.school_name) === normalize(g.school));
-          const matchesGrade = g.gradeBand === 'all' || (data.students || []).some((s: any) => normalize(s.grade_band) === normalize(g.gradeBand) || normalize(s.ageGroup) === normalize(g.gradeBand));
-          const matchesSport = g.sport === 'all' || normalize(data.sport) === normalize(g.sport) || (data.students || []).some((s: any) => normalize(s.sport) === normalize(g.sport));
+          const matchesSchool = g.school === 'all' || (data.students || []).some((s: any) => 
+            normalize(s.school_name) === normalize(g.school)
+          );
+          const matchesGrade = g.gradeBand === 'all' || (data.students || []).some((s: any) => 
+            normalize(s.grade_band) === normalize(g.gradeBand) || 
+            normalize(s.ageGroup) === normalize(g.gradeBand) ||
+            normalize(s.grade) === normalize(g.gradeBand)
+          );
+          const matchesSport = g.sport === 'all' || 
+            normalize(data.sport) === normalize(g.sport) || 
+            (data.students || []).some((s: any) => normalize(s.sport) === normalize(g.sport));
+            
           if (matchesSchool && matchesGrade && matchesSport) { isTargeted = true; break; }
         }
         if (isTargeted) tokens.push(...data.expoPushTokens);
