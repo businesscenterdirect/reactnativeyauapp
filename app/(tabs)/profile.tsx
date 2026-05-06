@@ -11,6 +11,16 @@ import { TextInput } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
 import { GRADE_BANDS, SPORTS } from '../../src/services/registration';
+import { CountryPicker } from '../../src/components/CountryPicker';
+import { countries, Country } from '../../src/constants/countries';
+
+// Phone masking
+function formatPhoneDisplay(digits: string): string {
+  const d = digits.replace(/\D/g, '').slice(0, 10);
+  if (d.length < 4) return d;
+  if (d.length < 7) return `(${d.slice(0, 3)})-${d.slice(3)}`;
+  return `(${d.slice(0, 3)})-${d.slice(3, 6)}-${d.slice(6)}`;
+}
 
 
 
@@ -19,7 +29,21 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [phone, setPhone] = useState(user?.phone || '');
+
+  const initialPhone = user?.phone || '';
+  const matchedCountry = countries.reduce((prev, curr) => {
+    if (initialPhone.startsWith(curr.dialCode) && curr.dialCode.length > (prev?.dialCode?.length || 0)) {
+      return curr;
+    }
+    return prev;
+  }, { dialCode: '' } as Country);
+  const defaultCountry = matchedCountry.dialCode ? matchedCountry : countries[0];
+  const initialDigits = matchedCountry.dialCode ? initialPhone.slice(matchedCountry.dialCode.length) : initialPhone;
+
+  const [selectedCountry, setSelectedCountry] = useState<Country>(defaultCountry);
+  const [phoneDigits, setPhoneDigits] = useState(initialDigits);
+  const [isCountryPickerOpen, setIsCountryPickerOpen] = useState(false);
+
   const [email, setEmail] = useState(user?.email || '');
   const [studentFirstName, setStudentFirstName] = useState(user?.students?.[0]?.firstName || '');
   const [studentLastName, setStudentLastName] = useState(user?.students?.[0]?.lastName || '');
@@ -40,7 +64,7 @@ export default function ProfileScreen() {
     if (!user?.id) return;
     setIsUpdating(true);
     try {
-      const updates: any = { phone, email };
+      const updates: any = { phone: selectedCountry.dialCode + phoneDigits.replace(/\D/g, ''), email };
 
       if (user.students && user.students.length > 0) {
         const updatedStudents = [...user.students];
@@ -140,7 +164,25 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>PHONE NUMBER</Text>
-              <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" keyboardType="phone-pad" />
+              <View style={styles.phoneInputWrapper}>
+                <TouchableOpacity
+                  style={styles.phonePrefix}
+                  onPress={() => setIsCountryPickerOpen(true)}
+                >
+                  <Text style={{ fontSize: 16, marginRight: 4 }}>{selectedCountry.flag}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '700', color: '#1E293B' }}>{selectedCountry.dialCode}</Text>
+                  <MaterialIcons name="keyboard-arrow-down" size={18} color="#64748B" style={{ marginLeft: 2 }} />
+                </TouchableOpacity>
+                <View style={styles.phoneDivider} />
+                <TextInput 
+                  style={styles.phoneInput} 
+                  value={formatPhoneDisplay(phoneDigits)} 
+                  onChangeText={(text) => setPhoneDigits(text.replace(/\D/g, '').slice(0, 10))} 
+                  placeholder="Phone" 
+                  placeholderTextColor="#9CA3AF"
+                  keyboardType="phone-pad" 
+                />
+              </View>
             </View>
 
             {user?.students && user.students.length > 0 && (
@@ -240,6 +282,7 @@ export default function ProfileScreen() {
 
       <PickerModal visible={showGradePicker} onClose={() => setShowGradePicker(false)} options={GRADE_BANDS.map(g => g.value)} onSelect={setStudentGrade} title="Select Grade" />
       <PickerModal visible={showSportPicker} onClose={() => setShowSportPicker(false)} options={SPORTS} onSelect={setStudentSport} title="Select Sport" />
+      <CountryPicker visible={isCountryPickerOpen} onClose={() => setIsCountryPickerOpen(false)} onSelect={setSelectedCountry} />
     </View>
   );
 }
@@ -279,6 +322,10 @@ const styles = StyleSheet.create({
   inlineInputs: { flexDirection: 'row', marginBottom: 15 },
   inputLabel: { fontSize: 11, fontWeight: '900', color: '#64748B', marginBottom: 8, letterSpacing: 0.5 },
   input: { backgroundColor: '#FFF', borderWidth: 1.5, borderColor: '#E2E8F0', borderRadius: 12, padding: 12, fontSize: 14, fontWeight: '700', color: '#1E293B' },
+  phoneInputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', borderWidth: 1.5, borderColor: '#E2E8F0', borderRadius: 12, paddingHorizontal: 12, minHeight: 46 },
+  phonePrefix: { flexDirection: 'row', alignItems: 'center' },
+  phoneDivider: { width: 1, height: 24, backgroundColor: '#E2E8F0', marginHorizontal: 8 },
+  phoneInput: { flex: 1, fontSize: 14, fontWeight: '700', color: '#1E293B', padding: 0 },
   selector: { backgroundColor: '#FFF', borderWidth: 1.5, borderColor: '#E2E8F0', borderRadius: 12, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   selectorText: { fontSize: 14, fontWeight: '700', color: '#1E293B' },
   saveBtn: { backgroundColor: '#002C61', borderRadius: 12, padding: 15, alignItems: 'center', justifyContent: 'center', marginTop: 5 },

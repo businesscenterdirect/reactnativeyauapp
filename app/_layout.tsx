@@ -12,13 +12,71 @@ import { UserProvider } from '../src/context/UserContext';
 import { setupNotificationListeners } from '../src/services/notifications';
 import { SyncManager } from '../src/components/SyncManager';
 
+import { useUser } from '../src/context/UserContext';
+
+import * as SplashScreen from 'expo-splash-screen';
+import { View, ActivityIndicator } from 'react-native';
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-export default function RootLayout() {
+function NavigationContent() {
+  const { user, loading } = useUser();
   const colorScheme = useColorScheme();
 
+  useEffect(() => {
+    if (!loading) {
+      SplashScreen.hideAsync();
+    }
+  }, [loading]);
+
+  // IMPORTANT: Do not render the navigation stack while we are still 
+  // determining the initial authentication state. If we render the stack 
+  // too early, it will mount the initial route (usually (tabs)), which 
+  // will then immediately trigger a redirect to /auth/login if no user 
+  // is found. This "double mount" is the primary cause of unclickable 
+  // tab bars and "ghost" screens overlapping the UI.
+  if (loading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#002C61', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#FFFFFF" />
+      </View>
+    );
+  }
+
+  return (
+    /* 
+       The 'key' here forces a total destruction and rebuild of the 
+       navigation container whenever the user identity changes (login/logout). 
+       This is a fail-safe against native view persistence bugs.
+    */
+    <View style={{ flex: 1 }} key={user?.id || 'guest'}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="auth/register" />
+          <Stack.Screen name="auth/login" />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal', headerShown: true }} />
+          <Stack.Screen 
+            name="messages/[id]" 
+            options={{ 
+              presentation: 'card',
+              gestureEnabled: true,
+              title: 'Message Details'
+            }} 
+          />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </View>
+  );
+}
+
+export default function RootLayout() {
   // Setup notification listeners
   useEffect(() => {
     const subscription = setupNotificationListeners();
@@ -32,29 +90,7 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <SyncManager>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-            <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-            <Stack.Screen 
-              name="messages/[id]" 
-              options={{ 
-                // Use 'card' instead of 'modal' — modal presentation on iOS
-                // can leave a ghost (transparent) screen in the stack when
-                // the user swipe-dismisses instead of using the back button.
-                // That ghost screen sits on top of the tab navigator and
-                // intercepts all touches, making the app appear completely frozen.
-                presentation: 'card',
-                headerShown: false,
-                gestureEnabled: true,
-                title: 'Message Details'
-              }} 
-            />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <NavigationContent />
       </SyncManager>
     </UserProvider>
   );
