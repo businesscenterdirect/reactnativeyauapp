@@ -282,7 +282,10 @@ export default function RegisterScreen() {
         <View style={[styles.overlay, { backgroundColor: 'rgba(0, 26, 61, 0.85)' }]} pointerEvents="none" />
       </ImageBackground>
 
-      <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
+      <Animated.View 
+        style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}
+        pointerEvents="box-none"
+      >
         <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 10 : 40) }]}>
           <Image source={require('../../assets/favicon.png')} style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]} resizeMode="contain" />
           <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 12 }]}>YAU SPORTS</Text>
@@ -652,7 +655,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   inputLabel: { fontSize: 13, color: '#4B5563', fontWeight: '700', marginBottom: 8, marginTop: 16, marginLeft: 4 },
   inputWrapper: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: '#F3F4F6', borderRadius: 16, paddingHorizontal: 16, height: 58 },
-  input: { flex: 1, fontSize: 15, color: '#111827', fontWeight: '600' },
+  input: { flex: 1, height: '100%', fontSize: 15, color: '#111827', fontWeight: '600' },
   inputValue: { flex: 1, fontSize: 15, color: '#111827', fontWeight: '600' },
   placeholderText: { color: '#9CA3AF' },
   phonePrefix: { flexDirection: 'row', alignItems: 'center' },

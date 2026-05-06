@@ -239,7 +239,10 @@ export default function LoginScreen() {
         <View style={[styles.overlay, { backgroundColor: 'rgba(0, 26, 61, 0.85)' }]} pointerEvents="none" />
       </ImageBackground>
 
-      <Animated.View style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}>
+      <Animated.View 
+        style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}
+        pointerEvents="box-none"
+      >
         <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 25 : 40) }]}>
           <Image
             source={require('../../assets/favicon.png')}
@@ -361,15 +364,6 @@ export default function LoginScreen() {
                 <Text style={styles.signupBtnText}>Sign Up</Text>
               </TouchableOpacity>
 
-              {/* Testing Button */}
-              <TouchableOpacity
-                style={{ marginTop: 20 }}
-                onPress={() => router.push('/onboarding' as any)}
-              >
-                <Text style={{ color: '#9CA3AF', fontSize: 12, textDecorationLine: 'underline' }}>
-                  Check Onboarding (Testing)
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -487,6 +481,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    height: '100%',
     fontSize: 15,
     color: '#111827',
     fontWeight: '600',
