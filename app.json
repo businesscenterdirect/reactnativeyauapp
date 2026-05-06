@@ -4,7 +4,7 @@
     "slug": "yau-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/appicon.png",
     "scheme": "yauapp",
     "userInterfaceStyle": "automatic",
     "extra": {
@@ -26,9 +26,9 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/favicon.png",
-        "backgroundImage": "./assets/favicon.png",
-        "monochromeImage": "./assets/favicon.png"
+        "foregroundImage": "./assets/appicon.png",
+        "backgroundImage": "./assets/appicon.png",
+        "monochromeImage": "./assets/appicon.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.example.yau_app",
@@ -36,7 +36,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/appicon.png"
     },
     "plugins": [
       "expo-router",
