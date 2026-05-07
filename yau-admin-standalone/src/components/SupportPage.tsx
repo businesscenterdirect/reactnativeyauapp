@@ -28,6 +28,10 @@ const SupportPage: React.FC = () => {
     {
       question: "Can I manage multiple children's schedules in one account?",
       answer: "Yes! During registration, you can add multiple children. If you've already registered, you can view all your children's relevant schedules, standings, and messages through the unified dashboard in the mobile app."
+    },
+    {
+      question: "How do I delete my account?",
+      answer: "To delete your account and all associated personal data, please contact our support team at FUN@YAUSports.org. Once requested, your account and data will be removed from our systems within 48 hours."
     }
   ];
 
