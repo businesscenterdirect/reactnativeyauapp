@@ -37,6 +37,8 @@ export interface AdminPost {
   unreadCount?: number;
   adminUnreadCount?: number;
   lastActivity?: any;
+  targetUserId?: string;
+  initiatorId?: string;
 }
 
 export interface MessageReply {
@@ -250,5 +252,91 @@ export const getMessageById = async (messageId: string): Promise<AdminPost | nul
   } catch (error) {
     if (DEV) console.error("Error fetching message by ID:", error);
     return null;
+  }
+};
+
+export const createAccountDeletionRequest = async (user: any, reason: string, details?: string) => {
+  try {
+    const { collection, addDoc, serverTimestamp, query, where, getDocs, doc, updateDoc, increment } = await import('firebase/firestore');
+    
+    const messageContent = `ACCOUNT DELETION REQUEST
+--------------------------
+User: ${user.firstName} ${user.lastName}
+Email: ${user.email}
+Phone: ${user.phone || 'N/A'}
+User ID: ${user.id}
+
+Reason: ${reason}
+${details ? `Details: ${details}` : ''}
+
+Please process this account deletion request as per the user's request.`;
+
+    // 1. Check if a deletion request thread already exists for this user
+    const q = query(
+      collection(db, "admin_posts"), 
+      where("initiatorId", "==", user.id),
+      where("title", "==", "Account Deletion Request")
+    );
+    const querySnapshot = await getDocs(q);
+
+    let postId: string;
+
+    if (!querySnapshot.empty) {
+      // 2. Reuse existing thread
+      postId = querySnapshot.docs[0].id;
+      const postRef = doc(db, "admin_posts", postId);
+      
+      // Update the main post with latest info
+      await updateDoc(postRef, {
+        lastActivity: serverTimestamp(),
+        adminUnreadCount: increment(1),
+        lastSenderId: user.id,
+        lastMessage: messageContent
+      });
+
+      // Add the new request as a reply
+      const repliesRef = collection(db, "admin_posts", postId, "replies");
+      await addDoc(repliesRef, {
+        userId: user.id,
+        userName: `${user.firstName} ${user.lastName}`,
+        userRole: 'parent',
+        content: messageContent,
+        timestamp: serverTimestamp()
+      });
+
+    } else {
+      // 3. Create new thread
+      const docRef = await addDoc(collection(db, "admin_posts"), {
+        title: "Account Deletion Request",
+        description: `Deletion request from ${user.firstName} ${user.lastName} - Reason: ${reason}`,
+        targetUserId: user.id,
+        initiatorId: user.id,
+        type: 'admin',
+        role: 'admin',
+        replyCount: 0,
+        unreadCount: 0, 
+        adminUnreadCount: 1,
+        createdAt: serverTimestamp(),
+        lastActivity: serverTimestamp(),
+        lastSenderId: user.id,
+        lastMessage: messageContent
+      });
+      postId = docRef.id;
+
+      // Add the first reply
+      const repliesRef = collection(db, "admin_posts", postId, "replies");
+      await addDoc(repliesRef, {
+        userId: user.id,
+        userName: `${user.firstName} ${user.lastName}`,
+        userRole: 'parent',
+        content: messageContent,
+        timestamp: serverTimestamp()
+      });
+    }
+
+    return postId;
+  } catch (error) {
+    console.error("Error creating account deletion request:", error);
+    throw error;
   }
 };

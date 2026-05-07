@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, updateDoc, increment, getDocs, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, updateDoc, increment, getDocs, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { broadcastPushNotification } from '../lib/push';
 import { Send, Target, Plus, Trash2, History, ChevronDown, ChevronUp, MessageSquare, X } from 'lucide-react';
@@ -171,6 +171,23 @@ const Messaging: React.FC = () => {
     }
   };
 
+  const fetchTokensForUser = async (userId: string): Promise<string[]> => {
+    try {
+      const memberSnap = await getDoc(doc(db, 'members', userId));
+      if (memberSnap.exists()) {
+        const data = memberSnap.data();
+        const tokens = data.expoPushTokens || [];
+        console.log(`[Messaging] Found ${tokens.length} tokens for user ${userId}`);
+        return tokens;
+      }
+      console.log(`[Messaging] No member found for ID ${userId}`);
+      return [];
+    } catch (error) {
+      console.error('[Messaging] Error fetching tokens for user:', error);
+      return [];
+    }
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim() || targetGroups.length === 0) {
@@ -223,10 +240,25 @@ const Messaging: React.FC = () => {
         lastMessage: replyText.trim(),
         lastSenderId: 'admin'
       });
-      if (selectedPost.targetGroups) {
+      if (selectedPost.targetGroups && selectedPost.targetGroups.length > 0) {
         const tokens = await fetchTokensForTargetGroups(selectedPost.targetGroups);
+        console.log(`[Messaging] Broadcast reply: ${tokens.length} tokens`);
         if (tokens.length > 0) {
           await broadcastPushNotification(tokens, `New Reply: ${selectedPost.title}`, replyText.trim(), { screen: 'messages', messageId: selectedPost.id });
+        }
+      } else {
+        const targetId = (selectedPost as any).initiatorId || (selectedPost as any).targetUserId;
+        console.log(`[Messaging] Direct reply target: ${targetId}`);
+        if (targetId) {
+          const tokens = await fetchTokensForUser(targetId);
+          if (tokens.length > 0) {
+            await broadcastPushNotification(tokens, `New Reply: ${selectedPost.title}`, replyText.trim(), { screen: 'messages', messageId: selectedPost.id });
+            console.log(`[Messaging] Direct notification sent to ${tokens.length} tokens`);
+          } else {
+            console.log(`[Messaging] No tokens found for direct reply target`);
+          }
+        } else {
+          console.log(`[Messaging] No targetId found for direct reply`);
         }
       }
       setReplyText('');

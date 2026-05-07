@@ -86,10 +86,61 @@ export const useMessageStore = create<MessageState>((set, get) => ({
       console.log('[Message Store] admin_posts snapshot received. Count:', snapshot.docs.length);
       const msgs: any[] = [];
       
+      const normalizedStudents = userStudents.map(s => ({
+        sport: normalize(s.sport),
+        location: normalize(s.school_name),
+        grade: normalize(s.grade_band || s.grade)
+      }));
+
       snapshot.forEach((doc) => {
         const data = doc.data();
-        console.log('[Message Store] Doc:', doc.id, 'Data:', JSON.stringify(data).substring(0, 100));
-        msgs.push({ id: doc.id, ...data });
+        let isMatch = false;
+
+        // 1. Check for Direct Message / Support Thread
+        if (data.targetUserId === userId || data.initiatorId === userId) {
+          isMatch = true;
+        }
+        // 2. Check Multi-Group Targeting
+        else if (data.targetGroups && Array.isArray(data.targetGroups)) {
+          isMatch = data.targetGroups.some((g: any) => {
+            const targetSchool = normalize(g.school);
+            const targetGrade = normalize(g.gradeBand);
+            const targetSport = normalize(g.sport);
+
+            return normalizedStudents.some(s => {
+              const mSchool = targetSchool === 'all' || s.location.includes(targetSchool);
+              const mGrade = targetGrade === 'all' || s.grade === targetGrade;
+              const mSport = targetSport === 'all' || s.sport === targetSport;
+              return mSchool && mGrade && mSport;
+            }) || (targetSchool === 'all' && targetGrade === 'all' && targetSport === 'all');
+          });
+        }
+        // 3. Check Legacy Target Fields
+        else if (!data.targetUserId && !data.initiatorId) {
+          const targetSport = data.targetSport ?? 'all';
+          const targetLocation = data.targetLocation ?? 'all';
+          const targetAgeGroup = data.targetAgeGroup ?? 'all';
+
+          if (targetSport === 'all' && targetLocation === 'all' && targetAgeGroup === 'all') {
+            isMatch = true;
+          } else {
+            const tSport = normalize(targetSport);
+            const tLocation = normalize(targetLocation);
+            const tGrade = normalize(targetAgeGroup);
+
+            isMatch = normalizedStudents.some(s => {
+              let m = true;
+              if (tSport !== "all") m = m && (s.sport === tSport);
+              if (tLocation !== "all") m = m && (s.location.includes(tLocation));
+              if (tGrade !== "all") m = m && (s.grade === tGrade);
+              return m;
+            });
+          }
+        }
+
+        if (isMatch) {
+          msgs.push({ id: doc.id, ...data });
+        }
       });
 
       // Simple Sort by timestamp/createdAt/updatedAt
@@ -102,8 +153,8 @@ export const useMessageStore = create<MessageState>((set, get) => ({
       };
 
       const sorted = msgs.sort((a, b) => {
-        const timeA = Math.max(getMillis(a.updatedAt), getMillis(a.createdAt), getMillis(a.timestamp));
-        const timeB = Math.max(getMillis(b.updatedAt), getMillis(b.createdAt), getMillis(b.timestamp));
+        const timeA = Math.max(getMillis(a.updatedAt), getMillis(a.createdAt), getMillis(a.timestamp), getMillis(a.lastActivity));
+        const timeB = Math.max(getMillis(b.updatedAt), getMillis(b.createdAt), getMillis(b.timestamp), getMillis(b.lastActivity));
         return timeB - timeA;
       });
       

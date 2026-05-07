@@ -13,6 +13,7 @@ import { db } from '../../src/services/firebase';
 import { GRADE_BANDS, SPORTS } from '../../src/services/registration';
 import { CountryPicker } from '../../src/components/CountryPicker';
 import { countries, Country } from '../../src/constants/countries';
+import { createAccountDeletionRequest } from '../../src/services/messaging';
 
 // Phone masking
 function formatPhoneDisplay(digits: string): string {
@@ -53,6 +54,18 @@ export default function ProfileScreen() {
 
   const [showGradePicker, setShowGradePicker] = useState(false);
   const [showSportPicker, setShowSportPicker] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteReason, setDeleteReason] = useState('');
+  const [deleteDetails, setDeleteDetails] = useState('');
+
+  const DELETION_REASONS = [
+    'Accidentally created this account',
+    'I already have another account',
+    'I have left the program / no longer need it',
+    'Not satisfied with the service',
+    'Other'
+  ];
 
   const handleSignOut = async () => {
     try { await signOut(auth); } catch (_) { }
@@ -89,6 +102,29 @@ export default function ProfileScreen() {
       Alert.alert('Error', 'Failed to update profile. Please try again.');
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!user || !deleteReason) return;
+    if (deleteReason === 'Other' && !deleteDetails.trim()) {
+      Alert.alert('Required', 'Please provide more details for your reason.');
+      return;
+    }
+
+    setIsDeletingAccount(true);
+    try {
+      await createAccountDeletionRequest(user, deleteReason, deleteDetails);
+      setShowDeleteModal(false);
+      Alert.alert(
+        'Request Sent',
+        'Your deletion request has been sent to the YAU team. We will process your request and contact you if needed.',
+        [{ text: 'OK' }]
+      );
+    } catch (e) {
+      Alert.alert('Error', 'Failed to send request. Please try again.');
+    } finally {
+      setIsDeletingAccount(false);
     }
   };
 
@@ -148,9 +184,14 @@ export default function ProfileScreen() {
             <Text style={styles.userName}>{user?.firstName} {user?.lastName}</Text>
             <Text style={styles.userEmail}>{user?.email}</Text>
           </View>
-          <TouchableOpacity style={styles.editCircle} onPress={() => setIsEditing(!isEditing)}>
-            <MaterialIcons name={isEditing ? 'close' : 'edit'} size={20} color="#FFF" />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <TouchableOpacity style={[styles.editCircle, { backgroundColor: 'rgba(255,255,255,0.1)' }]} onPress={() => setShowDeleteModal(true)}>
+              <MaterialIcons name="delete-forever" size={20} color="#E31B23" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.editCircle} onPress={() => setIsEditing(!isEditing)}>
+              <MaterialIcons name={isEditing ? 'close' : 'edit'} size={20} color="#FFF" />
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
 
@@ -277,12 +318,71 @@ export default function ProfileScreen() {
           <MaterialIcons name="logout" size={20} color="#E31B23" />
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
+
         <Text style={styles.version}>Version 2.1.0 Premium</Text>
       </ScrollView>
 
-      <PickerModal visible={showGradePicker} onClose={() => setShowGradePicker(false)} options={GRADE_BANDS.map(g => g.value)} onSelect={setStudentGrade} title="Select Grade" />
       <PickerModal visible={showSportPicker} onClose={() => setShowSportPicker(false)} options={SPORTS} onSelect={setStudentSport} title="Select Sport" />
       <CountryPicker visible={isCountryPickerOpen} onClose={() => setIsCountryPickerOpen(false)} onSelect={setSelectedCountry} />
+
+      {/* Delete Account Modal */}
+      <Modal visible={showDeleteModal} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { maxHeight: '90%' }]}>
+            <View style={styles.modalHeader}>
+              <View>
+                <Text style={styles.modalTitle}>Delete Account</Text>
+                <Text style={styles.modalSubtitle}>Please tell us why you want to leave</Text>
+              </View>
+              <TouchableOpacity onPress={() => setShowDeleteModal(false)}>
+                <MaterialIcons name="close" size={24} color="#64748B" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ padding: 20 }}>
+              {DELETION_REASONS.map((reason) => (
+                <TouchableOpacity 
+                  key={reason} 
+                  style={[styles.reasonOption, deleteReason === reason && styles.reasonOptionSelected]}
+                  onPress={() => setDeleteReason(reason)}
+                >
+                  <View style={[styles.radio, deleteReason === reason && styles.radioSelected]}>
+                    {deleteReason === reason && <View style={styles.radioInner} />}
+                  </View>
+                  <Text style={[styles.reasonText, deleteReason === reason && styles.reasonTextSelected]}>{reason}</Text>
+                </TouchableOpacity>
+              ))}
+
+              {deleteReason === 'Other' && (
+                <View style={{ marginTop: 15 }}>
+                  <Text style={styles.inputLabel}>PLEASE SPECIFY</Text>
+                  <TextInput 
+                    style={[styles.input, { height: 100, textAlignVertical: 'top' }]} 
+                    placeholder="Tell us more..." 
+                    multiline
+                    value={deleteDetails}
+                    onChangeText={setDeleteDetails}
+                  />
+                </View>
+              )}
+
+              <TouchableOpacity 
+                style={[styles.confirmDeleteBtn, (!deleteReason || isDeletingAccount) && { opacity: 0.5 }]}
+                onPress={handleConfirmDelete}
+                disabled={!deleteReason || isDeletingAccount}
+              >
+                {isDeletingAccount ? (
+                  <ActivityIndicator color="#FFF" />
+                ) : (
+                  <Text style={styles.confirmDeleteText}>Submit Deletion Request</Text>
+                )}
+              </TouchableOpacity>
+              
+              <View style={{ height: 40 }} />
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -332,9 +432,19 @@ const styles = StyleSheet.create({
   saveBtnText: { color: '#FFF', fontSize: 14, fontWeight: '800' },
   deleteBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#FEF2F2', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#FEE2E2' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#FFF', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingBottom: 40, maxHeight: '80%' },
+  modalContent: { backgroundColor: '#FFF', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingBottom: 0, maxHeight: '80%' },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
-  modalTitle: { fontSize: 16, fontWeight: '900', color: '#1E293B' },
+  modalTitle: { fontSize: 18, fontWeight: '900', color: '#1E293B' },
+  modalSubtitle: { fontSize: 13, color: '#64748B', fontWeight: '500', marginTop: 2 },
+  reasonOption: { flexDirection: 'row', alignItems: 'center', padding: 16, borderRadius: 16, backgroundColor: '#F8FAFC', marginBottom: 10, borderWidth: 1.5, borderColor: 'transparent' },
+  reasonOptionSelected: { borderColor: '#002C61', backgroundColor: '#F0F9FF' },
+  radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: '#CBD5E1', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  radioSelected: { borderColor: '#002C61' },
+  radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#002C61' },
+  reasonText: { fontSize: 14, fontWeight: '600', color: '#475569' },
+  reasonTextSelected: { color: '#1E293B', fontWeight: '800' },
+  confirmDeleteBtn: { backgroundColor: '#E31B23', borderRadius: 16, padding: 18, alignItems: 'center', justifyContent: 'center', marginTop: 20, shadowColor: '#E31B23', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 },
+  confirmDeleteText: { color: '#FFF', fontSize: 15, fontWeight: '900', textTransform: 'uppercase', letterSpacing: 0.5 },
   optionItem: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20, borderBottomWidth: 1, borderBottomColor: '#F8FAFC' },
   optionText: { fontSize: 15, fontWeight: '700', color: '#334155' },
 });
