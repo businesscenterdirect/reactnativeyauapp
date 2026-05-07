@@ -296,6 +296,8 @@ function AppLayout() {
 
 import { Toaster } from 'react-hot-toast';
 
+import SupportPage from './components/SupportPage';
+
 function App() {
   return (
     <Router>
@@ -303,6 +305,7 @@ function App() {
         <Toaster position="top-right" />
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/support" element={<SupportPage />} />
           <Route
             path="/*"
             element={

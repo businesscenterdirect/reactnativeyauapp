@@ -526,7 +526,7 @@ export default function RegisterScreen() {
                     {smsConsent && <MaterialIcons name="check" size={14} color="#FFF" />}
                   </TouchableOpacity>
                   <Text style={styles.termsText}>
-                    I agree to receive text messages from YAU. Message and data rates may apply. Reply STOP to opt out or HELP for help. View our <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/privacypolicy')} style={styles.linkText}>Privacy Policy</Text> and <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/terms')} style={styles.linkText}>Terms of Use</Text>.
+                    I agree to receive text messages from YAU. Message and data rates may apply. Reply STOP to opt out or HELP for help. View our <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/privacypolicy/')} style={styles.linkText}>Privacy Policy</Text> and <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/terms')} style={styles.linkText}>Terms of Use</Text>.
                   </Text>
                 </View>
 
@@ -538,7 +538,7 @@ export default function RegisterScreen() {
                     {termsAccepted && <MaterialIcons name="check" size={14} color="#FFF" />}
                   </TouchableOpacity>
                   <Text style={styles.termsText}>
-                    I agree to the <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/terms')} style={styles.linkText}>Terms of Service</Text> and <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/privacyterms')} style={styles.linkText}>Privacy Policy</Text>
+                    I agree to the <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/terms')} style={styles.linkText}>Terms of Service</Text> and <Text onPress={() => Linking.openURL('https://youthathleteuniversity.org/privacypolicy/')} style={styles.linkText}>Privacy Policy</Text>
                   </Text>
                 </View>
 
