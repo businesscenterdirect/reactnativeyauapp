@@ -5,6 +5,8 @@ import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, Tou
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { Schedule } from '../../src/services/schedule';
+import { isGradeMatch } from '../../src/services/registration';
+
 
 const { width } = Dimensions.get('window');
 
@@ -67,25 +69,7 @@ export default function HomeScreen() {
   const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
   // Same filter logic as the schedule screen — checks grade_band, all students, school & grade
-  const filteredSchedules = schedules.filter((s: Schedule) => {
-    if (!user?.students || user.students.length === 0) return true;
-
-    return user.students.some((student: any) => {
-      // School / Team Name Match
-      const schoolMatch = !student.school_name ||
-        s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-        s.location?.toLowerCase().includes(student.school_name.toLowerCase());
-
-      // Grade / Grade Band Match — uses grade_band direct field (same as schedule screen)
-      const gradeMatch = !student.grade ||
-        (s.grade_band && s.grade_band === student.grade) ||
-        s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
-        (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
-
-      return schoolMatch && gradeMatch;
-    });
-  });
+  const filteredSchedules = schedules;
 
   const upcomingSchedules = filteredSchedules
     .filter((s: Schedule) => s.date > todayStr)

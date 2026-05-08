@@ -4,12 +4,10 @@ import { apiService } from './api';
 
 // ─── Canonical Grade Bands ── MUST match Admin Panel exactly ──────────────────
 export const GRADE_BANDS = [
-  { label: 'K - 1st Grade',   value: 'K - 1st Grade',   band: 'Band 1' },
-  { label: '1st - 2nd Grade', value: '1st - 2nd Grade', band: 'Band 2' },
-  { label: '3rd - 4th Grade', value: '3rd - 4th Grade', band: 'Band 3' },
-  { label: '5th - 6th Grade', value: '5th - 6th Grade', band: 'Band 4' },
-  { label: '7th - 8th Grade', value: '7th - 8th Grade', band: 'Band 5' },
-  { label: 'High School',     value: 'High School',     band: 'Band 6' },
+  { label: 'Kindergarten – 1st Grade',          value: 'Kindergarten – 1st Grade',          band: 'Band 1' },
+  { label: '2nd – 3rd Grade',                   value: '2nd – 3rd Grade',                   band: 'Band 2' },
+  { label: '4th – 5th Grade',                   value: '4th – 5th Grade',                   band: 'Band 3' },
+  { label: 'Middle School (6th, 7th & 8th Grade)', value: 'Middle School (6th, 7th & 8th Grade)', band: 'Band 4' },
 ];
 
 // Canonical sports
@@ -18,7 +16,31 @@ export const SPORTS = ['Flag Football', 'Soccer', 'Cheer', 'Basketball'];
 // Map grade band value → Band key
 export function gradeBandToBandKey(gradeBand: string): string {
   const match = GRADE_BANDS.find(g => g.value === gradeBand || g.label === gradeBand);
-  return match ? match.band : 'Band 1';
+  if (match) return match.band;
+  
+  // Backward compatibility for safe mappings
+  if (gradeBand === 'K - 1st Grade') return 'Band 1';
+  if (gradeBand === '7th - 8th Grade') return 'Band 4';
+  
+  return 'Band 1'; // Default fallback
+}
+
+/**
+ * Utility to match stored grade values (including legacy/flagged) against new filter values.
+ */
+export function isGradeMatch(storedGrade: string | undefined, filterGrade: string): boolean {
+  if (!storedGrade) return false;
+  if (storedGrade === filterGrade) return true;
+
+  // Safe Exact Mappings
+  if (filterGrade === 'Kindergarten – 1st Grade' && storedGrade === 'K - 1st Grade') return true;
+  if (filterGrade === 'Middle School (6th, 7th & 8th Grade)' && storedGrade === '7th - 8th Grade') return true;
+
+  // Flagged/Legacy records that don't have an automatic mapping remain as is
+  // and will only match if the filter matches them exactly (which shouldn't happen 
+  // with the new 4-band filter) or if we add specific fallback logic here.
+  
+  return false;
 }
 
 export interface RegistrationData {

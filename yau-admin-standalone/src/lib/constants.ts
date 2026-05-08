@@ -1,13 +1,27 @@
 // ─── Canonical Grade Bands ────────────────────────────────────────────────────
 // MUST match the mobile app exactly (standings.tsx, schedule.tsx)
 export const GRADE_BANDS: string[] = [
-  'K - 1st Grade',
-  '1st - 2nd Grade',
-  '3rd - 4th Grade',
-  '5th - 6th Grade',
-  '7th - 8th Grade',
-  'High School',
+  'Kindergarten – 1st Grade',
+  '2nd – 3rd Grade',
+  '4th – 5th Grade',
+  'Middle School (6th, 7th & 8th Grade)',
 ];
+
+
+
+/**
+ * Utility to match stored grade values (including legacy/flagged) against new filter values.
+ */
+export function isGradeMatch(storedGrade: string | undefined, filterGrade: string): boolean {
+  if (!storedGrade) return false;
+  if (storedGrade === filterGrade) return true;
+
+  // Safe Exact Mappings
+  if (filterGrade === 'Kindergarten – 1st Grade' && storedGrade === 'K - 1st Grade') return true;
+  if (filterGrade === 'Middle School (6th, 7th & 8th Grade)' && (storedGrade === '7th - 8th Grade' || storedGrade === 'Middle School')) return true;
+
+  return false;
+}
 
 // ─── Canonical Sports ─────────────────────────────────────────────────────────
 export const SPORTS: string[] = [

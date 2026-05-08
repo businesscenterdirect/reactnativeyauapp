@@ -3,7 +3,8 @@ import { sendPasswordResetEmail } from 'firebase/auth';
 import { AlertTriangle, CheckSquare, Edit2, Eye, Loader2, Mail, Phone, Save, Search, Shirt, Trash2, X, Square, Key } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '../lib/firebase';
-import { GRADE_BANDS, SPORTS } from '../lib/constants';
+import { GRADE_BANDS, SPORTS, isGradeMatch } from '../lib/constants';
+
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
 import { Card } from './ui/Card';
@@ -120,7 +121,8 @@ const MembersList: React.FC = () => {
     const matchesSchool = filterSchool === 'all' || (member.students || []).some(s => (s.school_name || '').trim() === filterSchool);
 
     // Grade Band — fallback gracefully; if student has no grade_band it won't match any specific filter
-    const matchesGradeBand = filterGradeBand === 'all' || (member.students || []).some(s => (s.grade_band || '').trim() === filterGradeBand);
+    const matchesGradeBand = filterGradeBand === 'all' || (member.students || []).some(s => isGradeMatch(s.grade_band, filterGradeBand));
+
 
     // Sport — fallback gracefully
     const matchesSport = filterSport === 'all' || member.sport === filterSport || (member.students || []).some(s => (s.sport || '').trim() === filterSport);
@@ -349,9 +351,13 @@ const MembersList: React.FC = () => {
                   <td className="px-6 py-4">
                     {(member.students || []).map((s, idx) => (
                       <div key={idx} className="space-y-0.5">
-                        <p className="text-xs font-bold text-gray-700 dark:text-white/80">{s.grade_band || <span className="text-gray-300">—</span>}</p>
+                        <div className="flex items-center gap-1">
+                          <p className="text-xs font-bold text-gray-700 dark:text-white/80">{s.grade_band || <span className="text-gray-300">—</span>}</p>
+                        </div>
+
                         {s.grade && <p className="text-[10px] text-gray-400">Gr. {s.grade}</p>}
                       </div>
+
                     ))}
                   </td>
                   {/* School */}

@@ -13,6 +13,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { Schedule } from '../../src/services/schedule';
+import { isGradeMatch } from '../../src/services/registration';
+
 
 const SPORT_ICONS: Record<string, string> = {
   soccer: '⚽',
@@ -56,26 +58,7 @@ export default function ScheduleScreen() {
 
   const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
-  const filteredSchedules = schedules.filter((s: Schedule) => {
-    // 1. Basic Student Filter (School, Grade Band)
-    if (!user?.students || user.students.length === 0) return true;
-
-    return user.students.some(student => {
-      // School / Team Name Match
-      const schoolMatch = !student.school_name ||
-        s.team1Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-        s.team2Name?.toLowerCase().includes(student.school_name.toLowerCase()) ||
-        s.location?.toLowerCase().includes(student.school_name.toLowerCase());
-
-      // Grade / Grade Band Match
-      const gradeMatch = !student.grade ||
-        (s.grade_band && s.grade_band === student.grade) ||
-        s.ageGroups?.some((g: string) => student.grade === g || student.grade.includes(g)) ||
-        (s.ageGroup && (student.grade.includes(s.ageGroup) || s.ageGroup.includes(student.grade.split(' ')[0])));
-
-      return schoolMatch && gradeMatch;
-    });
-  });
+  const filteredSchedules = schedules;
 
   const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date > todayStr);
   const realPast = filteredSchedules.filter((s: Schedule) => s.date <= todayStr);

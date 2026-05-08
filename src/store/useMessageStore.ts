@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { AdminPost } from '../services/messaging';
 import { collection, onSnapshot, query, orderBy, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { setBadgeCount } from '../services/notifications';
 
 interface UserReadState {
   lastSeenMessageId: string;
@@ -199,6 +200,9 @@ export const useMessageStore = create<MessageState>((set, get) => ({
 
     const total = updatedGroups.reduce((acc, g) => acc + (g.unreadCount || 0), 0);
     set({ groups: updatedGroups, totalUnread: total });
+    
+    // Sync with iOS Native Badge
+    setBadgeCount(total);
   },
 
   markAsRead: async (userId, groupId, lastMessageId) => {

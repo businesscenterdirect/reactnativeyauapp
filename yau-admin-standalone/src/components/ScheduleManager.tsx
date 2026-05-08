@@ -4,6 +4,7 @@ import { collection, query, onSnapshot, addDoc, updateDoc, doc, serverTimestamp,
 import { db } from '../lib/firebase';
 import { Calendar, Plus, Edit2, Trash2, X, Loader2, MapPin, Clock, Trophy, CheckSquare, Square, AlertTriangle } from 'lucide-react';
 import { parseScheduleDate, todayMidnight, GRADE_BANDS, SPORTS } from '../lib/constants';
+
 import { format } from 'date-fns';
 import { Button } from './ui/Button';
 import { Card } from './ui/Card';
@@ -303,9 +304,13 @@ const ScheduleManager: React.FC = () => {
               </div>
 
               <div className="absolute -bottom-3 right-6">
-                <Badge variant="info" className="bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white border-none shadow-xl h-8 px-5 font-black uppercase text-[10px] tracking-widest ring-4 ring-white dark:ring-black">
+                <Badge 
+                  variant="info" 
+                  className="bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white border-none shadow-xl h-8 px-5 font-black uppercase text-[10px] tracking-widest ring-4 ring-white dark:ring-black"
+                >
                   {schedule.grade_band}
                 </Badge>
+
               </div>
             </Card>
           ))}

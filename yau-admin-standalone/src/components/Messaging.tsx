@@ -8,7 +8,8 @@ import { Input } from './ui/Input';
 import { Select } from './ui/Select';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
-import { GRADE_BANDS, SPORTS } from '../lib/constants';
+import { GRADE_BANDS, SPORTS, isGradeMatch } from '../lib/constants';
+
 import toast from 'react-hot-toast';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -152,10 +153,11 @@ const Messaging: React.FC = () => {
             normalize(s.school_name) === normalize(g.school)
           );
           const matchesGrade = g.gradeBand === 'all' || (data.students || []).some((s: any) => 
-            normalize(s.grade_band) === normalize(g.gradeBand) || 
-            normalize(s.ageGroup) === normalize(g.gradeBand) ||
-            normalize(s.grade) === normalize(g.gradeBand)
+            isGradeMatch(s.grade_band, g.gradeBand) || 
+            isGradeMatch(s.ageGroup, g.gradeBand) ||
+            isGradeMatch(s.grade, g.gradeBand)
           );
+
           const matchesSport = g.sport === 'all' || 
             normalize(data.sport) === normalize(g.sport) || 
             (data.students || []).some((s: any) => normalize(s.sport) === normalize(g.sport));
@@ -423,16 +425,38 @@ const Messaging: React.FC = () => {
               </div>
 
               {/* Replies */}
-              {replies.map(reply => (
-                <div key={reply.id} className={`flex ${reply.userRole === 'admin' ? 'justify-end' : 'justify-start'} group`}>
-                  <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm relative ${reply.userRole === 'admin' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10'}`}>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${reply.userRole === 'admin' ? 'text-indigo-100' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                        {getRoleLabel(reply)}
-                      </span>
-                      <span className="text-[8px] opacity-60 font-bold dark:text-white/40">{reply.timestamp?.toDate().toLocaleTimeString()}</span>
-                    </div>
-                    <p className={`text-sm leading-relaxed ${reply.userRole === 'admin' ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{reply.content}</p>
+              {replies.map(reply => {
+                const isDeletionRequest = reply.content?.toUpperCase().includes('ACCOUNT DELETION REQUEST');
+                const isSystemAdmin = reply.userRole === 'admin';
+                
+                return (
+                  <div key={reply.id} className={`flex ${isSystemAdmin ? 'justify-end' : 'justify-start'} group`}>
+                    <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm relative ${
+                      isSystemAdmin 
+                        ? 'bg-indigo-600 text-white' 
+                        : isDeletionRequest 
+                          ? 'bg-red-600 text-white border-none shadow-lg' 
+                          : 'bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10'
+                    }`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${
+                          isSystemAdmin 
+                            ? 'text-indigo-100' 
+                            : isDeletionRequest
+                              ? 'text-red-100'
+                              : 'text-indigo-600 dark:text-indigo-400'
+                        }`}>
+                          {getRoleLabel(reply)}
+                        </span>
+                        <span className={`text-[8px] opacity-60 font-bold ${isDeletionRequest || isSystemAdmin ? 'text-white/60' : 'dark:text-white/40'}`}>
+                          {reply.timestamp?.toDate().toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
+                        (isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
+                      } ${isDeletionRequest ? 'font-medium' : ''}`}>
+                        {reply.content}
+                      </p>
                     {/* Delete reply button — visible on hover */}
                     <button
                       onClick={() => handleDeleteReply(reply.id)}
@@ -441,9 +465,10 @@ const Messaging: React.FC = () => {
                     >
                       <X size={10} />
                     </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               {replies.length === 0 && <div className="text-center py-20 text-gray-400 italic text-sm">No member replies yet.</div>}
             </div>
 

@@ -13,7 +13,8 @@ import { Card } from './ui/Card';
 import { Input } from './ui/Input';
 import { Badge } from './ui/Badge';
 import { Select } from './ui/Select';
-import { GRADE_BANDS, SPORTS, toStandingsKey } from '../lib/constants';
+import { GRADE_BANDS, SPORTS, toStandingsKey, isGradeMatch } from '../lib/constants';
+
 import toast from 'react-hot-toast';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -238,7 +239,8 @@ const StandingsManager: React.FC = () => {
 
   const filteredStandings = standings.filter(s => {
     const matchesSearch = (s.teamName || '').toLowerCase().includes(searchTerm.toLowerCase()) || (s.schoolName || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGrade = filterGradeBand === 'all' || s.gradeBand === filterGradeBand;
+    const matchesGrade = filterGradeBand === 'all' || isGradeMatch(s.gradeBand, filterGradeBand);
+
     const matchesSport = filterSport === 'all' || s.sport === filterSport;
     return matchesSearch && matchesGrade && matchesSport;
   });
@@ -477,9 +479,15 @@ const StandingsManager: React.FC = () => {
                       </td>
                       <td className="px-4 py-4">
                         <div>
-                          <Badge variant="secondary" className="text-[9px] mb-1">{standing.gradeBand}</Badge>
+                          <Badge 
+                            variant="secondary" 
+                            className="text-[9px] mb-1"
+                          >
+                            {standing.gradeBand}
+                          </Badge>
                           <div className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">{standing.sport}</div>
                         </div>
+
                       </td>
                       <td className="px-4 py-4 text-center">
                         <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 text-sm">{standing.wins ?? 0}</span>

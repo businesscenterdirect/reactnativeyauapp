@@ -1,0 +1,4869 @@
+{
+  "timestamp": "2026-05-08T09:59:00.773Z",
+  "dryRun": false,
+  "summary": {
+    "totalProcessed": 107,
+    "updated": 7,
+    "skipped": 104,
+    "flagged": 0,
+    "errors": 0
+  },
+  "details": {
+    "members": [],
+    "schedules": [
+      {
+        "collection": "schedules",
+        "id": "4L9NS5dgAACLDCmlBckP",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      },
+      {
+        "collection": "schedules",
+        "id": "DS10d61hyW2pxdyRIQFS",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      },
+      {
+        "collection": "schedules",
+        "id": "Z9DUrr6b5dMusbpuBsCq",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      },
+      {
+        "collection": "schedules",
+        "id": "a4U7kte9RHoQTjnQ22KU",
+        "old": "5th - 6th Grade",
+        "new": "Middle School (6th, 7th & 8th Grade)",
+        "action": "UPDATE"
+      },
+      {
+        "collection": "schedules",
+        "id": "eLU1MePaustFp7t8vIEY",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      }
+    ],
+    "standings": [
+      {
+        "collection": "standings",
+        "id": "baden__3rd__4th_grade__soccer",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      },
+      {
+        "collection": "standings",
+        "id": "brandywine__3rd__4th_grade__soccer",
+        "old": "3rd - 4th Grade",
+        "new": "4th – 5th Grade",
+        "action": "UPDATE"
+      }
+    ]
+  },
+  "backup": {
+    "members": [
+      {
+        "id": "1mH8x0yLOrS5pqdl20Pw",
+        "students": [
+          {
+            "uniformTop": "Adult M",
+            "lastName": "Danquah",
+            "dob": "11-06-2012",
+            "firstName": "Ernest",
+            "sport": "SOCCER",
+            "grade": "8th Grade",
+            "location": "National Harbor, MD",
+            "school_name": "Colin Powel Academy",
+            "ageGroup": "13U",
+            "uid": "aYIrYfBWtIELiQmhW38h",
+            "uniformBottom": "Adult M"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+12405500940",
+        "email": "ironcoucher12@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774477106,
+          "nanoseconds": 66000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774477105,
+          "nanoseconds": 331000000
+        },
+        "firstName": "David",
+        "paymentStatus": "paid",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "registrationSource": "web",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774477106,
+          "nanoseconds": 66000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "wuDrthPMPpd8aXjbxjgVSam1nMH2",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "SOCCER",
+        "paymentIntentId": "pi_3TEzkoD0jrYX3tXC0r2G0ooK",
+        "lastName": "Awanda",
+        "noRefundPolicy": true
+      },
+      {
+        "id": "2VfgW7Xd9GT4klRkAt1bFqWmqfy1",
+        "email": "piyush@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759141979,
+          "nanoseconds": 910000000
+        },
+        "firstName": "Piyush",
+        "smsOtpIn": true,
+        "students": [
+          {
+            "ageGroup": "6U",
+            "uid": "qUiiQtP1h1sQrF287sRW",
+            "location": "Andrews AFB - Clinton",
+            "sport": "Basketball",
+            "lastName": "R",
+            "firstName": "Piyu",
+            "dob": "01-22-19"
+          }
+        ],
+        "phone": "9098767890",
+        "lastReadTimestamps": {
+          "6U_Basketball_Andrews_AFB_-_Clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1760671373,
+            "nanoseconds": 730000000
+          }
+        },
+        "fcmToken": "ftqCZO6EA0XIquXBDJ2o4K:APA91bEWVrPlev6cK5LsbGxzp0gyuTkJseblbTwjMJ_2HUocqObrmC2mqNWpJ4J-VZdcoNJ4jQQi3gqW0jUWGwJSC4RerjoA5BugmttfZTDehDvQ2hGVIMI",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759746909,
+          "nanoseconds": 268000000
+        },
+        "location": "Andrews AFB - Clinton",
+        "sport": "Basketball",
+        "lastName": "R",
+        "password": "piyush@123",
+        "referralCode": "PIYUSH-R-2VFG"
+      },
+      {
+        "id": "2gEjRx16lIpuJDLchJIj",
+        "email": "testing30@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544905,
+          "nanoseconds": 982000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544896,
+          "nanoseconds": 52000000
+        },
+        "firstName": "Test",
+        "paymentStatus": "paid",
+        "students": [
+          {
+            "location": "Bowie, MD",
+            "grade": "1st Grade",
+            "ageGroup": "3U",
+            "school_name": "brandwine",
+            "uid": "ZstmOXg5mYIx9Gw5wwKv",
+            "lastName": "member",
+            "uniformTop": "",
+            "dob": "12-15-2023",
+            "firstName": "test",
+            "sport": "FLAG_FOOTBALL",
+            "uniformBottom": ""
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+17894560000",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544905,
+          "nanoseconds": 982000000
+        },
+        "registrationAgreement": true,
+        "uid": "4gWPSshFDOgFCHW3TI5n9cwe0DJ3",
+        "encouragementCommitment": true,
+        "location": "Bowie, MD",
+        "sport": "FLAG_FOOTBALL",
+        "paymentIntentId": "pi_3TRrpOD0jrYX3tXC16kG7Ygh",
+        "lastName": "Mail",
+        "noRefundPolicy": true,
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web"
+      },
+      {
+        "id": "33zrWvZmLuQhMzIVptel",
+        "upgradedFrom": "members",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "paymentIntentId": "pi_3SFg9fD0jrYX3tXC0OBxy3kd",
+        "lastName": "Proctor",
+        "registrationAgreement": true,
+        "uid": "t7YEYiqBb4dnajPci3lil0u5i232",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863761,
+          "nanoseconds": 900000000
+        },
+        "lastPaymentDate": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863761,
+          "nanoseconds": 900000000
+        },
+        "firstName": "Pierre",
+        "email": "pdproctor2010@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863758,
+          "nanoseconds": 156000000
+        },
+        "consentText": true,
+        "membershipType": "monthly",
+        "paymentMethod": "card",
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "phone": "2406067047",
+        "membershipActivatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863761,
+          "nanoseconds": 900000000
+        },
+        "isPaidMember": true,
+        "upgradedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863761,
+          "nanoseconds": 900000000
+        },
+        "students": [
+          {
+            "dob": "11-06-2017",
+            "firstName": "Pierre",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "lastName": "Proctor",
+            "uid": "15sL6QemTaSbIahMXpZ2",
+            "ageGroup": "7U"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759863756,
+          "nanoseconds": 790000000
+        },
+        "paymentStatus": "active"
+      },
+      {
+        "id": "4cYxmCdQh5cV0RrskkuM",
+        "consentText": true,
+        "email": "Onerichardantoine@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768325992,
+          "nanoseconds": 32000000
+        },
+        "firstName": "Richard ",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768325990,
+          "nanoseconds": 360000000
+        },
+        "students": [
+          {
+            "ageGroup": "6U",
+            "uid": "1d8aFdBFhxbZaQk7TbDY",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "lastName": "Antoine",
+            "dob": "Invalid Date",
+            "firstName": "Royal "
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "3019964795",
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768325992,
+          "nanoseconds": 32000000
+        },
+        "parentConduct": true,
+        "uid": "NUPhZUPnmaXZ3jXuU2c9OVlvNJj1",
+        "registrationAgreement": true,
+        "lastName": "Antoine ",
+        "paymentIntentId": "pi_3SpBZGD0jrYX3tXC1wsm1lcI",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web"
+      },
+      {
+        "id": "4jpVuDb2fagPIlCLFR90",
+        "phone": "+19528685636",
+        "registrationSource": "mobile",
+        "students": [
+          {
+            "grade": "1st Grade",
+            "ageGroup": "Band 2",
+            "school_name": "Carmody Hills Elementary",
+            "lastName": "Kumar",
+            "dob": "2015-02-19",
+            "firstName": "Kunal",
+            "sport": "Flag Football"
+          }
+        ],
+        "membershipType": "free",
+        "sport": "Flag Football",
+        "lastName": "Kumar",
+        "firstName": "Rahul",
+        "email": "rahul@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776256496,
+          "nanoseconds": 172000000
+        },
+        "location": "Kanpur"
+      },
+      {
+        "id": "4xzKyN2Ud5a1li1YaFpdW9j6ZIr2",
+        "registrationSource": "admin",
+        "membershipType": "free",
+        "lastName": "testing",
+        "sport": "Basketball",
+        "location": "College Park - Beltsville",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777009979,
+          "nanoseconds": 682000000
+        },
+        "uid": "4xzKyN2Ud5a1li1YaFpdW9j6ZIr2",
+        "isPaidMember": false,
+        "phone": "+12027031919",
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "students": [
+          {
+            "sport": "Basketball",
+            "grade_band": "4th – 5th Grade",
+            "firstName": "dksj",
+            "dob": "1991-04-24",
+            "lastName": "sksjdj",
+            "groupId": "college_park_beltsville_Band 3_basketball",
+            "ageGroup": "Band 3",
+            "school_name": "College Park - Beltsville",
+            "grade": "4th Grade"
+          }
+        ],
+        "paymentStatus": "inactive",
+        "firstName": "jack",
+        "createdBy": "admin",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777009979,
+          "nanoseconds": 682000000
+        },
+        "email": "lskdjwns@mdkdk.com",
+        "emailVerified": true
+      },
+      {
+        "id": "5N8flMJR63p5qknL7OmK",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TRrswD0jrYX3tXC12IAnguu",
+        "lastName": "email",
+        "uid": "glx5IWpk21buAhrGIW3QBf6SG5A3",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777545124,
+          "nanoseconds": 722000000
+        },
+        "location": "Greenbelt, MD",
+        "encouragementCommitment": true,
+        "phone": "+917856321400",
+        "isPaidMember": true,
+        "students": [
+          {
+            "location": "Greenbelt, MD",
+            "grade": "7th Grade",
+            "ageGroup": "3U",
+            "school_name": "brandwine",
+            "uid": "p2UoB3uHxVf6BVQQawCX",
+            "uniformTop": "",
+            "lastName": "member",
+            "dob": "12-26-2023",
+            "firstName": "email",
+            "sport": "SOCCER",
+            "uniformBottom": ""
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777545115,
+          "nanoseconds": 435000000
+        },
+        "firstName": "email",
+        "paymentStatus": "paid",
+        "email": "email30@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777545124,
+          "nanoseconds": 722000000
+        },
+        "consentText": true
+      },
+      {
+        "id": "5hgISR3JgZUl0V9q7RS89sFyytU2",
+        "emailVerified": true,
+        "email": "jsmith@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777068043,
+          "nanoseconds": 16000000
+        },
+        "firstName": "Johnson",
+        "paymentStatus": "inactive",
+        "createdBy": "admin",
+        "students": [
+          {
+            "school_name": "College Park - Beltsville",
+            "ageGroup": "Band 3",
+            "grade": "5th Grade",
+            "sport": "Basketball",
+            "firstName": "my",
+            "grade_band": "4th – 5th Grade",
+            "dob": "1995-11-23",
+            "groupId": "college_park_beltsville_Band 3_basketball",
+            "lastName": "student"
+          }
+        ],
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "phone": "+12027013900",
+        "isPaidMember": false,
+        "location": "College Park - Beltsville",
+        "uid": "5hgISR3JgZUl0V9q7RS89sFyytU2",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777068043,
+          "nanoseconds": 16000000
+        },
+        "lastName": "Smith",
+        "sport": "Basketball",
+        "membershipType": "free",
+        "registrationSource": "admin"
+      },
+      {
+        "id": "6FolvfIDnmPDrJDwxA9gHFCm9732",
+        "registrationSource": "admin",
+        "membershipType": "free",
+        "sport": "Flag Football",
+        "lastName": "My name",
+        "uid": "6FolvfIDnmPDrJDwxA9gHFCm9732",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777502433,
+          "nanoseconds": 126000000
+        },
+        "location": "",
+        "phone": "+12027099333",
+        "isPaidMember": false,
+        "smsConsent": true,
+        "students": [
+          {
+            "dob": "",
+            "firstName": "Aldiss",
+            "grade_band": "2nd – 3rd Grade",
+            "lastName": "Alabama",
+            "groupId": "brandywine_elementary_school_Band 2_flag_football",
+            "sport": "Flag Football",
+            "grade": "2nd / 3rd Grade",
+            "school_name": "Brandywine Elementary School",
+            "ageGroup": "Band 2",
+            "sports": [
+              "Flag Football"
+            ]
+          }
+        ],
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "createdBy": "admin",
+        "paymentStatus": "inactive",
+        "firstName": "Testing",
+        "emailVerified": true,
+        "email": "fka@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777502433,
+          "nanoseconds": 126000000
+        }
+      },
+      {
+        "id": "7tYscBzDOnZ2RUTNdvVJLD20Xd23",
+        "location": "College Park - Beltsville",
+        "encouragementCommitment": true,
+        "uid": "7tYscBzDOnZ2RUTNdvVJLD20Xd23",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "noRefundPolicy": true,
+        "lastName": "CBA",
+        "sport": "BASKETBALL",
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "fundraiserCommitment": true,
+        "registrationSource": "app",
+        "consentText": true,
+        "createdAt": "2026-03-03T14:57:49.823226",
+        "email": "abc@yopmail.com",
+        "firstName": "ABC",
+        "students": [
+          {
+            "ageGroup": "6U",
+            "school_name": "RJSP",
+            "uid": "6haqV0GFFwXENnVdEkVi",
+            "registrationAgreement": true,
+            "grade": "A",
+            "location": "College Park - Beltsville",
+            "sport": "BASKETBALL",
+            "lastName": "DSA",
+            "uniformTop": "YL",
+            "firstName": "ASD",
+            "dob": "01-01-2020",
+            "uniformBottom": "YM"
+          }
+        ],
+        "phone": "+19876567890",
+        "isPaidMember": true
+      },
+      {
+        "id": "8Kl8GQTcjJJEtnky034B",
+        "firstName": "Kimberly",
+        "consentText": true,
+        "email": "kmccrae76@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759175456,
+          "nanoseconds": 203000000
+        },
+        "phone": "3016595797",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "idStatus": "pending",
+            "governmentIdUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-existing-ids%2FhPAqwsk3uu2ptxZz4Gtj%2FIMG_9680.jpeg?alt=media&token=ba91d823-bee0-4a99-8e34-1540197c05d0",
+            "uniformTop": "",
+            "lastName": "Sellers",
+            "firstName": "Antonio",
+            "dob": "06-26-2015",
+            "updatedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1773757647,
+              "nanoseconds": 468000000
+            },
+            "ageGroup": "10U",
+            "uid": "hPAqwsk3uu2ptxZz4Gtj",
+            "registrationAgreement": true,
+            "governmentIdUrl_filetype": "jpeg"
+          }
+        ],
+        "noRefundPolicy": true,
+        "lastName": "Sellers",
+        "sport": "",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "registrationAgreement": true,
+        "uid": "jlcpSBJFLCgDQUctmTVXL5iSvln1",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759952377,
+          "nanoseconds": 100000000
+        },
+        "registrationSource": "web",
+        "membershipType": "free",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true
+      },
+      {
+        "id": "8ZU7UQTu2Pg7UOiCdfa4ykPR5uf1",
+        "phone": "9658741230",
+        "lastReadTimestamps": {
+          "8U_Tackle_Football_Greenbelt,_MD": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1758785424,
+            "nanoseconds": 339000000
+          }
+        },
+        "students": [
+          {
+            "location": "Greenbelt, MD",
+            "ageGroup": "8U",
+            "uid": "Qn3694AU79BgN5B3Yp1z",
+            "lastName": "P",
+            "dob": "01-25-17",
+            "firstName": "Ahilya",
+            "sport": "Tackle Football"
+          }
+        ],
+        "firstName": "Sharayu",
+        "smsOtpIn": true,
+        "lastName": "P",
+        "password": "sharayu@123",
+        "sport": "Tackle Football",
+        "location": "Greenbelt, MD",
+        "email": "sharayu@gmail.com",
+        "fcmToken": "eAPMgFxLRkORv9C9eioi2z:APA91bHhar8xEGB5YFR4AlW0sm8uJcJJq1BmISq72k2jFGgoWcNrqQ7Ko6rgqiQXOVb8PqXlWBzG5RVXHaLBaz-PVeZKSeHHsICbu-svcnbYRQURw-HD71s",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758516460,
+          "nanoseconds": 237000000
+        }
+      },
+      {
+        "id": "8cYJozwu9BkJ80p9wQar",
+        "location": "Greenbelt, MD",
+        "encouragementCommitment": true,
+        "uid": "eLsxLDB1aiRRmrCt8glg7mKnxzL2",
+        "registrationAgreement": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758832217,
+          "nanoseconds": 609000000
+        },
+        "parentConduct": true,
+        "noRefundPolicy": true,
+        "lastName": "Herrera",
+        "sport": "SOCCER",
+        "membershipType": "free",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "consentText": true,
+        "email": "hnellys827@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758832217,
+          "nanoseconds": 609000000
+        },
+        "firstName": "Nellys ",
+        "students": [
+          {
+            "dob": "01-11-2020",
+            "firstName": "Cristopher ",
+            "lastName": "Figueroa ",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "registrationAgreement": true,
+            "uid": "OP8E4GmrVTURKng4knl5",
+            "ageGroup": "5U"
+          }
+        ],
+        "phone": "2405107396",
+        "isPaidMember": false
+      },
+      {
+        "id": "8rbmsbmvtNbtfIRaKqRa",
+        "sport": "BASKETBALL",
+        "lastName": "Makel",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1760392332,
+          "nanoseconds": 656000000
+        },
+        "registrationAgreement": true,
+        "uid": "hpQPpaaxFKTMsosT7Sli2qp4Mmm2",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "free",
+        "registrationPlan": "oneTime",
+        "firstName": "Robert",
+        "email": "robertmakel49@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759184782,
+          "nanoseconds": 7000000
+        },
+        "consentText": true,
+        "isPaidMember": true,
+        "phone": "2026157047",
+        "students": [
+          {
+            "uniformBottom": "Youth S",
+            "lastName": "Green ",
+            "uniformTop": "Youth S",
+            "firstName": "Leo",
+            "dob": "08-02-2019",
+            "ageGroup": "5U",
+            "registrationAgreement": true,
+            "uid": "S48M64YAR6UHnPCTCDrj"
+          }
+        ]
+      },
+      {
+        "id": "ADpVLESALmHiS7bM0hqy",
+        "sport": "Soccer",
+        "lastName": "Pawar",
+        "firstName": "Navneet",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776257278,
+          "nanoseconds": 896000000
+        },
+        "email": "navy12@gmail.com",
+        "location": "Armidale",
+        "phone": "+12583691256",
+        "registrationSource": "mobile",
+        "students": [
+          {
+            "sport": "Soccer",
+            "dob": "2024-06-29",
+            "firstName": "Bbulu",
+            "lastName": "Pawar",
+            "school_name": "Benjamin Stoddert",
+            "ageGroup": "Band 2",
+            "grade": "2nd Grade"
+          }
+        ],
+        "membershipType": "free"
+      },
+      {
+        "id": "AkoL57qJIlEV1Z0g19N7",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776257946,
+          "nanoseconds": 87000000
+        },
+        "email": "---@gmail.com",
+        "location": "——",
+        "sport": "Flag Football",
+        "lastName": "..",
+        "firstName": "..",
+        "students": [
+          {
+            "grade": "4th Grade",
+            "ageGroup": "Band 3",
+            "school_name": "Brandywine Elementary",
+            "dob": "1817-12-28",
+            "firstName": "…..",
+            "lastName": "….",
+            "sport": "Flag Football"
+          }
+        ],
+        "membershipType": "free",
+        "phone": "****",
+        "registrationSource": "mobile"
+      },
+      {
+        "id": "BkUnWy2Z5XzVmbTTnU8S",
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "noRefundPolicy": true,
+        "lastName": "Ndubueze",
+        "paymentIntentId": "pi_3SzHpHD0jrYX3tXC0vcgFESK",
+        "sport": "BASKETBALL",
+        "encouragementCommitment": true,
+        "location": "Bowie, MD",
+        "registrationAgreement": true,
+        "uid": "3KX68b0cRffSw7cIZlE8VxHrh5v2",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770733328,
+          "nanoseconds": 568000000
+        },
+        "phone": "2408995090",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "uniformTop": "",
+            "lastName": "Hayes",
+            "firstName": "Isaiah ",
+            "dob": "09-09-2016",
+            "sport": "BASKETBALL",
+            "grade": "3rd Grade",
+            "location": "Bowie, MD",
+            "ageGroup": "9U",
+            "school_name": "St. Mary’s Landover Hills",
+            "uid": "rNkZx85yOCBWSN2io5OS"
+          }
+        ],
+        "firstName": "Beverly",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770733327,
+          "nanoseconds": 619000000
+        },
+        "consentText": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770733328,
+          "nanoseconds": 568000000
+        },
+        "email": "beverlyndubueze@gmail.com"
+      },
+      {
+        "id": "BpwzFnVZOGTq3IZqHhsaxQkwcr02",
+        "lastReadTimestamps": {
+          "soccer-13u-andrews-afb---clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1758299517,
+            "nanoseconds": 813000000
+          },
+          "13U_SOCCER_Andrews_AFB_-_Clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1758020572,
+            "nanoseconds": 924000000
+          }
+        }
+      },
+      {
+        "id": "DT45pLP8fPTjS4tGULNO",
+        "location": "Landover",
+        "encouragementCommitment": true,
+        "uid": "i00NkWMrafTpd4OHiWPa7ojI3H13",
+        "registrationAgreement": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774107264,
+          "nanoseconds": 574000000
+        },
+        "parentConduct": true,
+        "noRefundPolicy": true,
+        "lastName": "Nana",
+        "paymentIntentId": "pi_3TDRXbD0jrYX3tXC160JFnJ6",
+        "sport": "SOCCER",
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "consentText": true,
+        "email": "SINCLARENANA1@GMAIL.COM",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774107264,
+          "nanoseconds": 574000000
+        },
+        "firstName": "Sinclair",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774107263,
+          "nanoseconds": 703000000
+        },
+        "students": [
+          {
+            "school_name": "Beacon high elementary school ",
+            "ageGroup": "10U",
+            "uid": "GAyD0USOAHHGNofDtByV",
+            "grade": "5th Grade",
+            "location": "Landover",
+            "sport": "SOCCER",
+            "uniformTop": "",
+            "lastName": "Tchouamou nana",
+            "dob": "10-17-2015",
+            "firstName": "Steve Forlane ",
+            "uniformBottom": ""
+          }
+        ],
+        "phone": "+12407140406",
+        "isPaidMember": true
+      },
+      {
+        "id": "DdQAQ3X4WtPBtIdGYnzvvI6MFDt2",
+        "membershipType": "free",
+        "registrationSource": "admin",
+        "location": "",
+        "uid": "DdQAQ3X4WtPBtIdGYnzvvI6MFDt2",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777561738,
+          "nanoseconds": 707000000
+        },
+        "lastName": "Ms K",
+        "sport": "Flag Football",
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "students": [
+          {
+            "ageGroup": "Band 1",
+            "school_name": "Allenwood Elementary School",
+            "grade": "K / 1st Grade",
+            "sport": "Flag Football",
+            "lastName": "James",
+            "groupId": "allenwood_elementary_school_Band 1_flag_football",
+            "grade_band": "Kindergarten – 1st Grade",
+            "firstName": "Jack",
+            "dob": "",
+            "sports": [
+              "Flag Football"
+            ]
+          }
+        ],
+        "phone": "+12027013900",
+        "smsConsent": true,
+        "isPaidMember": false,
+        "emailVerified": true,
+        "email": "mskemail@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777561738,
+          "nanoseconds": 707000000
+        },
+        "paymentStatus": "inactive",
+        "firstName": "Komal",
+        "createdBy": "admin"
+      },
+      {
+        "id": "EKYB4jkOJyIaMGZBxYiu",
+        "uid": "dDIEwQSAGyPMQPsoMGdnr22VKEd2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776262695,
+          "nanoseconds": 395000000
+        },
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "sport": "BASKETBALL",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TMUGbD0jrYX3tXC1jv9oFj3",
+        "lastName": "Lindsay",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web",
+        "email": "ebonejamison@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776262695,
+          "nanoseconds": 395000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776262694,
+          "nanoseconds": 128000000
+        },
+        "firstName": "Ebone",
+        "paymentStatus": "paid",
+        "students": [
+          {
+            "uniformBottom": "",
+            "lastName": "Lindsay",
+            "uniformTop": "",
+            "dob": "04-09-2020",
+            "firstName": "Tristian",
+            "sport": "BASKETBALL",
+            "grade": "Kindergarten",
+            "location": "Brandywine",
+            "ageGroup": "6U",
+            "school_name": "Accokeek Academy",
+            "uid": "0EF96jiHwZZTocg5Hpia"
+          }
+        ],
+        "phone": "+12022102700",
+        "isPaidMember": true
+      },
+      {
+        "id": "EZG06PFoV9yl4kTWsWKv",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "free",
+        "registrationSource": "web",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759109653,
+          "nanoseconds": 816000000
+        },
+        "uid": "Fryojgqy0tTymrhzwENNJylu1Tg2",
+        "registrationAgreement": true,
+        "location": "Waldorf-Laplata, MD",
+        "encouragementCommitment": true,
+        "sport": "TACKLE_FOOTBALL",
+        "lastName": "Addison",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "ageGroup": "10U",
+            "uid": "XphBXMVl76U6N6AcxB6a",
+            "registrationAgreement": true,
+            "uniformBottom": "Youth M",
+            "lastName": "Smith ",
+            "uniformTop": "Youth M",
+            "firstName": "Kaden",
+            "dob": "09-05-2014"
+          }
+        ],
+        "isPaidMember": false,
+        "phone": "8438614321",
+        "email": "salidaw@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759109653,
+          "nanoseconds": 816000000
+        },
+        "consentText": true,
+        "firstName": "Salida "
+      },
+      {
+        "id": "EgTug6GDZSBRLcGko3Ae",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775498683,
+          "nanoseconds": 389000000
+        },
+        "registrationAgreement": true,
+        "uid": "rziCBtqt3yYwHq8QwZQbb5DBNiT2",
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "sport": "FLAG_FOOTBALL",
+        "lastName": "Matthews",
+        "paymentIntentId": "pi_3TJHVqD0jrYX3tXC1cgYkCMz",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "uid": "t6b4b70whlJZKEyBEUql",
+            "ageGroup": "8U",
+            "school_name": "Cedar Tree Academy ",
+            "location": "Brandywine",
+            "grade": "2nd Grade",
+            "sport": "FLAG_FOOTBALL",
+            "dob": "05-14-2018",
+            "firstName": "Dallas",
+            "uniformTop": "",
+            "lastName": "Matthews"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+14102515321",
+        "email": "devreyvon89@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775498683,
+          "nanoseconds": 389000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775498682,
+          "nanoseconds": 951000000
+        },
+        "paymentStatus": "paid",
+        "firstName": "Devrey"
+      },
+      {
+        "id": "EyGkOKLsUXUCwal7UZGz09rro9c2",
+        "lastReadTimestamps": {
+          "13U_SOCCER_John_Bayne_Elementary_School": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1757674307,
+            "nanoseconds": 64000000
+          }
+        }
+      },
+      {
+        "id": "F3CMFaFf0oj2suWGHofz",
+        "sport": "Flag Football",
+        "lastName": "Name",
+        "firstName": "Test",
+        "email": "twat.nae@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776260901,
+          "nanoseconds": 713000000
+        },
+        "location": "My location",
+        "phone": "+13012584523",
+        "registrationSource": "mobile",
+        "students": [
+          {
+            "ageGroup": "Band 3",
+            "school_name": "Allenwood Elementary School",
+            "grade": "5th Grade",
+            "sport": "Flag Football",
+            "firstName": "My student",
+            "dob": "2010-03-14",
+            "lastName": "Lauren"
+          }
+        ],
+        "membershipType": "free"
+      },
+      {
+        "id": "FQBPeH8zJ6aXYRWMR7MR",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "sport": "BASKETBALL",
+        "lastName": "Moore",
+        "paymentIntentId": "pi_3T3I7kD0jrYX3tXC1oLEL7hz",
+        "noRefundPolicy": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771687783,
+          "nanoseconds": 373000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "UXEw4NpjDeS0Wzh4FxQejISlMQl1",
+        "location": "Oxon Hill, Md",
+        "encouragementCommitment": true,
+        "isPaidMember": true,
+        "phone": "+13014424189",
+        "students": [
+          {
+            "uniformTop": "Youth L",
+            "lastName": "Moore-Tobe",
+            "dob": "01-12-2013",
+            "firstName": "Elijah ",
+            "sport": "BASKETBALL",
+            "location": "Oxon Hill, Md",
+            "grade": "7th Grade",
+            "school_name": "Colin Powell Academy",
+            "ageGroup": "13U",
+            "uid": "bkUTQKE7cxboRHBaSoyf",
+            "uniformBottom": "Youth L"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771687782,
+          "nanoseconds": 435000000
+        },
+        "firstName": "Virginia",
+        "paymentStatus": "paid",
+        "email": "ginnymoore61@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771687783,
+          "nanoseconds": 373000000
+        },
+        "consentText": true
+      },
+      {
+        "id": "FaY4oCJXVRYZJ0bFDdt3",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772243387,
+          "nanoseconds": 945000000
+        },
+        "registrationAgreement": true,
+        "uid": "Ho2uj82ukngyRFLoen9H1hcserP2",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "SOCCER",
+        "lastName": "Powell",
+        "paymentIntentId": "pi_3T5cf4D0jrYX3tXC0AkDkWhI",
+        "noRefundPolicy": true,
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "registrationSource": "web",
+        "email": "rolandpowelljr@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772243387,
+          "nanoseconds": 945000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772243385,
+          "nanoseconds": 646000000
+        },
+        "paymentStatus": "paid",
+        "firstName": "Roland",
+        "students": [
+          {
+            "uniformBottom": "Youth 2XL",
+            "school_name": "Golson",
+            "ageGroup": "12U",
+            "uid": "XKrBlExT0P7yKAcxU982",
+            "grade": "6th Grade",
+            "location": "National Harbor, MD",
+            "sport": "SOCCER",
+            "uniformTop": "Youth 2XL",
+            "lastName": "Powell ",
+            "dob": "10-13-2013",
+            "firstName": "Chase "
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+12404178498"
+      },
+      {
+        "id": "H6gfKsl53AFdAS25je5z",
+        "location": "Clinton, MD",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777443989,
+          "nanoseconds": 485000000
+        },
+        "lastName": "komal",
+        "sport": "Football",
+        "registrationPlan": "",
+        "membershipType": "free",
+        "registrationSource": "mobile",
+        "email": "komalsoftiatric@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776945713,
+          "nanoseconds": 386000000
+        },
+        "firstName": "komal",
+        "students": [
+          {
+            "uniformBottom": "39",
+            "coachName": "komal softiatric",
+            "grade": "3rd - 4th Grade",
+            "ageGroup": "Band 2",
+            "school_name": "Clinton Elementary School",
+            "grade_band": "2nd – 3rd Grade",
+            "firstName": "Jack",
+            "dob": "2008-10-19",
+            "uniformTop": "30",
+            "groupId": "clinton_elementary_school_Band2_football",
+            "lastName": "Nimrod ",
+            "sport": "Football"
+          }
+        ],
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]",
+          "ExponentPushToken[Xog6dbGF-JWoUDqjiaiiiU]",
+          "ExponentPushToken[1ZztNyKqyA1LpZDz-Li0sq]",
+          "ExponentPushToken[OH7t1KGjKMGCJzkKgCKaki]"
+        ],
+        "lastTokenUpdate": "2026-05-07T10:53:40.353Z",
+        "phone": "+12023658239"
+      },
+      {
+        "id": "HfyHsvYiKnIIdRjzSbJN",
+        "email": "sarmstead88@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758921119,
+          "nanoseconds": 408000000
+        },
+        "consentText": true,
+        "firstName": "Shawnta",
+        "students": [
+          {
+            "uid": "dJzdtpepIyLlk0mB7y2Y",
+            "registrationAgreement": true,
+            "ageGroup": "13U",
+            "firstName": "Masiah",
+            "dob": "03-23-2012",
+            "lastName": "Carroll",
+            "uniformBottom": "m",
+            "uniformTop": "m"
+          }
+        ],
+        "phone": "3013700052",
+        "isPaidMember": false,
+        "uid": "cmFLPPkif8fQFXTKpzZJsdUrWYE3",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776865318,
+          "nanoseconds": 862000000
+        },
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "BASKETBALL",
+        "noRefundPolicy": true,
+        "lastName": "Armstead",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "membershipType": "free",
+        "registrationSource": "web"
+      },
+      {
+        "id": "HhLPylWHoeozysXN87GF",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "sport": "CHEER",
+        "paymentIntentId": "pi_3TRrfLD0jrYX3tXC162RM9OK",
+        "lastName": "member",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544281,
+          "nanoseconds": 706000000
+        },
+        "registrationAgreement": true,
+        "uid": "cgVsnP4R3vUS7W2jnSDS8QLV3qn2",
+        "encouragementCommitment": true,
+        "location": "Andrews AFB - Clinton",
+        "isPaidMember": true,
+        "phone": "+919876543210",
+        "students": [
+          {
+            "sport": "CHEER",
+            "dob": "02-05-2015",
+            "firstName": "testtt",
+            "uniformTop": "",
+            "lastName": "testy",
+            "uid": "9Y5w3Unq08TdnLFkbdMp",
+            "school_name": "brandwine",
+            "ageGroup": "11U",
+            "grade": "7th Grade",
+            "location": "Andrews AFB - Clinton",
+            "uniformBottom": ""
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544271,
+          "nanoseconds": 877000000
+        },
+        "firstName": "member",
+        "paymentStatus": "paid",
+        "email": "mem30test@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777544281,
+          "nanoseconds": 706000000
+        },
+        "consentText": true
+      },
+      {
+        "id": "IBRL0CJn4XaOMFeTzlVGtblR7Kl2",
+        "lastReadTimestamps": {
+          "6U_Basketball_Bowie,_MD": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1759116541,
+            "nanoseconds": 590000000
+          }
+        },
+        "phone": "8908908900",
+        "students": [
+          {
+            "uid": "N76ZS9BdoahPavXpB4fx",
+            "ageGroup": "6U",
+            "location": "Bowie, MD",
+            "sport": "Basketball",
+            "dob": "01-16-19",
+            "firstName": "Rays",
+            "lastName": "P"
+          }
+        ],
+        "lastName": "P",
+        "smsOtpIn": true,
+        "password": "nilesh@123",
+        "firstName": "Nilesh",
+        "sport": "Basketball",
+        "location": "Bowie, MD",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758871412,
+          "nanoseconds": 136000000
+        },
+        "fcmToken": "dh40vb1sOkHtmB_ac5-nbi:APA91bGCE1d0LmOPFO8ZYU2NZxJdDN4adZowEJuZSPKX1ToRgQfnWZ6xOONZAj2yogArNLjuY_KTZFFsFiBdQf_bUjfqNIdAe4d_ploKGX5plw7HQ8NWfv8",
+        "email": "nilesh@gmail.com"
+      },
+      {
+        "id": "IhujkKusgWj69u0iRYPZ",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772498880,
+          "nanoseconds": 32000000
+        },
+        "firstName": "Monica",
+        "paymentStatus": "paid",
+        "email": "hayzel360@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772498881,
+          "nanoseconds": 38000000
+        },
+        "consentText": true,
+        "phone": "+14782875997",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "Youth M",
+            "lastName": "Snow",
+            "uniformTop": "Youth M",
+            "dob": "11-26-2015",
+            "firstName": "Jonathan",
+            "sport": "SOCCER",
+            "grade": "4th Grade",
+            "location": "National Harbor, MD",
+            "school_name": "Colin Powell Academy",
+            "ageGroup": "10U",
+            "uid": "8aCMcufSSjHPHDynrA47"
+          }
+        ],
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "lastName": "Snow",
+        "paymentIntentId": "pi_3T6h7xD0jrYX3tXC1usau1XW",
+        "registrationAgreement": true,
+        "uid": "t1Oci7Jt3OZsPAQ0p1NmPtP1bzE3",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772498881,
+          "nanoseconds": 38000000
+        },
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "oneTime"
+      },
+      {
+        "id": "JNw3tr1bJyjw7KXP4s5z",
+        "firstName": "Elita",
+        "email": "Everett_elita@hotmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759407521,
+          "nanoseconds": 114000000
+        },
+        "consentText": true,
+        "phone": "4452908108",
+        "isPaidMember": false,
+        "students": [
+          {
+            "uniformBottom": "",
+            "uniformTop": "",
+            "lastName": "Jenkins",
+            "dob": "07-04-2019",
+            "firstName": "Prince-Charles",
+            "ageGroup": "6U",
+            "uid": "M4dbnL14lJi5rTtw2ovd",
+            "registrationAgreement": true
+          }
+        ],
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "lastName": "Rhoan Everett",
+        "uid": "VnPZYiFfmNTL1wws93isfmz781N2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759407521,
+          "nanoseconds": 114000000
+        },
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "membershipType": "free"
+      },
+      {
+        "id": "LNokp4umtYqMCeHYhUxC",
+        "isPaidMember": true,
+        "phone": "2404860461",
+        "students": [
+          {
+            "dob": "2019-03-05",
+            "firstName": "Jayden",
+            "uniformTop": "",
+            "lastName": "Mallard",
+            "uniformBottom": "",
+            "uid": "9izjBMdAc7YJyRBzKKOb",
+            "ageGroup": "U8"
+          }
+        ],
+        "firstName": "Dexter",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767207610,
+          "nanoseconds": 334000000
+        },
+        "consentText": true,
+        "email": "dexmallard@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767207611,
+          "nanoseconds": 342000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "lastName": "Mallard",
+        "paymentIntentId": "pi_3SkUcuD0jrYX3tXC1Sxd1sTg",
+        "noRefundPolicy": true,
+        "sport": "BASKETBALL",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767661348,
+          "nanoseconds": 409000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "iRlJDu51CnN1MgHq3OBBeGxYfhH2"
+      },
+      {
+        "id": "LSFcqNGk2Q77lEv32NVn",
+        "phone": "+15714242522",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "Youth L",
+            "location": "National Harbor, MD",
+            "grade": "3rd Grade",
+            "uid": "kyV70rhnWH5VhK1T7yW6",
+            "ageGroup": "10U",
+            "school_name": "Mount Vernon Woods",
+            "firstName": "Ariya ",
+            "dob": "02-16-2016",
+            "uniformTop": "Youth M",
+            "lastName": "Henderson ",
+            "sport": "FLAG_FOOTBALL"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775841071,
+          "nanoseconds": 114000000
+        },
+        "firstName": "Brittany ",
+        "paymentStatus": "paid",
+        "email": "b4813031@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775841072,
+          "nanoseconds": 201000000
+        },
+        "consentText": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "sport": "FLAG_FOOTBALL",
+        "noRefundPolicy": true,
+        "lastName": "Noell",
+        "paymentIntentId": "pi_3TKiaGD0jrYX3tXC1pGv5LAz",
+        "uid": "LP7dNcQgLtYwjfFs7Sxc7Z3Wvfr2",
+        "registrationAgreement": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775841072,
+          "nanoseconds": 201000000
+        },
+        "parentConduct": true,
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true
+      },
+      {
+        "id": "MPzKil9i5kMYguR6ZCQ4",
+        "students": [
+          {
+            "dob": "04-18-2020",
+            "firstName": "Lucas",
+            "uniformBottom": "Youth M",
+            "uniformTop": "Youth M",
+            "lastName": "Montiel",
+            "registrationAgreement": true,
+            "uid": "9kuwRoU3DNd66pXi237W",
+            "ageGroup": "5U"
+          }
+        ],
+        "phone": "5716239230",
+        "isPaidMember": false,
+        "email": "yeniferrodriguezleon@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758654898,
+          "nanoseconds": 357000000
+        },
+        "consentText": true,
+        "firstName": "Yenifer",
+        "fundraiserCommitment": true,
+        "membershipType": "free",
+        "registrationPlan": "oneTime",
+        "registrationSource": "web",
+        "uid": "trNyc6PkMDQzrR46LyQ7lQWHd7z1",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758654898,
+          "nanoseconds": 357000000
+        },
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "lastName": "Rodriguez"
+      },
+      {
+        "id": "MZIy0UgBB7u6KV0NTw95",
+        "lastName": "Smith",
+        "paymentIntentId": "pi_3SLyKTD0jrYX3tXC1YhehSFL",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "encouragementCommitment": true,
+        "location": "Greenbelt, MD",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761363588,
+          "nanoseconds": 969000000
+        },
+        "registrationAgreement": true,
+        "uid": "zppyI8MxjbZqG21hzJqFG4WdPJC3",
+        "registrationSource": "web",
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "firstName": "Shinita",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761363588,
+          "nanoseconds": 20000000
+        },
+        "consentText": true,
+        "email": "shinitareid@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761363588,
+          "nanoseconds": 969000000
+        },
+        "isPaidMember": true,
+        "phone": "6465386424",
+        "students": [
+          {
+            "ageGroup": "8U",
+            "uid": "KMLKXlc0Er7dRycaMmXl",
+            "uniformTop": "Youth L",
+            "lastName": "Smith",
+            "uniformBottom": "Youth L",
+            "dob": "Invalid Date",
+            "firstName": "Eric Jr"
+          }
+        ]
+      },
+      {
+        "id": "PccUR6k8FBbI42Q59trz",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "sport": "BASKETBALL",
+        "lastName": "Ranadive",
+        "paymentIntentId": "pi_3T29HtD0jrYX3tXC1DNWgEO1",
+        "noRefundPolicy": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771415490,
+          "nanoseconds": 770000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "q3zaCMqR49gUkLoyYEORwEaCwIM2",
+        "location": "Landover",
+        "encouragementCommitment": true,
+        "isPaidMember": true,
+        "phone": "8977987987",
+        "students": [
+          {
+            "uniformBottom": "",
+            "location": "Landover",
+            "grade": "7th Grade",
+            "uid": "kTbhP9VRfvWt4U2KUcp0",
+            "ageGroup": "N/A",
+            "school_name": "high ",
+            "dob": "12-22-2001",
+            "firstName": "fname",
+            "uniformTop": "",
+            "lastName": "lname",
+            "sport": "BASKETBALL"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771415486,
+          "nanoseconds": 936000000
+        },
+        "firstName": "Vishal",
+        "paymentStatus": "paid",
+        "email": "codecraftwt@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771415490,
+          "nanoseconds": 770000000
+        },
+        "consentText": true
+      },
+      {
+        "id": "PpIUsfdvApcRwuRSmJTtjH1EOJL2",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "registrationSource": "app",
+        "fcmToken": "dmME7vT2AkQIrYkHrO5P8c:APA91bHfhKGLoxBeEyp64Yb6XTVw0XpYjp5JtH1dzsy9MzapoDZGlFLlXEb1_HLueAWJCfWre31jfkIF3PhOVQVZ57VTtx2ghsyp68S7lCZ_k8yTY9gqnWE",
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "PpIUsfdvApcRwuRSmJTtjH1EOJL2",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "TACKLE FOOTBALL",
+        "lastName": "Smith",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "firstName": "John",
+            "dob": "01-18-2020",
+            "lastName": "Wayne",
+            "uniformTop": "YM",
+            "sport": "TACKLE FOOTBALL",
+            "location": "National Harbor, MD",
+            "grade": "5th Grade",
+            "registrationAgreement": true,
+            "uid": "4365Jo5csiz6z9WWaUnJ",
+            "school_name": "tell me",
+            "ageGroup": "6U",
+            "uniformBottom": "YM"
+          }
+        ],
+        "isPaidMember": true,
+        "lastReadTimestamps": {
+          "6U_TACKLE_FOOTBALL_National_Harbor,_MD": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1773707536,
+            "nanoseconds": 586000000
+          }
+        },
+        "phone": "+12027013900",
+        "createdAt": "2026-03-16T20:31:53.612583",
+        "email": "samsmith@gmail.com",
+        "consentText": true,
+        "firstName": "Sam"
+      },
+      {
+        "id": "Q2YXgWkeuLCllYa5hHa8",
+        "firstName": "Ashley",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761690643,
+          "nanoseconds": 102000000
+        },
+        "consentText": true,
+        "email": "amor.zari12@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761690644,
+          "nanoseconds": 640000000
+        },
+        "isPaidMember": true,
+        "phone": "2405184113",
+        "students": [
+          {
+            "leagueIdRequestDate": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1761694110,
+              "nanoseconds": 71000000
+            },
+            "lastName": "Randall",
+            "dob": "Invalid Date",
+            "ageGroup": "N/A",
+            "updatedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1761694110,
+              "nanoseconds": 313000000
+            },
+            "uid": "QkFTP78fuXFXY4Di2cUz",
+            "headshotUrl_filetype": "jpeg",
+            "leagueIdPurchased": true,
+            "idStatus": "pending",
+            "uniformBottom": "",
+            "birthCertificateUrl_filetype": "jpeg",
+            "uniformTop": "",
+            "headshotUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-purchasedid-docs%2FQkFTP78fuXFXY4Di2cUz%2Fheadshot%2F0FCF5163-7193-4FE9-ACD7-A643BA59B0A0.jpeg?alt=media&token=9ed566dc-a9ce-4796-925e-9027abd0372e",
+            "birthCertificateUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-purchasedid-docs%2FQkFTP78fuXFXY4Di2cUz%2Fbirth-certificate%2FIMG_4250.jpeg?alt=media&token=90ce10f4-34d0-4651-a335-5d25c5fe2376",
+            "firstName": "Azari"
+          }
+        ],
+        "paymentIntentId": "pi_3SNLPXD0jrYX3tXC138MA5kR",
+        "lastName": "Hurd",
+        "noRefundPolicy": true,
+        "sport": "Flag Football",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761693313,
+          "nanoseconds": 520000000
+        },
+        "registrationAgreement": true,
+        "uid": "otep6Lp9E4aXLcHISSHzStHJJXi2",
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true
+      },
+      {
+        "id": "QwwLjTRIc66Xg4qJNxR4",
+        "lastName": "Holden",
+        "paymentIntentId": "pi_3SMIGuD0jrYX3tXC0IbwIfzn",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761440247,
+          "nanoseconds": 713000000
+        },
+        "registrationAgreement": true,
+        "uid": "dpFi2P3JstZpPtcAqagFRkxF0mn1",
+        "registrationSource": "web",
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "firstName": "Jourdan",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761440246,
+          "nanoseconds": 84000000
+        },
+        "consentText": true,
+        "email": "jourdan.marie@live.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761440247,
+          "nanoseconds": 713000000
+        },
+        "isPaidMember": true,
+        "phone": "2403388756",
+        "students": [
+          {
+            "lastName": "Barnes",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "dob": "Invalid Date",
+            "firstName": "Angel",
+            "ageGroup": "6U",
+            "uid": "bGP7jqCH8pZSbKNLgvDA"
+          }
+        ]
+      },
+      {
+        "id": "Qzod1J2jlC3bltYFmQPC",
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "encouragementCommitment": true,
+        "location": "Temple Hills",
+        "registrationAgreement": true,
+        "uid": "V9v5fMaSxzLzuT0snM55BtbeXdo1",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776714341,
+          "nanoseconds": 673000000
+        },
+        "noRefundPolicy": true,
+        "lastName": "Makel",
+        "paymentIntentId": "pi_3TONlGD0jrYX3tXC1MducYyX",
+        "sport": "FLAG_FOOTBALL",
+        "students": [
+          {
+            "uniformBottom": "Youth S",
+            "uniformTop": "Youth S",
+            "lastName": "Green",
+            "dob": "08-02-2019",
+            "firstName": "Leo",
+            "sport": "FLAG_FOOTBALL",
+            "location": "Temple Hills",
+            "grade": "1st Grade",
+            "school_name": "Imagine Foundations-Morningside",
+            "ageGroup": "6U",
+            "uid": "4SDx1BFRBVCvjpaFIP4N"
+          }
+        ],
+        "phone": "+12026157047",
+        "isPaidMember": true,
+        "consentText": true,
+        "email": "creayola@hotmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776714341,
+          "nanoseconds": 673000000
+        },
+        "firstName": "Robert",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776714340,
+          "nanoseconds": 61000000
+        }
+      },
+      {
+        "id": "RARRI8VeTDhfwfYj9cCk",
+        "membershipType": "free",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "encouragementCommitment": true,
+        "location": "Greenbelt, MD",
+        "registrationAgreement": true,
+        "uid": "3t9RcVMhDHeXQreCNUgJpMqSi8B3",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758304553,
+          "nanoseconds": 277000000
+        },
+        "noRefundPolicy": true,
+        "lastName": "Nabay",
+        "sport": "SOCCER",
+        "students": [
+          {
+            "registrationAgreement": true,
+            "uid": "xHX2NeUBlysB6KvUFDMY",
+            "ageGroup": "11U",
+            "dob": "06-02-2014",
+            "firstName": "Robert ",
+            "uniformTop": "",
+            "lastName": "Silla ",
+            "uniformBottom": ""
+          }
+        ],
+        "phone": "6463096992",
+        "isPaidMember": false,
+        "consentText": true,
+        "email": "miemimans@yahoo.ca",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758304553,
+          "nanoseconds": 277000000
+        },
+        "firstName": "Meime"
+      },
+      {
+        "id": "SHeDXWrI3WJMaXR10XvY",
+        "isPaidMember": true,
+        "phone": "2022354805",
+        "students": [
+          {
+            "dob": "Invalid Date",
+            "firstName": "Kase",
+            "uniformBottom": "Youth XS",
+            "lastName": "Hilliard",
+            "uniformTop": "Youth XS",
+            "uid": "9qCckziYk72AuRkFdhlL",
+            "ageGroup": "N/A"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767832045,
+          "nanoseconds": 617000000
+        },
+        "paymentStatus": "paid",
+        "firstName": "Sharmayne",
+        "email": "sharmaynebarksdale@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767832046,
+          "nanoseconds": 642000000
+        },
+        "consentText": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "sport": "BASKETBALL",
+        "lastName": "Barksdale",
+        "paymentIntentId": "pi_3Sn74RD0jrYX3tXC0nR6rhWl",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767832046,
+          "nanoseconds": 642000000
+        },
+        "registrationAgreement": true,
+        "uid": "6I0vQ8WL4qaIsFD9ACfN5erQPdh2",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true
+      },
+      {
+        "id": "TNtYr9Fttq8Budzwpnoo",
+        "firstName": "Daryl",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762193533,
+          "nanoseconds": 192000000
+        },
+        "consentText": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762193534,
+          "nanoseconds": 311000000
+        },
+        "email": "darylnewton6@gmail.com",
+        "phone": "7572303212",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uid": "qjLHggXjSHOV77exvikK",
+            "ageGroup": "N/A",
+            "firstName": "Dominick",
+            "dob": "Invalid Date",
+            "uniformBottom": "",
+            "uniformTop": "",
+            "lastName": "Hill"
+          },
+          {
+            "firstName": "Demi",
+            "dob": "Invalid Date",
+            "uniformTop": "",
+            "lastName": "Newton",
+            "uniformBottom": "",
+            "uid": "EwKFJtp737yOhKCujKkg",
+            "ageGroup": "N/A"
+          }
+        ],
+        "noRefundPolicy": true,
+        "lastName": "Newton Jr.",
+        "paymentIntentId": "pi_3SPSEhD0jrYX3tXC0qiBpGQu",
+        "sport": "SOCCER",
+        "encouragementCommitment": true,
+        "location": "Andrews AFB - Clinton",
+        "registrationAgreement": true,
+        "uid": "e20Icpy5zDeh3dFJoF2N7On1m922",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762193534,
+          "nanoseconds": 311000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true
+      },
+      {
+        "id": "UcSwjocYmWZSA2jzX5Lf",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "registrationSource": "web",
+        "registrationAgreement": true,
+        "uid": "8l1AhUJWA2XspJQg5v2HsHPxrh02",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775496673,
+          "nanoseconds": 751000000
+        },
+        "encouragementCommitment": true,
+        "location": "Brandywine",
+        "sport": "TACKLE_FOOTBALL",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TJGzSD0jrYX3tXC18cUfsNX",
+        "lastName": "Mincey",
+        "students": [
+          {
+            "uniformBottom": "Youth M",
+            "sport": "TACKLE_FOOTBALL",
+            "firstName": "Neil",
+            "dob": "02-22-2016",
+            "uniformTop": "Youth M",
+            "lastName": "Mincey",
+            "uid": "HFGSmgrW1S5BCREkG9Lc",
+            "school_name": "Accokeek Academy",
+            "ageGroup": "10U",
+            "grade": "4th Grade",
+            "location": "Brandywine"
+          }
+        ],
+        "phone": "+12023939383",
+        "isPaidMember": true,
+        "email": "lizardnjm@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775496673,
+          "nanoseconds": 751000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775496672,
+          "nanoseconds": 850000000
+        },
+        "firstName": "Neil",
+        "paymentStatus": "paid"
+      },
+      {
+        "id": "W47Xrp2Kkas2jnrhCP7x",
+        "lastPaymentDate": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758755049,
+          "nanoseconds": 33000000
+        },
+        "consentText": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758754792,
+          "nanoseconds": 153000000
+        },
+        "email": "silla.biz@gmail.com",
+        "firstName": "Meime",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "upgradedFrom": "members",
+        "uid": "SvA7qTLuxmVYisl4HlrvkAbVJPB2",
+        "registrationAgreement": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758755049,
+          "nanoseconds": 33000000
+        },
+        "paymentIntentId": "pi_3SB1jED0jrYX3tXC1X9KoVn1",
+        "lastName": "Nabay",
+        "students": [
+          {
+            "uid": "e1bS3bk0DmMRijNVxThd",
+            "registrationAgreement": true,
+            "ageGroup": "8U",
+            "firstName": "Mina ",
+            "dob": "02-16-2017",
+            "lastName": "Silla",
+            "uniformBottom": "",
+            "uniformTop": ""
+          }
+        ],
+        "upgradedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758755049,
+          "nanoseconds": 33000000
+        },
+        "phone": "6463096992",
+        "isPaidMember": true,
+        "membershipActivatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758755049,
+          "nanoseconds": 33000000
+        },
+        "paymentStatus": "active",
+        "membershipType": "monthly",
+        "paymentMethod": "card",
+        "encouragementCommitment": true,
+        "location": "Greenbelt, MD",
+        "parentConduct": true,
+        "noRefundPolicy": true,
+        "sport": "SOCCER"
+      },
+      {
+        "id": "WWraMu35VAZc5D3fmMuvlPbrqN92",
+        "membershipType": "free",
+        "registrationPlan": "",
+        "registrationSource": "admin",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777658621,
+          "nanoseconds": 888000000
+        },
+        "uid": "WWraMu35VAZc5D3fmMuvlPbrqN92",
+        "location": "Capital Heights",
+        "sport": "Basketball",
+        "lastName": "test",
+        "lastTokenUpdate": "2026-05-08T09:40:11.400Z",
+        "students": [
+          {
+            "sport": "Soccer",
+            "groupId": "capital_heights_Band 3_basketball",
+            "lastName": "Universal",
+            "grade_band": "4th – 5th Grade",
+            "dob": "2026-04-01",
+            "firstName": "Komal",
+            "school_name": "Allenwood",
+            "ageGroup": "Band 3",
+            "grade": "3rd - 4th Grade"
+          }
+        ],
+        "expoPushTokens": [
+          "ExponentPushToken[ryxaGHA-dMcflzYJCccP4Z]",
+          "ExponentPushToken[f0BfK-OcFdVIRWBvOgOv79]",
+          "ExponentPushToken[Xog6dbGF-JWoUDqjiaiiiU]",
+          "ExponentPushToken[1ZztNyKqyA1LpZDz-Li0sq]",
+          "ExponentPushToken[roweaGMw5ZVJnYtpEpOx2J]",
+          "ExponentPushToken[qSlPI5LrLUThoi0gEHcG9o]",
+          "ExponentPushToken[z0NAEROERe7I1IZ3Wc2yz_]",
+          "ExponentPushToken[V-5QrUAX--Wc_u9SkAxpky]",
+          "ExponentPushToken[V9S0JcI785C1RXjh-VWjq8]",
+          "ExponentPushToken[OH7t1KGjKMGCJzkKgCKaki]",
+          "ExponentPushToken[wtY0QANgLHurkRZh_17p8u]",
+          "ExponentPushToken[kD-a6KCnW3FaKHW8BLjdho]"
+        ],
+        "isPaidMember": false,
+        "phone": "+919632580741",
+        "email": "test11@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776945845,
+          "nanoseconds": 582000000
+        },
+        "emailVerified": true,
+        "createdBy": "admin",
+        "paymentStatus": "inactive",
+        "firstName": "komal"
+      },
+      {
+        "id": "WaoHGdok79xs7P0LbZI9",
+        "sport": "SOCCER",
+        "lastName": "Ntui",
+        "paymentIntentId": "pi_3TJ6p1D0jrYX3tXC0YAWkHHX",
+        "noRefundPolicy": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775457586,
+          "nanoseconds": 523000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "PMCWHvCGn5ZXxlNi8J4wPtHnR4L2",
+        "location": "Bowie, MD",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775457586,
+          "nanoseconds": 82000000
+        },
+        "firstName": "Alvine-Laure",
+        "paymentStatus": "paid",
+        "email": "alvine30@yahoo.co.uk",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775457586,
+          "nanoseconds": 523000000
+        },
+        "consentText": true,
+        "isPaidMember": true,
+        "phone": "+17033507641",
+        "students": [
+          {
+            "uniformBottom": "Youth M",
+            "location": "Bowie, MD",
+            "grade": "7th Grade",
+            "uid": "GShWt0oV9S9lcIyRuogE",
+            "school_name": "Benjamin Tasker ",
+            "ageGroup": "13U",
+            "dob": "12-17-2012",
+            "firstName": "Dileonel ",
+            "uniformTop": "Youth M",
+            "lastName": "Ntui Jr.",
+            "sport": "SOCCER"
+          }
+        ]
+      },
+      {
+        "id": "Xgmy2y2oI7OPvvCGPTMWsFYq7Kz2",
+        "isPaidMember": false,
+        "phone": "2023413778",
+        "students": [
+          {
+            "updatedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1769486175,
+              "nanoseconds": 21000000
+            },
+            "ageGroup": "7U",
+            "firstName": "Jack",
+            "dob": "2017-12-31",
+            "headshotUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-purchasedid-docs%2Fundefined%2Fheadshot%2Fysr%20vid%203%20pic.png?alt=media&token=136ceb87-4ae7-423a-a640-6af29e4e52f0",
+            "birthCertificateUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-purchasedid-docs%2Fundefined%2Fbirth-certificate%2FYAU%20Jersey%20Mock%20UP.png?alt=media&token=788112ee-cb7f-4212-b26b-fbdf6501eafe",
+            "lastName": "Junior",
+            "leagueIdRequestDate": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1769486174,
+              "nanoseconds": 805000000
+            },
+            "birthCertificateUrl_filetype": "png",
+            "leagueIdPurchased": true,
+            "headshotUrl_filetype": "png",
+            "idStatus": "pending"
+          }
+        ],
+        "paymentStatus": "Active",
+        "firstName": "Jack",
+        "createdBy": "admin",
+        "email": "jackshack1@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758558678,
+          "nanoseconds": 121000000
+        },
+        "emailVerified": true,
+        "registrationSource": "admin",
+        "membershipType": "monthly",
+        "lastName": "Shack",
+        "sport": "Flag_football",
+        "location": "National Harbor, MD",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758558678,
+          "nanoseconds": 121000000
+        },
+        "uid": "Xgmy2y2oI7OPvvCGPTMWsFYq7Kz2"
+      },
+      {
+        "id": "Y0vWeThiT06SPFl2ONEw",
+        "sport": "SOCCER",
+        "paymentIntentId": "pi_3SKnJkD0jrYX3tXC0nPJOYsl",
+        "lastName": "Moreno ",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761082932,
+          "nanoseconds": 798000000
+        },
+        "registrationAgreement": true,
+        "uid": "6hhGBZcxl4SqI8kAgI0wgRSi2Xq1",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761082931,
+          "nanoseconds": 141000000
+        },
+        "firstName": "Oscar ",
+        "paymentStatus": "paid",
+        "email": "omvasquez86@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761082932,
+          "nanoseconds": 798000000
+        },
+        "consentText": true,
+        "isPaidMember": true,
+        "phone": "7035979196",
+        "students": [
+          {
+            "uid": "M3bP5Rho3vIYCo2sOPxh",
+            "ageGroup": "N/A",
+            "firstName": "Daniel",
+            "dob": "Invalid Date",
+            "lastName": "Moreno Ortiz",
+            "uniformBottom": "Youth S",
+            "uniformTop": "Youth S"
+          }
+        ]
+      },
+      {
+        "id": "Y5BjhQykevjIXGDUPLtb",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776355758,
+          "nanoseconds": 13000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "dLeJU8mrLtdJnj0FeKQaPBM7Aq22",
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "sport": "BASKETBALL",
+        "lastName": "Christie",
+        "paymentIntentId": "pi_3TMsTcD0jrYX3tXC0oLIQEq0",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "ageGroup": "6U",
+            "school_name": "Accokeek Academy ",
+            "uid": "QRbbHuQPxYNg0tpB8O83",
+            "location": "Brandywine",
+            "grade": "Kindergarten",
+            "sport": "BASKETBALL",
+            "uniformTop": "",
+            "lastName": "Christie ",
+            "dob": "03-16-2020",
+            "firstName": "Amari"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+17574034605",
+        "email": "oliviahoist.2008@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776355758,
+          "nanoseconds": 13000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776355757,
+          "nanoseconds": 64000000
+        },
+        "firstName": "Olivia ",
+        "paymentStatus": "paid"
+      },
+      {
+        "id": "YIY0fJAaan8eqw6bvGOk",
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TMXL7D0jrYX3tXC0K2KnJPt",
+        "lastName": "Pannell",
+        "registrationAgreement": true,
+        "uid": "cl7KvXPT59NgGgsBVoBonquMIYx1",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776274506,
+          "nanoseconds": 857000000
+        },
+        "parentConduct": true,
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776274505,
+          "nanoseconds": 499000000
+        },
+        "firstName": "Shontia",
+        "paymentStatus": "paid",
+        "email": "Shonpann@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776274506,
+          "nanoseconds": 857000000
+        },
+        "consentText": true,
+        "phone": "+12029079767",
+        "isPaidMember": true,
+        "students": [
+          {
+            "ageGroup": "7U",
+            "school_name": "Turner Elementary ",
+            "uid": "HDEwmci2CgJw3bePYjZv",
+            "location": "National Harbor, MD",
+            "grade": "1st Grade",
+            "sport": "SOCCER",
+            "lastName": "Ford",
+            "uniformTop": "",
+            "firstName": "Shylah’",
+            "dob": "06-08-2019",
+            "uniformBottom": ""
+          }
+        ]
+      },
+      {
+        "id": "YfxZv0shX94nP0C8BpBN",
+        "paymentIntentId": "pi_3SAYKKD0jrYX3tXC19I7l3Tn",
+        "lastName": "Shackelford",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761233466,
+          "nanoseconds": 626000000
+        },
+        "uid": "PxqpsQYkZcdaWBCjuUnbisb7Lp42",
+        "registrationAgreement": true,
+        "upgradedFrom": "members",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "firstName": "John",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758642021,
+          "nanoseconds": 359000000
+        },
+        "email": "pgcountybears@gmail.com",
+        "consentText": true,
+        "lastPaymentDate": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758642052,
+          "nanoseconds": 465000000
+        },
+        "sport": "BASKETBALL",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "paymentMethod": "card",
+        "membershipType": "monthly",
+        "paymentStatus": "active",
+        "isPaidMember": true,
+        "membershipActivatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758642052,
+          "nanoseconds": 465000000
+        },
+        "phone": "2027013900",
+        "upgradedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758642052,
+          "nanoseconds": 465000000
+        },
+        "students": [
+          {
+            "ageGroup": "7U",
+            "registrationAgreement": true,
+            "uid": "ECZaSTci7fGw3JkyNVOj",
+            "lastName": "Name",
+            "uniformBottom": "",
+            "uniformTop": "",
+            "firstName": "My",
+            "dob": "02-28-2018"
+          }
+        ]
+      },
+      {
+        "id": "YjnlFIayGZY9LKYz9bMb",
+        "students": [
+          {
+            "uid": "SAXcaju0g5sziT63fRwU",
+            "ageGroup": "9U",
+            "school_name": "Indian Queen ES",
+            "location": "National Harbor, MD",
+            "grade": "3rd Grade",
+            "sport": "SOCCER",
+            "firstName": "Sender",
+            "dob": "12-05-2016",
+            "lastName": "Hernandez ",
+            "uniformTop": "Youth L",
+            "uniformBottom": "Youth L"
+          }
+        ],
+        "phone": "+17036382852",
+        "isPaidMember": true,
+        "email": "sylvviiam@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777840578,
+          "nanoseconds": 533000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777840575,
+          "nanoseconds": 888000000
+        },
+        "firstName": "Silvia ",
+        "paymentStatus": "paid",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "registrationSource": "web",
+        "uid": "YlWrVuNIEdb7V4fwLyUN02i6CoG3",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777840578,
+          "nanoseconds": 533000000
+        },
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TT6kLD0jrYX3tXC1Fd8Y0Hq",
+        "lastName": "Medrano"
+      },
+      {
+        "id": "Z5FkDlY2UYRDsocGzGVj",
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "noRefundPolicy": true,
+        "lastName": "Kanu",
+        "paymentIntentId": "pi_3SrrF3D0jrYX3tXC0JZZVWar",
+        "sport": "BASKETBALL",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "uid": "P2sC4yQX0IaL0NwsLPpyKnLvCaj1",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768962842,
+          "nanoseconds": 964000000
+        },
+        "phone": "2022513449",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uid": "OxW4pWdkNHrFPIhO4wWi",
+            "ageGroup": "N/A",
+            "dob": "Invalid Date",
+            "firstName": "Jamal",
+            "lastName": "Kanu",
+            "uniformTop": "",
+            "uniformBottom": ""
+          }
+        ],
+        "firstName": "Abu",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768962841,
+          "nanoseconds": 735000000
+        },
+        "consentText": true,
+        "email": "abukanu1962@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1768962842,
+          "nanoseconds": 964000000
+        }
+      },
+      {
+        "id": "aiNRE1KpjKqIuCRfBjcs",
+        "consentText": false,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770435172,
+          "nanoseconds": 144000000
+        },
+        "email": "taharra45@gmail.com",
+        "firstName": "Taharra",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770435171,
+          "nanoseconds": 180000000
+        },
+        "students": [
+          {
+            "idStatus": "pending",
+            "uniformBottom": "Adult M",
+            "governmentIdUrl_filetype": "jpeg",
+            "uniformTop": "Adult M",
+            "firstName": "",
+            "governmentIdUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/children%2Fchild-existing-ids%2FHRUolejlvwo4M7WsQC9u%2FIMG_8283.jpeg?alt=media&token=47dd536e-fbaf-4ca6-84c0-55bf73659d26",
+            "grade": "",
+            "location": "",
+            "ageGroup": "N/A",
+            "school_name": "",
+            "updatedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1770435578,
+              "nanoseconds": 53000000
+            },
+            "uid": "HRUolejlvwo4M7WsQC9u",
+            "lastName": "",
+            "dob": "",
+            "sport": ""
+          }
+        ],
+        "phone": "2024862669",
+        "isPaidMember": true,
+        "encouragementCommitment": true,
+        "location": "Ft Washington ",
+        "registrationAgreement": true,
+        "uid": "nWDf16A9coXowV9fKQP7Hrqah9o2",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770435996,
+          "nanoseconds": 360000000
+        },
+        "noRefundPolicy": true,
+        "lastName": "Richardson",
+        "paymentIntentId": "pi_3Sy2GLD0jrYX3tXC00CmS0m3",
+        "sport": "Basketball",
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web"
+      },
+      {
+        "id": "b0jhU0mW3glFoRVj7iho",
+        "upgradedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758655922,
+          "nanoseconds": 967000000
+        },
+        "phone": "2023413778",
+        "isPaidMember": true,
+        "membershipActivatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758655922,
+          "nanoseconds": 967000000
+        },
+        "students": [
+          {
+            "registrationAgreement": true,
+            "uid": "pCJatL7eFDiZ6hPaiNFE",
+            "ageGroup": "14U",
+            "firstName": "The",
+            "dob": "05-04-2011",
+            "uniformBottom": "",
+            "uniformTop": "",
+            "lastName": "Mick"
+          },
+          {
+            "createdAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1758656402,
+              "nanoseconds": 110000000
+            },
+            "ageGroup": "10U",
+            "uid": "fc4nFnJJ694G8TMCnc7i",
+            "uniformTop": "",
+            "lastName": "Bird",
+            "firstName": "Jai",
+            "dob": "12-14-2015",
+            "idStatus": "unverified",
+            "uniformBottom": ""
+          }
+        ],
+        "paymentStatus": "active",
+        "membershipType": "monthly",
+        "paymentMethod": "card",
+        "noRefundPolicy": true,
+        "sport": "BASKETBALL",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "parentConduct": true,
+        "lastPaymentDate": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758655922,
+          "nanoseconds": 967000000
+        },
+        "firstName": "I am",
+        "consentText": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758655837,
+          "nanoseconds": 13000000
+        },
+        "email": "KimberlyEsquire7@gmail.com",
+        "registrationSource": "web",
+        "upgradedFrom": "members",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "paymentIntentId": "pi_3SAbvAD0jrYX3tXC074JRCKb",
+        "lastName": "She",
+        "registrationAgreement": true,
+        "uid": "dbBNAVbvi0h8XGCbujR1wKjT2JQ2",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758655922,
+          "nanoseconds": 967000000
+        }
+      },
+      {
+        "id": "bBH2KCmSCpSaBmctI6Ez",
+        "email": "florev11@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1760896663,
+          "nanoseconds": 360000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1760896662,
+          "nanoseconds": 364000000
+        },
+        "firstName": "Elvine",
+        "paymentStatus": "paid",
+        "students": [],
+        "isPaidMember": true,
+        "phone": "2024134099",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762451337,
+          "nanoseconds": 278000000
+        },
+        "registrationAgreement": true,
+        "uid": "Vh9XnbkXvVOks1j7HSYp0ha5yQt1",
+        "encouragementCommitment": true,
+        "location": "Bowie, MD",
+        "sport": "SOCCER",
+        "lastName": "Pouani",
+        "paymentIntentId": "pi_3SK0rQD0jrYX3tXC1zyKGXaf",
+        "noRefundPolicy": true,
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web"
+      },
+      {
+        "id": "cWpQAiN2rpTYHJfaFg69",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775598592,
+          "nanoseconds": 18000000
+        },
+        "registrationAgreement": true,
+        "uid": "pxH1ZkOwLsfv93roq6mRwKO61Qp2",
+        "lastName": "Johnson",
+        "paymentIntentId": "pi_3TDqxRD0jrYX3tXC0Z6bkNcP",
+        "noRefundPolicy": true,
+        "sport": "Soccer",
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "consentText": true,
+        "email": "sandrapamilton@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774204967,
+          "nanoseconds": 244000000
+        },
+        "firstName": "Sandra",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774204966,
+          "nanoseconds": 278000000
+        },
+        "students": [
+          {
+            "firstName": "Annie",
+            "dob": "12-12-2021",
+            "uniformTop": "",
+            "lastName": "Johnson",
+            "sport": "BASKETBALL",
+            "location": "National Harbor, MD",
+            "grade": "Kindergarten",
+            "uid": "yCEfVEjhMIV6LhbaHPox",
+            "ageGroup": "4U",
+            "school_name": "",
+            "uniformBottom": ""
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "6614725460"
+      },
+      {
+        "id": "d4vgChdir8XQCNHgJ0ac",
+        "students": [
+          {
+            "school_name": "High Bridge Elementary",
+            "ageGroup": "Band 3",
+            "grade": "5th Grade",
+            "sport": "Soccer",
+            "lastName": "Civics",
+            "firstName": "Cubic",
+            "dob": "2022-02-12"
+          },
+          {
+            "sport": "Soccer",
+            "lastName": "C on j b",
+            "firstName": "Check j",
+            "dob": "2026-04-14",
+            "school_name": "James Ryder Randall Elementary",
+            "ageGroup": "Band 3",
+            "grade": "5th Grade"
+          },
+          {
+            "sport": "Soccer",
+            "dob": "1979-04-14",
+            "firstName": "H C you",
+            "lastName": "N n. Jim kb",
+            "ageGroup": "Band 4",
+            "school_name": "Carmody Hills Elementary",
+            "grade": "6th Grade"
+          }
+        ],
+        "membershipType": "free",
+        "phone": "97576583#634258653",
+        "registrationSource": "mobile",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776257450,
+          "nanoseconds": 548000000
+        },
+        "email": "xhcjckvkgkdhdxu",
+        "location": "Chvjvlvmm in veg",
+        "sport": "Soccer",
+        "lastName": "Did",
+        "firstName": "Braun"
+      },
+      {
+        "id": "d8lWcZTtsrOOfy4CYHL9",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953467,
+          "nanoseconds": 387000000
+        },
+        "paymentStatus": "active",
+        "isPaidMember": true,
+        "membershipActivatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953472,
+          "nanoseconds": 602000000
+        },
+        "phone": "7038695109",
+        "upgradedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953472,
+          "nanoseconds": 602000000
+        },
+        "students": [
+          {
+            "uid": "JI7ESlZcP4TTAgMWJ5MK",
+            "ageGroup": "7U",
+            "dob": "02-01-2018",
+            "firstName": "Connor ",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "lastName": "Samuel Ishaeik"
+          },
+          {
+            "uid": "Fl6Emrk3PWFLV8wO39kb",
+            "ageGroup": "11U",
+            "firstName": "Chase",
+            "dob": "06-16-2014",
+            "uniformBottom": "",
+            "lastName": "Samuel Ishaeik",
+            "uniformTop": ""
+          }
+        ],
+        "sport": "BASKETBALL",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "encouragementCommitment": true,
+        "location": "Andrews AFB - Clinton",
+        "paymentMethod": "card",
+        "membershipType": "monthly",
+        "firstName": "Adam",
+        "email": "adam.ishaeik@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953468,
+          "nanoseconds": 201000000
+        },
+        "consentText": true,
+        "lastPaymentDate": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953472,
+          "nanoseconds": 602000000
+        },
+        "paymentIntentId": "pi_3SG3UbD0jrYX3tXC0uDT0Hno",
+        "lastName": "Ishaeik",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759953472,
+          "nanoseconds": 602000000
+        },
+        "uid": "AvHIdBosk3g8sNFBdeExMnqlZXC3",
+        "registrationAgreement": true,
+        "upgradedFrom": "members",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly"
+      },
+      {
+        "id": "dS8b6Clxf4ChoNVFcuJg",
+        "email": "sellers2408@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1773774249,
+          "nanoseconds": 40000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1773774246,
+          "nanoseconds": 210000000
+        },
+        "firstName": "Kimberly",
+        "paymentStatus": "paid",
+        "students": [
+          {
+            "firstName": "Antonio",
+            "dob": "06-26-2015",
+            "lastName": "Sellers",
+            "uniformTop": "",
+            "sport": "FLAG_FOOTBALL",
+            "grade": "5th Grade",
+            "location": "National Harbor, MD",
+            "uid": "dFPdMktiuvbbcR65tqTs",
+            "school_name": "Hilcrest Heights Elementary School",
+            "ageGroup": "11U",
+            "uniformBottom": ""
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+13016595797",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1773774249,
+          "nanoseconds": 40000000
+        },
+        "uid": "f2GTSYZtVCfCROeC8254BywfWl43",
+        "registrationAgreement": true,
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "sport": "FLAG_FOOTBALL",
+        "lastName": "Sellers",
+        "paymentIntentId": "pi_3TC2uLD0jrYX3tXC1w28ZpIb",
+        "noRefundPolicy": true,
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web"
+      },
+      {
+        "id": "e7ZDgMKkK0sH0sGOZdZw",
+        "isPaidMember": true,
+        "phone": "+12404727848",
+        "students": [
+          {
+            "uniformTop": "",
+            "lastName": "Dula ",
+            "dob": "02-02-2020",
+            "firstName": "Mikayla ",
+            "sport": "CHEER",
+            "location": "National Harbor, MD",
+            "grade": "Kindergarten",
+            "school_name": "John Hanson Montessori ",
+            "ageGroup": "6U",
+            "uid": "DpZbHp2qhrBuFULd3oP4",
+            "uniformBottom": ""
+          }
+        ],
+        "firstName": "Whitney ",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772058106,
+          "nanoseconds": 563000000
+        },
+        "consentText": true,
+        "email": "Whitneynwaltz@ymail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772058107,
+          "nanoseconds": 968000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "lastName": "Dula ",
+        "paymentIntentId": "pi_3T4qSfD0jrYX3tXC1A1uW8ub",
+        "noRefundPolicy": true,
+        "sport": "CHEER",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772058107,
+          "nanoseconds": 968000000
+        },
+        "registrationAgreement": true,
+        "uid": "VzmZJfQj2bbek3A4U4blUuXz2hc2"
+      },
+      {
+        "id": "eUsW6Xa6dYthJs4GuPSc",
+        "consentText": true,
+        "email": "hildarobertsaf@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770996089,
+          "nanoseconds": 77000000
+        },
+        "firstName": "Hilda",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770996087,
+          "nanoseconds": 701000000
+        },
+        "students": [
+          {
+            "ageGroup": "10U",
+            "school_name": "Francis T. Evans",
+            "uid": "98Yxh3HeosXPE3maYXcM",
+            "grade": "5th Grade",
+            "location": "Andrews AFB - Clinton",
+            "sport": "SOCCER",
+            "uniformTop": "",
+            "lastName": "Roberts ",
+            "dob": "08-31-2015",
+            "firstName": "Zai ",
+            "uniformBottom": ""
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "6463422269",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770996089,
+          "nanoseconds": 77000000
+        },
+        "registrationAgreement": true,
+        "uid": "gwC4kpNhxUWUzLwIc7bji8wBhjD2",
+        "paymentIntentId": "pi_3T0OBLD0jrYX3tXC115N3zfk",
+        "lastName": "Gonzalez ",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web"
+      },
+      {
+        "id": "eV5lTBKMtlf7pAxLYxIEMzlb4Ii2",
+        "students": [
+          {
+            "location": "Andrews AFB - Clinton",
+            "ageGroup": "Unknown",
+            "uid": "fTIMiSk067UQhYDt1KhT",
+            "lastName": "BAS",
+            "firstName": "SAB",
+            "dob": "01-30-19",
+            "sport": "Baseball"
+          }
+        ],
+        "lastReadTimestamps": {
+          "Unknown_Baseball_Andrews_AFB_-_Clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1764855808,
+            "nanoseconds": 537000000
+          }
+        },
+        "phone": "8547965412",
+        "location": "Andrews AFB - Clinton",
+        "fcmToken": "ffoPQL00RUSqEyBHJtKiCW:APA91bGdv1fv7_SeLUZkYP95ts94ihg-zX2_Qdmw0y118NL4HVqI6wu7hGHWIDmy0x2s6Hc3UrYRzasPGm-8x1CiOVD50fpsqQNjicYYvgdR-WDMCgDoQv0",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1764851272,
+          "nanoseconds": 195000000
+        },
+        "email": "plan@gmail.com",
+        "smsOtpIn": true,
+        "password": "plan@123",
+        "lastName": "Nap",
+        "firstName": "Plan",
+        "sport": "Baseball"
+      },
+      {
+        "id": "eZFNO5IrZnTl63Pm09Lcez3aiki2",
+        "lastReadTimestamps": {
+          "soccer-14u-andrews-afb---clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1757934263,
+            "nanoseconds": 969000000
+          },
+          "5U_SOCCER_Andrews_AFB_-_Clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1758020111,
+            "nanoseconds": 110000000
+          },
+          "14U_SOCCER_Andrews_AFB_-_Clinton": {
+            "type": "firestore/timestamp/1.0",
+            "seconds": 1758019495,
+            "nanoseconds": 686000000
+          }
+        }
+      },
+      {
+        "id": "fdpBJzbeNuRie1QGD54U",
+        "fundraiserCommitment": true,
+        "membershipType": "free",
+        "registrationPlan": "oneTime",
+        "registrationSource": "web",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759267469,
+          "nanoseconds": 48000000
+        },
+        "uid": "jTx0yFqOzygdCJltTaSTuJXz2gX2",
+        "registrationAgreement": true,
+        "location": "Greenbelt School ",
+        "encouragementCommitment": true,
+        "sport": "SOCCER",
+        "lastName": "Kamara",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "ageGroup": "12U",
+            "registrationAgreement": true,
+            "uid": "ZKZshro77RB9RTmgtMSf",
+            "lastName": "Mansaray ",
+            "uniformTop": "Youth S",
+            "uniformBottom": "Youth S",
+            "firstName": "Ishmail ",
+            "dob": "08-17-2012"
+          }
+        ],
+        "isPaidMember": false,
+        "phone": "2404683707",
+        "email": "tkamara83@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759267469,
+          "nanoseconds": 48000000
+        },
+        "consentText": true,
+        "firstName": "Tonia"
+      },
+      {
+        "id": "gBAGbXmE3eYKrk29iJiJu2yuxpf2",
+        "paymentStatus": "inactive",
+        "firstName": "Jack",
+        "createdBy": "admin",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777512340,
+          "nanoseconds": 437000000
+        },
+        "email": "Jackson@gmail.com",
+        "emailVerified": true,
+        "isPaidMember": false,
+        "smsConsent": true,
+        "phone": "+12027013900",
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "students": [
+          {
+            "school_name": "Clinton Elementary School",
+            "ageGroup": "Band 2",
+            "grade": "2nd / 3rd Grade",
+            "sport": "Soccer",
+            "lastName": "1",
+            "groupId": "clinton_elementary_school_Band 2_soccer",
+            "dob": "",
+            "firstName": "Child",
+            "grade_band": "2nd – 3rd Grade",
+            "sports": [
+              "Flag Football",
+              "Soccer",
+              "Cheer",
+              "Basketball"
+            ]
+          },
+          {
+            "sports": [
+              "Flag Football",
+              "Soccer",
+              "Cheer",
+              "Basketball"
+            ],
+            "grade": "2nd / 3rd Grade",
+            "ageGroup": "Band 2",
+            "school_name": "Clinton Elementary School",
+            "groupId": "clinton_elementary_school_Band 2_cheer",
+            "lastName": "1",
+            "firstName": "Child",
+            "grade_band": "2nd – 3rd Grade",
+            "dob": "",
+            "sport": "Cheer"
+          },
+          {
+            "dob": "",
+            "grade_band": "2nd – 3rd Grade",
+            "firstName": "Child",
+            "lastName": "1",
+            "groupId": "clinton_elementary_school_Band 2_basketball",
+            "sport": "Basketball",
+            "grade": "2nd / 3rd Grade",
+            "ageGroup": "Band 2",
+            "school_name": "Clinton Elementary School",
+            "sports": [
+              "Flag Football",
+              "Soccer",
+              "Cheer",
+              "Basketball"
+            ]
+          }
+        ],
+        "lastTokenUpdate": "2026-05-08T03:23:35.501Z",
+        "lastName": "Shackelford",
+        "sport": "Flag Football",
+        "location": "",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777512340,
+          "nanoseconds": 437000000
+        },
+        "uid": "gBAGbXmE3eYKrk29iJiJu2yuxpf2",
+        "registrationSource": "admin",
+        "membershipType": "free"
+      },
+      {
+        "id": "gkLhmatHNQVNa8SKn4Ag",
+        "isPaidMember": true,
+        "phone": "+12407140406",
+        "students": [
+          {
+            "sport": "SOCCER",
+            "dob": "10-17-2015",
+            "firstName": "Steve Forlane ",
+            "uniformTop": "",
+            "lastName": "Tchouamou nana",
+            "uid": "pVUkeceoGzygaQ5uWYVw",
+            "ageGroup": "10U",
+            "school_name": "Beacon high elementary school ",
+            "grade": "5th Grade",
+            "location": "Landover",
+            "uniformBottom": ""
+          }
+        ],
+        "firstName": "Sinclair",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774106697,
+          "nanoseconds": 312000000
+        },
+        "consentText": true,
+        "email": "SINCLAIRENANA1@GMAIL.COM",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774106698,
+          "nanoseconds": 296000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "paymentIntentId": "pi_3TDROSD0jrYX3tXC1BBxDKGH",
+        "lastName": "Nana fambou",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "location": "Landover",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774106698,
+          "nanoseconds": 296000000
+        },
+        "registrationAgreement": true,
+        "uid": "8gp2Iy1pm9NWu3G2dg1SxH2mW9b2"
+      },
+      {
+        "id": "hVdBHMAbDiNia2a58f05",
+        "sport": "Flag Football",
+        "firstName": "Jagjeet",
+        "lastName": "Singh",
+        "email": "hfjf123@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776256816,
+          "nanoseconds": 652000000
+        },
+        "location": "Montreal",
+        "phone": "+13251369632",
+        "registrationSource": "mobile",
+        "membershipType": "free",
+        "students": [
+          {
+            "sport": "Flag Football",
+            "firstName": "Roop",
+            "dob": "2023-01-14",
+            "lastName": "Kaur",
+            "school_name": "Brandywine Elementary",
+            "ageGroup": "Band 1",
+            "grade": "Pre-K"
+          }
+        ]
+      },
+      {
+        "id": "ihzJGUX9NfKEVbNeu8kY",
+        "membershipType": "free",
+        "students": [
+          {
+            "grade": "2nd Grade",
+            "ageGroup": "Band 2",
+            "school_name": "Carmody Hills Elementary",
+            "lastName": "Hecht the",
+            "dob": "2023-04-14",
+            "firstName": "Vv suck gov g",
+            "sport": "Cheer"
+          }
+        ],
+        "registrationSource": "mobile",
+        "phone": "*246253657262",
+        "location": "Shfutstug machinists high",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776257537,
+          "nanoseconds": 292000000
+        },
+        "email": "v hdudtyursxtjs.7(:(6",
+        "firstName": "Ty ty c c y DC",
+        "lastName": "C gxh",
+        "sport": "Cheer"
+      },
+      {
+        "id": "khZIpIQkYM2x8vpUNcZQ",
+        "location": "Waldorf-Laplata, MD",
+        "encouragementCommitment": true,
+        "registrationAgreement": true,
+        "uid": "jd2SlBzKprdpCx5nxaWUALBXqNn1",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761213255,
+          "nanoseconds": 69000000
+        },
+        "parentConduct": true,
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3SLLDiD0jrYX3tXC0XwkQLa1",
+        "lastName": "Sherman",
+        "sport": "BASKETBALL",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "consentText": true,
+        "email": "P.b.Sherman8084@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761213255,
+          "nanoseconds": 69000000
+        },
+        "firstName": "Patrick",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761213252,
+          "nanoseconds": 950000000
+        },
+        "students": [
+          {
+            "uid": "gQ32ByXA87d6CUUQjcBP",
+            "ageGroup": "N/A",
+            "firstName": "Patrick",
+            "dob": "Invalid Date",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "lastName": "Sherman"
+          }
+        ],
+        "phone": "2026993269",
+        "isPaidMember": true
+      },
+      {
+        "id": "m5orQhm2IE7HY4DHu0mi",
+        "firstName": "Zonia",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777687963,
+          "nanoseconds": 539000000
+        },
+        "consentText": true,
+        "email": "maradiagasonia82@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777687964,
+          "nanoseconds": 293000000
+        },
+        "isPaidMember": true,
+        "phone": "+13019063965",
+        "students": [
+          {
+            "location": "National Harbor, MD",
+            "grade": "Kindergarten",
+            "uid": "6Ty95pTPVdIo8Z99eXvQ",
+            "school_name": "Berry elementary ",
+            "ageGroup": "5U",
+            "dob": "10-08-2020",
+            "firstName": "Liam",
+            "lastName": "Flores ",
+            "uniformTop": "Youth L",
+            "sport": "SOCCER",
+            "uniformBottom": "Youth M"
+          }
+        ],
+        "lastName": "Maradiaga ",
+        "paymentIntentId": "pi_3TST2rD0jrYX3tXC0FDwAamh",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777687964,
+          "nanoseconds": 293000000
+        },
+        "registrationAgreement": true,
+        "uid": "hzr9JHK4ZVYe0jnwF2kK4TV2jEj1",
+        "registrationSource": "web",
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true
+      },
+      {
+        "id": "o6pfRjC7k4g899SRQPI9W7u2sXk1",
+        "lastName": "Komal",
+        "sport": "Baseball",
+        "location": "Brandywine",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774265084,
+          "nanoseconds": 407000000
+        },
+        "uid": "o6pfRjC7k4g899SRQPI9W7u2sXk1",
+        "registrationSource": "admin",
+        "membershipType": "one-time",
+        "welcomeMessageDismissed": true,
+        "firstName": "Ms",
+        "paymentStatus": "Active",
+        "createdBy": "admin",
+        "email": "komalsoftiatric1@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1774127897,
+          "nanoseconds": 794000000
+        },
+        "emailVerified": true,
+        "isPaidMember": false,
+        "phone": null,
+        "students": []
+      },
+      {
+        "id": "oZJjFZ4PsTP3XZbjpZY8",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "registrationSource": "web",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761331129,
+          "nanoseconds": 771000000
+        },
+        "uid": "D0HgjIQnVEcjRpMODYb1gwWIzuB2",
+        "registrationAgreement": true,
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "sport": "SOCCER",
+        "lastName": "Reese",
+        "paymentIntentId": "pi_3SLpsxD0jrYX3tXC0SceiYZC",
+        "noRefundPolicy": true,
+        "students": [
+          {
+            "firstName": "Kendele",
+            "dob": "Invalid Date",
+            "lastName": "Forbes",
+            "uniformBottom": "",
+            "uniformTop": "",
+            "uid": "vldnNlBRiBjtrxvgeKqr",
+            "ageGroup": "7U"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "2404470218",
+        "email": "toykareese@outlook.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761331129,
+          "nanoseconds": 771000000
+        },
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1761331129,
+          "nanoseconds": 396000000
+        },
+        "firstName": "Toyka",
+        "paymentStatus": "paid"
+      },
+      {
+        "id": "omWqENBRlaeACp8qRz5M",
+        "students": [
+          {
+            "lastName": "Patterson",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "dob": "2018-01-20",
+            "firstName": "Ike",
+            "ageGroup": "U8",
+            "uid": "dLO5546IlFm5rhWXSU7f"
+          }
+        ],
+        "phone": "4436245141",
+        "isPaidMember": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1763049426,
+          "nanoseconds": 321000000
+        },
+        "email": "alexis.d.brown@gmail.com",
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1763049425,
+          "nanoseconds": 501000000
+        },
+        "firstName": "Alexis",
+        "paymentStatus": "paid",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web",
+        "registrationAgreement": true,
+        "uid": "ugWF8xNnVZTNsO4wE65ZBgDUzvs2",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1763049845,
+          "nanoseconds": 531000000
+        },
+        "encouragementCommitment": true,
+        "location": "Brandywine",
+        "sport": "FLAG_FOOTBALL",
+        "noRefundPolicy": true,
+        "lastName": "Brown",
+        "paymentIntentId": "pi_3ST2tPD0jrYX3tXC0mp9e95G"
+      },
+      {
+        "id": "p7jA45mWkfh4DINxS8Cq7xq02kK2",
+        "membershipType": "free",
+        "registrationSource": "admin",
+        "uid": "p7jA45mWkfh4DINxS8Cq7xq02kK2",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210871,
+          "nanoseconds": 294000000
+        },
+        "location": "",
+        "sport": "Flag Football",
+        "lastName": "Test",
+        "lastTokenUpdate": "2026-05-08T04:13:59.121Z",
+        "students": [
+          {
+            "grade_band": "Middle School (6th, 7th & 8th Grade)",
+            "firstName": "Test",
+            "dob": "",
+            "groupId": "princeton_Band 4_flag_football",
+            "lastName": "Test",
+            "sport": "Flag Football",
+            "grade": "7th - 8th Grade",
+            "school_name": "Princeton",
+            "ageGroup": "Band 5",
+            "sports": [
+              "Flag Football"
+            ]
+          }
+        ],
+        "expoPushTokens": [
+          "ExponentPushToken[jmxZjeNExJ6E_bimCF_baS]"
+        ],
+        "phone": "+12027013900",
+        "isPaidMember": false,
+        "smsConsent": true,
+        "emailVerified": true,
+        "email": "johntest@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210871,
+          "nanoseconds": 294000000
+        },
+        "createdBy": "admin",
+        "firstName": "John",
+        "paymentStatus": "inactive"
+      },
+      {
+        "id": "qHATpYaxFXb3VzyTX9wom3WmHpl1",
+        "paymentStatus": "inactive",
+        "firstName": "komalnew",
+        "createdBy": "admin",
+        "email": "komal@gm.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777010306,
+          "nanoseconds": 788000000
+        },
+        "emailVerified": true,
+        "isPaidMember": false,
+        "phone": "+15555555555",
+        "expoPushTokens": [
+          "ExponentPushToken[z0NAEROERe7I1IZ3Wc2yz_]"
+        ],
+        "students": [
+          {
+            "school_name": "Andrews AFB - Clinton",
+            "ageGroup": "Band 3",
+            "grade": "4th Grade",
+            "sport": "Basketball",
+            "groupId": "andrews_afb_clinton_Band 3_basketball",
+            "lastName": "teat",
+            "grade_band": "4th – 5th Grade",
+            "firstName": "kid1",
+            "dob": "2007-04-23"
+          }
+        ],
+        "lastName": "soft",
+        "sport": "Basketball",
+        "location": "Clinton",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777010306,
+          "nanoseconds": 788000000
+        },
+        "uid": "qHATpYaxFXb3VzyTX9wom3WmHpl1",
+        "registrationSource": "admin",
+        "membershipType": "free"
+      },
+      {
+        "id": "qpsL2bx9RrTYFngPTeUbXogaV8R2",
+        "phone": "+1234567890",
+        "isPaidMember": false,
+        "students": [
+          {
+            "ageGroup": "8-10",
+            "firstName": "Jane",
+            "dob": "2015-03-15",
+            "lastName": "Doe"
+          }
+        ],
+        "createdBy": "admin",
+        "paymentStatus": "inactive",
+        "firstName": "John",
+        "emailVerified": true,
+        "email": "john.doe@example.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762425643,
+          "nanoseconds": 658000000
+        },
+        "registrationSource": "admin",
+        "sport": "Flag Football",
+        "lastName": "Doe",
+        "uid": "qpsL2bx9RrTYFngPTeUbXogaV8R2",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762425643,
+          "nanoseconds": 658000000
+        },
+        "location": "New York"
+      },
+      {
+        "id": "qz69KyQB7BRpmJGSVEON",
+        "isPaidMember": false,
+        "phone": "2026749428",
+        "students": [
+          {
+            "uniformBottom": "Youth M",
+            "lastName": "Price",
+            "uniformTop": "Youth L",
+            "firstName": "Jahard",
+            "dob": "05-02-2016",
+            "ageGroup": "9U",
+            "registrationAgreement": true,
+            "uid": "5fuPO8407nljNeqObMY8"
+          }
+        ],
+        "firstName": "Chanel",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758931103,
+          "nanoseconds": 969000000
+        },
+        "email": "chanelprice11@gmail.com",
+        "consentText": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "oneTime",
+        "membershipType": "free",
+        "sport": "BASKETBALL",
+        "lastName": "Price",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1758931103,
+          "nanoseconds": 969000000
+        },
+        "uid": "GXxzHIynUJNvGR3ekixQAnxm3Hi2",
+        "registrationAgreement": true,
+        "location": "Greenbelt, MD",
+        "encouragementCommitment": true
+      },
+      {
+        "id": "srQuWHYbi6H3a3VwQTrD",
+        "registrationSource": "web",
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "lastName": "Godase",
+        "paymentIntentId": "pi_3SawFVD0jrYX3tXC11aEE2rn",
+        "noRefundPolicy": true,
+        "sport": "BASKETBALL",
+        "encouragementCommitment": true,
+        "location": "Andrews AFB - Clinton",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1764930512,
+          "nanoseconds": 842000000
+        },
+        "uid": "t7r2CzsoKpZSx9moBuYC1MK4pB53",
+        "registrationAgreement": true,
+        "isPaidMember": true,
+        "phone": "1231231231",
+        "students": [
+          {
+            "uniformBottom": "",
+            "lastName": "Godase",
+            "uniformTop": "",
+            "dob": "Invalid Date",
+            "firstName": "Sammy ",
+            "ageGroup": "3U",
+            "uid": "xC13FswxDBAXOUBdc4Jx"
+          },
+          {
+            "ageGroup": "3U",
+            "uid": "fEmqFVBwY6TCWSFk1wwG",
+            "lastName": "Goadse",
+            "uniformTop": "",
+            "uniformBottom": "",
+            "firstName": "Danny ",
+            "dob": "Invalid Date"
+          }
+        ],
+        "firstName": "Nirmalya",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1764930510,
+          "nanoseconds": 142000000
+        },
+        "consentText": true,
+        "email": "nirmalya@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1764930512,
+          "nanoseconds": 842000000
+        }
+      },
+      {
+        "id": "uwxX6ATUb89XkleKGLys",
+        "registrationSource": "web",
+        "registrationPlan": "monthly",
+        "membershipType": "free",
+        "fundraiserCommitment": true,
+        "noRefundPolicy": true,
+        "lastName": "Diaz amaya",
+        "sport": "SOCCER",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "uid": "Pc6TL16rjSfoRxcAtrOBLyuSpEw2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759360772,
+          "nanoseconds": 781000000
+        },
+        "phone": "5714891119",
+        "isPaidMember": false,
+        "students": [
+          {
+            "registrationAgreement": true,
+            "uid": "e9R6W6JMIqBV1LhX7GCD",
+            "ageGroup": "11U",
+            "firstName": "Isaac ",
+            "dob": "12-18-2013",
+            "uniformTop": "",
+            "lastName": "Jule ",
+            "uniformBottom": ""
+          }
+        ],
+        "firstName": "Merary s",
+        "consentText": true,
+        "email": "Merarydiaz1996@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1759360772,
+          "nanoseconds": 781000000
+        }
+      },
+      {
+        "id": "vGiYEyZJFYs0uEQZbKYN",
+        "students": [
+          {
+            "sport": "SOCCER",
+            "uniformTop": "Youth M",
+            "lastName": "Artis",
+            "dob": "10-30-2016",
+            "firstName": "William",
+            "school_name": "Accokeek academy",
+            "ageGroup": "9U",
+            "uid": "9zPiU5oziQGTmlhKDZCk",
+            "grade": "2nd Grade",
+            "location": "Brandywine",
+            "uniformBottom": "Youth M"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+12403184563",
+        "consentText": true,
+        "email": "landisportia@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772768310,
+          "nanoseconds": 311000000
+        },
+        "firstName": "PORTIA",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772768308,
+          "nanoseconds": 428000000
+        },
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1772768411,
+          "nanoseconds": 70000000
+        },
+        "parentConduct": true,
+        "uid": "HwCtfyIiXVdI1xVA0DF18hhO0Xl1",
+        "registrationAgreement": true,
+        "lastName": "ARTIS",
+        "paymentIntentId": "pi_3T7pDaD0jrYX3tXC1oo4V5tm",
+        "noRefundPolicy": true,
+        "sport": "Basketball"
+      },
+      {
+        "id": "vk8ElKKoEUwx1t7HIH1Y",
+        "firstName": "Kristy",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762798577,
+          "nanoseconds": 136000000
+        },
+        "consentText": true,
+        "email": "kristylee0978@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762798578,
+          "nanoseconds": 422000000
+        },
+        "phone": "2022709306",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uid": "8rjAboQvNNaxDcESCEMO",
+            "ageGroup": "N/A",
+            "dob": "Invalid Date",
+            "firstName": "Justin",
+            "uniformBottom": "Adult M",
+            "lastName": "Jones",
+            "uniformTop": "Adult M"
+          }
+        ],
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3SRzdTD0jrYX3tXC1JxXgt8g",
+        "lastName": "Johnson",
+        "sport": "SOCCER",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "registrationAgreement": true,
+        "uid": "4lMuKsvdbFR89nokysSiySbm7bD2",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762798578,
+          "nanoseconds": 422000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "fundraiserCommitment": true
+      },
+      {
+        "id": "vklBuAPF4NoE3ZBuIRwm",
+        "students": [
+          {
+            "dob": "2017-11-06",
+            "firstName": "Pierre",
+            "lastName": "Proctor",
+            "uniformTop": "Youth M",
+            "uniformBottom": "Youth M",
+            "uid": "K8un45Rh6O7v0DkJa9bm",
+            "ageGroup": "U10"
+          }
+        ],
+        "phone": "2025311360",
+        "isPaidMember": true,
+        "consentText": true,
+        "email": "sckeys26@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762802440,
+          "nanoseconds": 754000000
+        },
+        "paymentStatus": "paid",
+        "firstName": "Shannon",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762802439,
+          "nanoseconds": 446000000
+        },
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "fundraiserCommitment": true,
+        "registrationSource": "web",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "registrationAgreement": true,
+        "uid": "J4KBm23uyQRII7c3ZEAkzDGaLXx2",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1764895337,
+          "nanoseconds": 16000000
+        },
+        "noRefundPolicy": true,
+        "lastName": "Keys",
+        "paymentIntentId": "pi_3SS0dlD0jrYX3tXC1kRdojYz",
+        "sport": "Soccer"
+      },
+      {
+        "id": "vmn8TtWHmSWCeB0Yvfbi",
+        "registrationAgreement": true,
+        "uid": "JW8tY31uikfjzkVTDrQYSWmmnPC3",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771181114,
+          "nanoseconds": 317000000
+        },
+        "encouragementCommitment": true,
+        "location": "Landover ",
+        "sport": "TACKLE_FOOTBALL",
+        "noRefundPolicy": true,
+        "lastName": "Nickles",
+        "paymentIntentId": "pi_3T1AJcD0jrYX3tXC0vwNb1xb",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "registrationSource": "web",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771181114,
+          "nanoseconds": 317000000
+        },
+        "email": "teyonka.nickles@gmail.com",
+        "consentText": true,
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771181112,
+          "nanoseconds": 762000000
+        },
+        "firstName": "Teyonka",
+        "paymentStatus": "paid",
+        "students": [
+          {
+            "uniformBottom": "",
+            "sport": "TACKLE_FOOTBALL",
+            "dob": "11-14-2018",
+            "firstName": "King",
+            "lastName": "Ferguson ",
+            "uniformTop": "",
+            "uid": "UoT2VWzJHP2CT1brXNNY",
+            "ageGroup": "7U",
+            "school_name": "Stanton elementary school ",
+            "location": "Landover ",
+            "grade": "1st Grade"
+          }
+        ],
+        "phone": "2023611793",
+        "isPaidMember": true
+      },
+      {
+        "id": "wSLddw2hz63ZUSe0QZ18",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "sport": "FLAG_FOOTBALL",
+        "paymentIntentId": "pi_3TRs7wD0jrYX3tXC1G4yJPIE",
+        "lastName": "Mail",
+        "noRefundPolicy": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777546055,
+          "nanoseconds": 271000000
+        },
+        "parentConduct": true,
+        "registrationAgreement": true,
+        "uid": "rueEkPWHj4TKkhecK2ulnCRwHs43",
+        "location": "Bowie, MD",
+        "encouragementCommitment": true,
+        "isPaidMember": true,
+        "phone": "+919966554422",
+        "students": [
+          {
+            "uniformBottom": "",
+            "uniformTop": "",
+            "lastName": "sdfsd",
+            "dob": "11-22-2015",
+            "firstName": "fasfd",
+            "sport": "FLAG_FOOTBALL",
+            "location": "Bowie, MD",
+            "grade": "1st Grade",
+            "ageGroup": "10U",
+            "school_name": "brandwine",
+            "uid": "ym8tzIvAx94y11UNQyLc"
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777546045,
+          "nanoseconds": 599000000
+        },
+        "firstName": "Test",
+        "paymentStatus": "paid",
+        "email": "final@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777546055,
+          "nanoseconds": 271000000
+        },
+        "consentText": true
+      },
+      {
+        "id": "wUgbKloGgm6ClITKczgI",
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "registrationPlan": "monthly",
+        "membershipType": "paid",
+        "sport": "FLAG_FOOTBALL",
+        "lastName": "Farrell ",
+        "paymentIntentId": "pi_3TPjmSD0jrYX3tXC1OdHvUfD",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777037315,
+          "nanoseconds": 132000000
+        },
+        "registrationAgreement": true,
+        "uid": "JCIUCI2TeJSmi0grw8xIeKWZRju1",
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "isPaidMember": true,
+        "phone": "+12027683294",
+        "students": [
+          {
+            "sport": "FLAG_FOOTBALL",
+            "firstName": "Cleveland ",
+            "dob": "03-06-2018",
+            "lastName": "Kilgore",
+            "uniformTop": "",
+            "uid": "wkQEEfdP4TG30iYukwQK",
+            "ageGroup": "8U",
+            "school_name": "Valley View",
+            "grade": "1st Grade",
+            "location": "National Harbor, MD",
+            "uniformBottom": ""
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777037313,
+          "nanoseconds": 642000000
+        },
+        "firstName": "Ericka",
+        "paymentStatus": "paid",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777037315,
+          "nanoseconds": 132000000
+        },
+        "email": "erick2ericka@gmail.com",
+        "consentText": true
+      },
+      {
+        "id": "wWHfcG73q4Khu6wsHe2b",
+        "noRefundPolicy": true,
+        "lastName": "Allen",
+        "paymentIntentId": "pi_3TI7nWD0jrYX3tXC0GANRotO",
+        "sport": "SOCCER",
+        "location": "Brandywine",
+        "encouragementCommitment": true,
+        "uid": "Y9Z2Ehwn4fNHReLmDxkFVAooq7w2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775223012,
+          "nanoseconds": 668000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "firstName": "Salema",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775223011,
+          "nanoseconds": 272000000
+        },
+        "consentText": true,
+        "email": "sale993@yahoo.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1775223012,
+          "nanoseconds": 668000000
+        },
+        "phone": "+13017411064",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "sport": "SOCCER",
+            "dob": "04-02-2023",
+            "firstName": "Salena",
+            "uniformTop": "",
+            "lastName": "Allen",
+            "uid": "KFlLKzeSqMQqJwBPpvH3",
+            "school_name": "",
+            "ageGroup": "3U",
+            "location": "Brandywine",
+            "grade": "Kindergarten"
+          }
+        ]
+      },
+      {
+        "id": "wgaIKR6oWgX1GOFCd5oQ",
+        "consentText": true,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762787924,
+          "nanoseconds": 591000000
+        },
+        "email": "arroyoguill@gmail.com",
+        "firstName": "Guillermo",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762787923,
+          "nanoseconds": 409000000
+        },
+        "students": [
+          {
+            "lastName": "Arroyo",
+            "uniformTop": "Youth L",
+            "uniformBottom": "Youth L",
+            "dob": "Invalid Date",
+            "firstName": "Daniel",
+            "ageGroup": "N/A",
+            "uid": "LUJz85GUX67vUUBksjHM"
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "2403533029",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1762787924,
+          "nanoseconds": 591000000
+        },
+        "registrationAgreement": true,
+        "uid": "FrOzpAMOG9SToApZQBhFaxje9nu2",
+        "lastName": "Arroyo",
+        "paymentIntentId": "pi_3SRwraD0jrYX3tXC0RnHpF6f",
+        "noRefundPolicy": true,
+        "sport": "SOCCER",
+        "registrationPlan": "oneTime",
+        "membershipType": "paid",
+        "fundraiserCommitment": true,
+        "registrationSource": "web"
+      },
+      {
+        "id": "xVY1gQz57IbgRVem7Kdz",
+        "consentText": true,
+        "email": "member30@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777543238,
+          "nanoseconds": 151000000
+        },
+        "firstName": "Test",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777543229,
+          "nanoseconds": 44000000
+        },
+        "students": [
+          {
+            "grade": "6th Grade",
+            "location": "Bowie, MD",
+            "uid": "n4TKfbTvZC1Sq5gzxKmv",
+            "school_name": "brandwine",
+            "ageGroup": "14U",
+            "firstName": "test",
+            "dob": "02-05-2012",
+            "lastName": "testt",
+            "uniformTop": "",
+            "sport": "FLAG_FOOTBALL",
+            "uniformBottom": ""
+          }
+        ],
+        "isPaidMember": true,
+        "phone": "+917055570555",
+        "location": "Bowie, MD",
+        "encouragementCommitment": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777543238,
+          "nanoseconds": 151000000
+        },
+        "registrationAgreement": true,
+        "uid": "XoeUTyL6TLcPP21mnB7jXOazZG73",
+        "lastName": "Mail",
+        "paymentIntentId": "pi_3TRrOVD0jrYX3tXC0mfGF78Y",
+        "noRefundPolicy": true,
+        "sport": "FLAG_FOOTBALL",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "registrationSource": "web"
+      },
+      {
+        "id": "y2llQ63P98wxMr7FWlfT",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3SxtjoD0jrYX3tXC0L91lK5G",
+        "lastName": "123123",
+        "sport": "SOCCER",
+        "location": "Andrews AFB - Clinton",
+        "encouragementCommitment": true,
+        "uid": "c8ZSA24rXPTcrV1L6Ow9jSDXqPV2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770402404,
+          "nanoseconds": 7000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "oneTime",
+        "fundraiserCommitment": true,
+        "firstName": "pratik12",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770402401,
+          "nanoseconds": 206000000
+        },
+        "consentText": true,
+        "email": "pratik12@yopmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770402404,
+          "nanoseconds": 7000000
+        },
+        "phone": "1231231231",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "Youth M",
+            "idStatus": "active",
+            "expirationDate": "Feb 06, 2027",
+            "idReviewedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1770410743,
+              "nanoseconds": 533000000
+            },
+            "idReviewedBy": "admin",
+            "uniformTop": "Youth M",
+            "firstName": "eeeee",
+            "idRejectionReason": "",
+            "generatedIdUrl": "https://firebasestorage.googleapis.com/v0/b/yau-app.firebasestorage.app/o/id-cards%2Fy2llQ63P98wxMr7FWlfT%2F2HcF1uztBnirjYlAT48f%2Fid_card.png?alt=media&token=eea4c154-b2c4-466b-8b3e-09d930582cfe",
+            "lastName": "eeee",
+            "dob": "12-31-2013",
+            "sport": "SOCCER",
+            "location": "Andrews AFB - Clinton",
+            "grade": "1st Grade",
+            "ageGroup": "12U",
+            "school_name": "eeee",
+            "uid": "2HcF1uztBnirjYlAT48f"
+          }
+        ]
+      },
+      {
+        "id": "zU3BZnrUgXKSnglMhmrc",
+        "isPaidMember": true,
+        "phone": "+12402103738",
+        "students": [
+          {
+            "sport": "BASKETBALL",
+            "firstName": "Gabriel ",
+            "dob": "11-12-2012",
+            "uniformTop": "",
+            "lastName": "Campbell",
+            "uid": "tBtqujFoSUsbdXDIbCcw",
+            "ageGroup": "13U",
+            "school_name": "Colin Powell academy ",
+            "grade": "7th Grade",
+            "location": "Oxon Hill,MD",
+            "uniformBottom": ""
+          }
+        ],
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771818328,
+          "nanoseconds": 636000000
+        },
+        "firstName": "Miranda",
+        "paymentStatus": "paid",
+        "email": "powell8825@ymail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771818329,
+          "nanoseconds": 497000000
+        },
+        "consentText": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "sport": "BASKETBALL",
+        "paymentIntentId": "pi_3T3q5ID0jrYX3tXC11WhFtCx",
+        "lastName": "Powell",
+        "noRefundPolicy": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1771818329,
+          "nanoseconds": 497000000
+        },
+        "registrationAgreement": true,
+        "uid": "M2MQY2jhx3deAmSY78s85Jszgwz2",
+        "encouragementCommitment": true,
+        "location": "Oxon Hill,MD"
+      },
+      {
+        "id": "zjMImxuYOlNzveXjuPSY",
+        "isPaidMember": true,
+        "phone": "2022857194",
+        "students": [
+          {
+            "ageGroup": "14U",
+            "uid": "JtDmku1Mb4YX263oG6cw",
+            "uniformTop": "",
+            "lastName": "Byas ",
+            "uniformBottom": "",
+            "firstName": "Jayco ",
+            "dob": "Invalid Date"
+          }
+        ],
+        "firstName": "Jakco ",
+        "paymentStatus": "paid",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767205588,
+          "nanoseconds": 323000000
+        },
+        "consentText": true,
+        "email": "Jakco128@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767205589,
+          "nanoseconds": 502000000
+        },
+        "registrationSource": "web",
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "fundraiserCommitment": true,
+        "paymentIntentId": "pi_3SkU6HD0jrYX3tXC0zRyHMfj",
+        "lastName": "Byas ",
+        "noRefundPolicy": true,
+        "sport": "BASKETBALL",
+        "encouragementCommitment": true,
+        "location": "National Harbor, MD",
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1767205589,
+          "nanoseconds": 502000000
+        },
+        "registrationAgreement": true,
+        "uid": "ko8SjeJAh7QOKa7TlX2LFYxiCg42"
+      },
+      {
+        "id": "zlsjzJ5quGaxQA1NjdJX",
+        "sport": "SOCCER",
+        "noRefundPolicy": true,
+        "paymentIntentId": "pi_3TNZ2vD0jrYX3tXC0KJ3CYTL",
+        "lastName": "Billings ",
+        "uid": "P7vOjyV2xVhu1ae6aBxnyIESX5y2",
+        "registrationAgreement": true,
+        "parentConduct": true,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776519394,
+          "nanoseconds": 506000000
+        },
+        "location": "National Harbor, MD",
+        "encouragementCommitment": true,
+        "registrationSource": "web",
+        "fundraiserCommitment": true,
+        "membershipType": "paid",
+        "registrationPlan": "monthly",
+        "paidAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776519393,
+          "nanoseconds": 554000000
+        },
+        "firstName": "Jordan",
+        "paymentStatus": "paid",
+        "email": "jordanbills9308@gmail.com",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1776519394,
+          "nanoseconds": 506000000
+        },
+        "consentText": true,
+        "phone": "+12538612693",
+        "isPaidMember": true,
+        "students": [
+          {
+            "uniformBottom": "",
+            "school_name": "Brandywine Elementary ",
+            "ageGroup": "11U",
+            "uid": "mPIp9NnoS4axRjKNbqDB",
+            "grade": "5th Grade",
+            "location": "National Harbor, MD",
+            "sport": "SOCCER",
+            "uniformTop": "",
+            "lastName": "Smith ",
+            "dob": "07-30-2015",
+            "firstName": "Noah "
+          },
+          {
+            "grade": "6th Grade",
+            "location": "National Harbor, MD",
+            "uid": "feK2G7M9geX4O2fyswjN",
+            "ageGroup": "12U",
+            "school_name": "Gwynn Park Middle",
+            "firstName": "Charlie ",
+            "dob": "01-17-2014",
+            "lastName": "Blackmon IV",
+            "uniformTop": "",
+            "sport": "SOCCER",
+            "uniformBottom": ""
+          }
+        ]
+      }
+    ],
+    "schedules": [
+      {
+        "id": "4L9NS5dgAACLDCmlBckP",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777531121,
+          "nanoseconds": 539000000
+        },
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777649211,
+          "nanoseconds": 610000000
+        },
+        "team1Name": "Allenwood",
+        "team2Name": "Baden",
+        "location": "test venue",
+        "time": "10:00 AM",
+        "sport": "Basketball",
+        "date": "2026-05-01",
+        "grade_band": "3rd - 4th Grade"
+      },
+      {
+        "id": "DS10d61hyW2pxdyRIQFS",
+        "coachId": "",
+        "season": "2024-25",
+        "team1Id": "",
+        "date": "2026-04-09",
+        "time": "12:30",
+        "ageGroups": [
+          "4th Grade",
+          "3rd Grade"
+        ],
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1770403821,
+          "nanoseconds": 124000000
+        },
+        "team1Name": "Brandywine",
+        "team2Id": "",
+        "coachName": "TBD",
+        "team2": "Eagles",
+        "team1": "National Harbor",
+        "status": "",
+        "grade_band": "3rd - 4th Grade",
+        "sport": "Soccer",
+        "notes": "",
+        "location": "13802 R st NW Washinton, DC",
+        "team2Name": "Allenwood",
+        "ageGroup": "4th Grade, 3rd Grade",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778132051,
+          "nanoseconds": 697000000
+        }
+      },
+      {
+        "id": "Z9DUrr6b5dMusbpuBsCq",
+        "team1Name": "Allenwood",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778221437,
+          "nanoseconds": 838000000
+        },
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778221417,
+          "nanoseconds": 36000000
+        },
+        "location": "LA28 Olympic Venue",
+        "time": "10:00 AM",
+        "team2Name": "Brandywine",
+        "sport": "Basketball",
+        "date": "2026-05-10",
+        "grade_band": "3rd - 4th Grade"
+      },
+      {
+        "id": "a4U7kte9RHoQTjnQ22KU",
+        "team1Name": "Brandywine",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210749,
+          "nanoseconds": 441000000
+        },
+        "team2Name": "John Hanson",
+        "time": "10:00 AM",
+        "location": "John Hanson ",
+        "sport": "Cheer",
+        "date": "2026-05-09",
+        "grade_band": "5th - 6th Grade"
+      },
+      {
+        "id": "dPH3AJNUYRr69ikHBM3U",
+        "sport": "Flag Football",
+        "date": "2026-05-10",
+        "grade_band": "Kindergarten – 1st Grade",
+        "team1Name": "Brandywine",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778211290,
+          "nanoseconds": 606000000
+        },
+        "time": "11:00 AM",
+        "location": "At Hom",
+        "team2Name": "Brandywine"
+      },
+      {
+        "id": "eLU1MePaustFp7t8vIEY",
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777562159,
+          "nanoseconds": 107000000
+        },
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777665533,
+          "nanoseconds": 314000000
+        },
+        "team1Name": "Allenwood",
+        "team2Name": "Brandywine",
+        "location": "John Hanson School - 6360 Oxon Hill Rd Oxon Hill MD",
+        "time": "10:00 AM",
+        "sport": "Soccer",
+        "date": "2026-05-02",
+        "grade_band": "3rd - 4th Grade"
+      }
+    ],
+    "standings": [
+      {
+        "id": "allenwood__k__1st_grade__soccer",
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777647826,
+          "nanoseconds": 574000000
+        },
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777647826,
+          "nanoseconds": 574000000
+        },
+        "points": 1,
+        "draws": 1,
+        "wins": 0,
+        "sport": "Soccer",
+        "losses": 0,
+        "gradeBand": "Kindergarten – 1st Grade",
+        "schoolName": "Allenwood",
+        "teamName": "Allenwood"
+      },
+      {
+        "id": "baden__3rd__4th_grade__soccer",
+        "points": 1,
+        "draws": 0,
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210787,
+          "nanoseconds": 557000000
+        },
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210787,
+          "nanoseconds": 557000000
+        },
+        "losses": 0,
+        "wins": 1,
+        "sport": "Soccer",
+        "gradeBand": "3rd - 4th Grade",
+        "schoolName": "Baden",
+        "teamName": "Baden"
+      },
+      {
+        "id": "baden__k__1st_grade__soccer",
+        "draws": 1,
+        "points": 1,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777647826,
+          "nanoseconds": 993000000
+        },
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1777647826,
+          "nanoseconds": 993000000
+        },
+        "losses": 0,
+        "sport": "Soccer",
+        "wins": 0,
+        "schoolName": "Baden",
+        "gradeBand": "Kindergarten – 1st Grade",
+        "teamName": "Baden"
+      },
+      {
+        "id": "brandywine__3rd__4th_grade__soccer",
+        "losses": 1,
+        "wins": 0,
+        "sport": "Soccer",
+        "points": 0,
+        "draws": 0,
+        "updatedAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210787,
+          "nanoseconds": 609000000
+        },
+        "createdAt": {
+          "type": "firestore/timestamp/1.0",
+          "seconds": 1778210787,
+          "nanoseconds": 609000000
+        },
+        "teamName": "Brandywine",
+        "gradeBand": "3rd - 4th Grade",
+        "schoolName": "Brandywine"
+      }
+    ]
+  }
+}

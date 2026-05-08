@@ -59,6 +59,7 @@ export const broadcastPushNotification = async (tokens: string[], title: string,
         body,
         data,
         sound: 'default',
+        badge: 1,
         priority: 'high'
       })
     )

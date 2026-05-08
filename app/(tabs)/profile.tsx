@@ -10,7 +10,8 @@ import { useState } from 'react';
 import { TextInput } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
-import { GRADE_BANDS, SPORTS } from '../../src/services/registration';
+import { GRADE_BANDS, SPORTS, gradeBandToBandKey } from '../../src/services/registration';
+
 import { CountryPicker } from '../../src/components/CountryPicker';
 import { countries, Country } from '../../src/constants/countries';
 import { createAccountDeletionRequest } from '../../src/services/messaging';
@@ -81,14 +82,18 @@ export default function ProfileScreen() {
 
       if (user.students && user.students.length > 0) {
         const updatedStudents = [...user.students];
+        const bandKey = gradeBandToBandKey(studentGrade);
         updatedStudents[0] = {
           ...updatedStudents[0],
           firstName: studentFirstName,
           lastName: studentLastName,
           grade: studentGrade,
+          grade_band: bandKey,
+          ageGroup: bandKey,
           sport: studentSport
         };
         updates.students = updatedStudents;
+
       }
 
       const memberRef = doc(db, 'members', user.id);
@@ -322,6 +327,13 @@ export default function ProfileScreen() {
         <Text style={styles.version}>Version 2.1.0 Premium</Text>
       </ScrollView>
 
+      <PickerModal 
+        visible={showGradePicker} 
+        onClose={() => setShowGradePicker(false)} 
+        options={GRADE_BANDS.map(g => g.label)} 
+        onSelect={setStudentGrade} 
+        title="Select Grade Band" 
+      />
       <PickerModal visible={showSportPicker} onClose={() => setShowSportPicker(false)} options={SPORTS} onSelect={setStudentSport} title="Select Sport" />
       <CountryPicker visible={isCountryPickerOpen} onClose={() => setIsCountryPickerOpen(false)} onSelect={setSelectedCountry} />
 

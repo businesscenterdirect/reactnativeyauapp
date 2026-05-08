@@ -19,7 +19,8 @@ interface Standing {
 
 type SportType = 'Soccer' | 'Flag Football' | 'Basketball';
 
-import { GRADE_BANDS } from '../../src/services/registration';
+import { GRADE_BANDS, isGradeMatch } from '../../src/services/registration';
+
 
 
 import { useUser } from '../../src/context/UserContext';
@@ -32,7 +33,8 @@ export default function StandingsScreen() {
   const [standings, setStandings] = useState<Standing[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSport, setSelectedSport] = useState<SportType>('Soccer');
-  const [selectedBand, setSelectedBand] = useState(GRADE_BANDS[1].value); // 1st-2nd
+  const [selectedBand, setSelectedBand] = useState(GRADE_BANDS[0].value); // Kindergarten – 1st Grade
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -77,8 +79,9 @@ export default function StandingsScreen() {
   // Filter real data
   const filteredData = standings.filter(s =>
     s.sport === selectedSport &&
-    (s.gradeBand.includes(selectedBand.split(' ')[0]) || selectedBand.includes(s.gradeBand))
+    isGradeMatch(s.gradeBand, selectedBand)
   );
+
 
   const renderHeader = () => (
     <View style={styles.tableHeader}>
