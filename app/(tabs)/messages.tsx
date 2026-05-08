@@ -18,8 +18,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 
 import { useMessageStore, shouldShowBadge } from '../../src/store/useMessageStore';
+import { formatMessageTimestamp } from '../../src/utils/dateFormatter';
 
 
+
+const stripHtml = (html: string) => {
+  if (!html) return '';
+  return html.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').trim();
+};
 
 // Memoized List Item
 const MessageItem = React.memo(({
@@ -32,6 +38,7 @@ const MessageItem = React.memo(({
   formatTime: (ts: any) => string;
 }) => {
   const showBadge = shouldShowBadge(item.unreadCount);
+  const preview = stripHtml(item.lastMessage || item.description || item.message || 'No preview available');
 
   return (
     <TouchableOpacity
@@ -64,7 +71,7 @@ const MessageItem = React.memo(({
         </View>
 
         <Text style={[styles.messagePreview, showBadge && styles.unreadPreview]} numberOfLines={1}>
-          {item.lastMessage || item.description || item.message || 'No preview available'}
+          {preview}
         </Text>
       </View>
     </TouchableOpacity>
@@ -91,32 +98,13 @@ export default function MessagesScreen() {
     });
   };
 
-  const formatTime = (ts: any) => {
-    if (!ts) return '';
-    const date = ts.toDate ? ts.toDate() : (ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts));
-    if (isNaN(date.getTime())) return '';
+  const formatTime = (ts: any) => formatMessageTimestamp(ts);
 
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const oneDay = 24 * 60 * 60 * 1000;
-
-    if (diff < oneDay) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-    } else if (diff < 7 * oneDay) {
-      return date.toLocaleDateString([], { weekday: 'short' });
-    }
-    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
-  };
-
-  const [activeTab, setActiveTab] = useState<'All Messages' | 'From Admin' | 'From Coaches'>('All Messages');
+  const [activeTab, setActiveTab] = useState<'All Messages' | 'From Coach'>('All Messages');
 
   const displayedMessages = messages.filter((m: any) => {
     if (activeTab === 'All Messages') return true;
-    if (activeTab === 'From Coaches') return m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach';
-    if (activeTab === 'From Admin') {
-      const role = m.role || m.senderRole || m.type || 'admin';
-      return role === 'admin';
-    }
+    if (activeTab === 'From Coach') return m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach';
     return true;
   });
 
@@ -135,15 +123,10 @@ export default function MessagesScreen() {
         <Text style={styles.headerSubtitle}>Stay up to date with the latest from your coach and YAU</Text>
 
         <View style={styles.tabsRow}>
-          {(['All Messages', 'From Admin', 'From Coaches'] as const).map((tab) => {
+          {(['All Messages', 'From Coach'] as const).map((tab) => {
             const pool = tab === 'All Messages'
               ? messages
-              : tab === 'From Coaches'
-                ? messages.filter((m: any) => m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach')
-                : messages.filter((m: any) => {
-                  const role = m.role || m.senderRole || m.type || 'admin';
-                  return role === 'admin';
-                });
+              : messages.filter((m: any) => m.role === 'coach' || m.senderRole === 'coach' || m.type === 'coach');
             const count = (pool as any[]).reduce((acc: number, m: any) => acc + (m.unreadCount || 0), 0);
 
             return (

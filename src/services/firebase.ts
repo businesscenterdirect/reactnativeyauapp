@@ -1,7 +1,10 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// @ts-ignore - getReactNativePersistence exists in the RN bundle but may not be recognized by the IDE's web-default types
+import { initializeAuth, getReactNativePersistence, getAuth, browserLocalPersistence } from 'firebase/auth';
+import { Platform } from 'react-native';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DEV = __DEV__;
 
@@ -36,9 +39,14 @@ try {
   }
 }
 
-export const auth = getAuth(app);
+// Initialize Auth with persistent storage
+// On Web, we use the default persistence; on Native, we use AsyncStorage
+export const auth = Platform.OS === 'web' 
+  ? getAuth(app)
+  : initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage)
+    });
 
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 
 // Firebase web SDK handles persistence automatically in React Native, 
 // but we explicitly enable persistent cache for better control.

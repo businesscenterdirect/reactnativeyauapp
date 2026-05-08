@@ -125,7 +125,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.feedHeader}>
-          <Text style={styles.feedTitle}>Upcoming Match</Text>
+          <Text style={styles.feedTitle}>Upcoming Game</Text>
           <TouchableOpacity onPress={() => router.push('/(tabs)/schedule' as any)}>
             <Text style={styles.viewAll}>View All</Text>
           </TouchableOpacity>
@@ -138,7 +138,7 @@ export default function HomeScreen() {
             <TouchableOpacity
               key={item.id}
               style={styles.matchCard}
-              onPress={() => router.push({ pathname: '/match/[id]' as any, params: { id: item.id } })}
+              onPress={() => router.push({ pathname: '/game/[id]' as any, params: { id: item.id } })}
             >
               <View style={styles.cardHeader}>
                 <Text style={styles.cardHeaderDate}>{formatDate(item.date)}</Text>
@@ -174,8 +174,8 @@ export default function HomeScreen() {
         ) : (
           <View style={styles.emptyContainer}>
             <MaterialIcons name="event-busy" size={80} color="#E2E8F0" />
-            <Text style={styles.emptyTitle}>NO UPCOMING MATCHES</Text>
-            <Text style={styles.emptyText}>You're all caught up! New matches will appear here once they are scheduled.</Text>
+            <Text style={styles.emptyTitle}>NO UPCOMING GAMES</Text>
+            <Text style={styles.emptyText}>You're all caught up! New games will appear here once they are scheduled.</Text>
           </View>
         )}
       </ScrollView>

@@ -56,12 +56,14 @@ export default function ScheduleScreen() {
   const schedules = useScheduleStore((state: any) => state.schedules);
   const loading = useScheduleStore((state: any) => state.loading);
 
-  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   const filteredSchedules = schedules;
 
-  const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date > todayStr);
-  const realPast = filteredSchedules.filter((s: Schedule) => s.date <= todayStr);
+  // Games on "Today" should remain in Upcoming until the day is over
+  const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date >= todayStr);
+  const realPast = filteredSchedules.filter((s: Schedule) => s.date < todayStr);
 
   // Use real data
   const displayedItems = activeTab === 'upcoming' ? realUpcoming : realPast;
@@ -133,7 +135,7 @@ export default function ScheduleScreen() {
             <View style={styles.empty}>
               <MaterialIcons name="event-busy" size={80} color="#E2E8F0" />
               <Text style={styles.emptyTitle}>NO {activeTab.toUpperCase()} GAMES</Text>
-              <Text style={styles.emptyText}>There are no {activeTab} matches scheduled for this group at the moment.</Text>
+              <Text style={styles.emptyText}>There are no {activeTab} games scheduled for this group at the moment.</Text>
             </View>
           }
           renderItem={({ item }) => {
@@ -145,7 +147,7 @@ export default function ScheduleScreen() {
             return (
               <TouchableOpacity
                 style={[styles.gameCard, { borderColor: headerColor }]}
-                onPress={() => router.push({ pathname: '/match/[id]' as any, params: { id: item.id } })}
+                onPress={() => router.push({ pathname: '/game/[id]' as any, params: { id: item.id } })}
               >
                 <View style={[styles.cardHeader, { backgroundColor: headerColor }]}>
                   <Text style={styles.cardHeaderDate}>{formatHeaderDate(item.date)}</Text>

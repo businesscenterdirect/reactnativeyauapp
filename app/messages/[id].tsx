@@ -12,20 +12,24 @@ import {
   TextInput, 
   KeyboardAvoidingView, 
   Platform,
-  Keyboard
+  Keyboard,
+  useWindowDimensions
 } from 'react-native';
+import RenderHTML from 'react-native-render-html';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { db } from '../../src/services/firebase';
 import { AdminPost, MessageReply, subscribeToReplies, sendReply } from '../../src/services/messaging';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { formatMessageTimestamp } from '../../src/utils/dateFormatter';
 
 export default function MessageDetailScreen() {
   const { id, message: messageParam } = useLocalSearchParams<{ id: string; message?: string }>();
   const router = useRouter();
   const { user } = useUser();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const scrollRef = useRef<ScrollView>(null);
   
   const [message, setMessage] = useState<AdminPost | null>(null);
@@ -105,7 +109,12 @@ export default function MessageDetailScreen() {
         <View style={styles.postCard}>
           <View style={styles.tag}><Text style={styles.tagText}>OFFICIAL POST</Text></View>
           <Text style={styles.postTitle}>{message?.title}</Text>
-          <Text style={styles.postBody}>{message?.description}</Text>
+          <RenderHTML 
+            contentWidth={width - 80} 
+            source={{ html: message?.description || '' }} 
+            baseStyle={styles.postBody}
+          />
+          <Text style={styles.postDate}>{formatMessageTimestamp(message?.createdAt || message?.timestamp)}</Text>
         </View>
 
         <View style={styles.repliesArea}>
@@ -113,9 +122,19 @@ export default function MessageDetailScreen() {
             const isMe = r.userId === user?.id;
             return (
               <View key={r.id} style={[styles.bubbleWrap, isMe ? { alignItems: 'flex-end' } : { alignItems: 'flex-start' }]}>
-                <View style={[styles.bubble, isMe ? styles.myBubble : styles.theirBubble]}>
-                  {!isMe && <Text style={styles.bubbleAuthor}>{r.userName}</Text>}
-                  <Text style={[styles.bubbleText, isMe && { color: '#FFF' }]}>{r.content}</Text>
+                  <View style={[styles.bubble, isMe ? styles.myBubble : styles.theirBubble]}>
+                    {!isMe && <Text style={styles.bubbleAuthor}>{r.userName}</Text>}
+                    <RenderHTML 
+                      contentWidth={width - 120} 
+                      source={{ html: r.content || '' }} 
+                      baseStyle={{
+                        ...styles.bubbleText,
+                        color: isMe ? '#FFF' : '#111827'
+                      }}
+                    />
+                  <Text style={[styles.bubbleTime, isMe && { color: 'rgba(255,255,255,0.7)' }]}>
+                    {formatMessageTimestamp(r.timestamp)}
+                  </Text>
                 </View>
               </View>
             )
@@ -150,15 +169,17 @@ const styles = StyleSheet.create({
   postCard: { backgroundColor: '#F8FAFC', borderRadius: 24, padding: 20, marginBottom: 30, borderWidth: 1.5, borderColor: '#F1F5F9' },
   tag: { backgroundColor: '#002C61', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 12 },
   tagText: { color: '#FFF', fontSize: 9, fontWeight: '900' },
-  postTitle: { fontSize: 20, fontWeight: '900', color: '#111827', marginBottom: 10 },
-  postBody: { fontSize: 14, color: '#4B5563', lineHeight: 22 },
+  postTitle: { fontSize: 20, fontWeight: '900', color: '#111827', marginBottom: 6 },
+  postBody: { fontSize: 14, color: '#4B5563', lineHeight: 22, marginBottom: 12 },
+  postDate: { fontSize: 11, color: '#94A3B8', fontWeight: '700' },
   repliesArea: { gap: 15 },
   bubbleWrap: { width: '100%' },
-  bubble: { maxWidth: '80%', padding: 14, borderRadius: 20, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
+  bubble: { maxWidth: '85%', padding: 14, borderRadius: 20, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
   myBubble: { backgroundColor: '#E31B23', borderBottomRightRadius: 4 },
   theirBubble: { backgroundColor: '#F3F4F6', borderBottomLeftRadius: 4 },
   bubbleAuthor: { fontSize: 10, fontWeight: '900', color: '#002C61', marginBottom: 4, textTransform: 'uppercase' },
-  bubbleText: { fontSize: 14, color: '#111827', lineHeight: 20 },
+  bubbleText: { fontSize: 14, color: '#111827', lineHeight: 20, marginBottom: 4 },
+  bubbleTime: { fontSize: 10, color: '#94A3B8', fontWeight: '600' },
   inputBar: { flexDirection: 'row', alignItems: 'center', padding: 15, borderTopWidth: 1.5, borderTopColor: '#F3F4F6', gap: 12, backgroundColor: '#FFF' },
   input: { flex: 1, backgroundColor: '#F3F4F6', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, maxHeight: 100 },
   sendBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#002C61', alignItems: 'center', justifyContent: 'center' },

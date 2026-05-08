@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
 import { registerForPushNotificationsAsync } from '../services/notifications';
 import Constants from 'expo-constants';
@@ -60,6 +60,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     let authUnsub: (() => void) | undefined;
 
     const init = async () => {
+      let hasHydrated = false;
       // 1. Show cached user immediately to avoid blank screen on cold start
       try {
         const cached = await AsyncStorage.getItem(USER_STORAGE_KEY);
@@ -68,6 +69,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
           setUserState(parsed);
           // If we have a cached id, attach the live Firestore listener right away
           if (parsed.id) attachMemberListener(parsed.id);
+          hasHydrated = true;
         }
       } catch (e) {
         if (__DEV__) console.error('[UserContext] Hydration error:', e);
@@ -76,16 +78,29 @@ export function UserProvider({ children }: { children: ReactNode }) {
       // 2. Subscribe to Firebase Auth — source of truth for session validity
       authUnsub = onAuthStateChanged(auth, async (firebaseUser) => {
         if (!firebaseUser) {
-          // Signed out — drop listener + clear state
+          if (hasHydrated) {
+            // Guard: wait a more generous moment for Firebase to restore persistence
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            if (auth.currentUser) {
+              if (__DEV__) console.log('[UserContext] persistence recovered after 1.5s delay');
+              setLoading(false);
+              return; 
+            }
+          }
+
           if (memberUnsubRef.current) {
             memberUnsubRef.current();
             memberUnsubRef.current = null;
           }
           setUserState(null);
           AsyncStorage.removeItem(USER_STORAGE_KEY).catch(() => {});
+        } else {
+          // SIGNED IN
+          // If we didn't hydrate or the ID changed, attach the listener
+          if (!user?.id || user.id !== firebaseUser.uid) {
+            attachMemberListener(firebaseUser.uid);
+          }
         }
-        // When signed in: the member listener (attached above or via updateUser)
-        // already keeps state fresh — no manual fetch needed.
         setLoading(false);
       });
     };
@@ -109,25 +124,32 @@ export function UserProvider({ children }: { children: ReactNode }) {
     try {
       if (Platform.OS === 'web' || !user?.id) return;
       
+      if (__DEV__) console.log('[UserContext] Registering push token for user:', user.id);
+
       // Improved Project ID retrieval for EAS builds across different Expo versions
       const projectId = 
         Constants.expoConfig?.extra?.eas?.projectId ?? 
         Constants.easConfig?.projectId ?? 
         'dd35e184-c545-49be-853d-cf7223e7be47'; // Fallback to hardcoded ID from app.json
         
+      // Safety Delay: wait for Firestore listener to settle and any 
+      // previous session cleanup to finish.
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       const token = await registerForPushNotificationsAsync(projectId);
-      if (!token) return;
+      if (!token) {
+        if (__DEV__) console.warn('[UserContext] Failed to get push token');
+        return;
+      }
 
-      // Use arrayUnion to safely add the new token without overwriting existing ones.
-      // This is much safer than manual array management as it avoids race conditions.
-      const { arrayUnion } = await import('firebase/firestore');
+      // Sync to Firestore
       const memberRef = doc(db, 'members', user.id);
       await updateDoc(memberRef, { 
         expoPushTokens: arrayUnion(token),
-        lastTokenUpdate: new Date().toISOString() // Track when the token was last refreshed
+        lastTokenUpdate: new Date().toISOString()
       });
 
-      if (__DEV__) console.log('[UserContext] Push token synced to Firestore');
+      if (__DEV__) console.log('[UserContext] Push token synced successfully:', token);
     } catch (error) {
       if (__DEV__) console.warn('[UserContext] Push token sync failed:', error);
     }

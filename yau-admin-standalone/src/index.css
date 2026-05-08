@@ -60,3 +60,32 @@ body {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* Quill Dark Mode Fixes */
+.dark .ql-toolbar.ql-snow {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .ql-container.ql-snow {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: black;
+}
+
+.dark .ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dark .ql-snow .ql-stroke {
+  stroke: #fff;
+}
+
+.dark .ql-snow .ql-fill, .dark .ql-snow .ql-picker {
+  fill: #fff;
+  color: #fff;
+}
+
+.dark .ql-snow .ql-picker-options {
+  background-color: #1a1a1a;
+  border-color: #333;
+}

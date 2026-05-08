@@ -73,10 +73,10 @@ export async function registerForPushNotificationsAsync(projectId?: string): Pro
 export function setupNotificationListeners() {
   try {
     // Handle notification responses (user taps notification)
-    const subscription = Notifications.addNotificationResponseReceivedListener((response: any) => {
+    const responseSubscription = Notifications.addNotificationResponseReceivedListener((response: any) => {
       const data = response.notification.request.content.data;
+      if (__DEV__) console.log('[Notifications] Response received with data:', data);
 
-      // Navigate to specific message if messageId is provided
       if (data && data.messageId) {
         router.push(`/messages/${data.messageId}` as any);
       } else if (data && data.screen === 'messages') {
@@ -87,7 +87,20 @@ export function setupNotificationListeners() {
         router.push('/(tabs)/messages');
       }
     });
-    return subscription;
+
+    // Handle notifications while app is in foreground
+    const notificationSubscription = Notifications.addNotificationReceivedListener((notification) => {
+      if (__DEV__) console.log('[Notifications] Foreground notification received:', notification.request.content.title);
+      // Data sync is handled by Firestore SyncManager, 
+      // but we could trigger a local alert or sound here if needed.
+    });
+
+    return {
+      remove: () => {
+        responseSubscription.remove();
+        notificationSubscription.remove();
+      }
+    };
   } catch (e) {
     if (DEV) console.log('Notification listeners not available in this environment.');
     return null;

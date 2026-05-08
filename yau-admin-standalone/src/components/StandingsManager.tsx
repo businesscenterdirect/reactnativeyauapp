@@ -45,7 +45,7 @@ const StandingsManager: React.FC = () => {
   const [filterGradeBand, setFilterGradeBand] = useState('all');
   const [filterSport, setFilterSport] = useState('all');
 
-  // ── Match Result Form ───────────────────────────────────────────────────────
+  // ── Game Result Form ───────────────────────────────────────────────────────
   const defaultMatchForm = {
     teamAName: '',
     teamBName: '',
@@ -140,7 +140,7 @@ const StandingsManager: React.FC = () => {
     }
   };
 
-  const handleSubmitMatch = async (e: React.FormEvent) => {
+  const handleSubmitGame = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!matchForm.teamAName || !matchForm.teamBName) {
@@ -166,7 +166,7 @@ const StandingsManager: React.FC = () => {
 
     setSubmittingMatch(true);
     try {
-      // 1. Save match result to audit trail
+      // 1. Save game result to audit trail
       await addDoc(collection(db, 'match_results'), {
         teamAName: matchForm.teamAName,
         teamBName: matchForm.teamBName,
@@ -194,12 +194,12 @@ const StandingsManager: React.FC = () => {
           ? 'It\'s a draw!'
           : `${matchForm.teamBName} wins!`;
 
-      toast.success(`Match saved. ${outcomeText}`);
+      toast.success(`Game saved. ${outcomeText}`);
       setMatchForm(defaultMatchForm);
       setTab('table');
     } catch (error) {
       console.error('Error saving match:', error);
-      toast.error('Failed to save match result.');
+      toast.error('Failed to save game result.');
     } finally {
       setSubmittingMatch(false);
     }
@@ -260,7 +260,7 @@ const StandingsManager: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Standings Manager</h1>
-          <p className="text-gray-500 dark:text-white/60 font-medium tracking-tight">Enter match results — standings update automatically.</p>
+          <p className="text-gray-500 dark:text-white/60 font-medium tracking-tight">Enter game results — standings update automatically.</p>
         </div>
       </div>
 
@@ -270,7 +270,7 @@ const StandingsManager: React.FC = () => {
           onClick={() => setTab('enter')}
           className={`flex items-center gap-2 px-6 py-3 text-sm font-black uppercase tracking-widest transition-all border-b-2 -mb-px ${tab === 'enter' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-white/60'}`}
         >
-          <Swords size={16} /> Enter Match Result
+          <Swords size={16} /> Enter Game Result
         </button>
         <button
           onClick={() => setTab('table')}
@@ -280,10 +280,10 @@ const StandingsManager: React.FC = () => {
         </button>
       </div>
 
-      {/* ── TAB 1: Enter Match Result ── */}
+      {/* ── TAB 1: Enter Game Result ── */}
       {tab === 'enter' && (
-        <Card title="Enter Match Result" className="max-w-2xl">
-          <form onSubmit={handleSubmitMatch} className="space-y-6">
+        <Card title="Enter Game Result" className="max-w-2xl">
+          <form onSubmit={handleSubmitGame} className="space-y-6">
             {/* Teams */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Select
@@ -400,7 +400,7 @@ const StandingsManager: React.FC = () => {
               />
             </div>
 
-            <Input label="Match Date" type="date" value={matchForm.date} onChange={e => setMatchForm({ ...matchForm, date: e.target.value })} required />
+            <Input label="Game Date" type="date" value={matchForm.date} onChange={e => setMatchForm({ ...matchForm, date: e.target.value })} required />
 
             <div className="flex gap-3 pt-4 border-t border-gray-100 dark:border-white/5">
               <Button type="button" variant="ghost" className="flex-1" onClick={() => setMatchForm(defaultMatchForm)}>Reset</Button>
@@ -518,7 +518,7 @@ const StandingsManager: React.FC = () => {
                       <td colSpan={8} className="px-6 py-20 text-center">
                         <Trophy size={48} className="text-gray-100 dark:text-indigo-900 mb-4 mx-auto" />
                         <h3 className="font-bold text-gray-900 dark:text-white mb-1">No standings data</h3>
-                        <p className="text-sm text-gray-400 font-medium">Enter match results to auto-populate standings.</p>
+                        <p className="text-sm text-gray-400 font-medium">Enter game results to auto-populate standings.</p>
                       </td>
                     </tr>
                   )}

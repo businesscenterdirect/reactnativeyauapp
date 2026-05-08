@@ -321,7 +321,7 @@ const ScheduleManager: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-[200] p-4">
           <Card className="w-full max-w-xl shadow-2xl border-none p-0 overflow-hidden"
-            title={editingSchedule ? 'Modify Matchup' : 'Schedule New Game'}
+            title={editingSchedule ? 'Modify Game' : 'Schedule New Game'}
             headerAction={<button onClick={() => setIsModalOpen(false)}><X size={24} className="text-gray-400 hover:text-red-500" /></button>}
           >
             <form onSubmit={handleSubmit} className="p-8 space-y-6">

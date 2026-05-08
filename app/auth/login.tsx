@@ -65,7 +65,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % slides.length);
-    }, 4500);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -239,7 +239,7 @@ export default function LoginScreen() {
         <View style={[styles.overlay, { backgroundColor: 'rgba(0, 26, 61, 0.85)' }]} pointerEvents="none" />
       </ImageBackground>
 
-      <Animated.View 
+      <Animated.View
         style={{ height: headerHeight, width: '100%', position: 'absolute', top: 0, zIndex: 1 }}
         pointerEvents="box-none"
       >
@@ -287,12 +287,12 @@ export default function LoginScreen() {
         style={[styles.cardContainer, { marginTop: keyboardVisible ? height * 0.2 : height * 0.44 }]}
       >
         <ScrollView
-          contentContainerStyle={[styles.scrollContent, keyboardVisible && { paddingTop: 20 }]}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: 8 }, keyboardVisible && { paddingTop: 20 }]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formCard}>
-            <View style={[styles.inputGroup, { marginTop: keyboardVisible ? 10 : 24 }]}>
+            <View style={[styles.inputGroup, { marginTop: keyboardVisible ? 10 : 8 }]}>
               <Text style={styles.inputLabel}>Email</Text>
               <View style={styles.inputWrapper}>
                 <TextInput
@@ -364,6 +364,15 @@ export default function LoginScreen() {
                 <Text style={styles.signupBtnText}>Sign Up</Text>
               </TouchableOpacity>
 
+              <TouchableOpacity
+                style={[styles.signupBtn, { marginTop: 15 }]}
+                onPress={() => {
+                  router.push('/onboarding');
+                }}
+              >
+                <Text style={styles.noAccountText}>New to YAU?</Text>
+                <Text style={[styles.signupBtnText, { color: '#E31B23' }]}>View Intro</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -403,6 +412,7 @@ const styles = StyleSheet.create({
   welcomeContainer: {
     alignItems: 'center',
     marginTop: 0,
+    zIndex: 1000, // Ensure text is above background
   },
   welcomeText: {
     color: '#FFFFFF',
@@ -434,7 +444,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 80,
+    paddingTop: 24,
     paddingBottom: 80,
   },
   slideWrapper: {
@@ -445,6 +455,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 20,
     gap: 8,
+    zIndex: 1000,
   },
   dot: {
     width: 8,

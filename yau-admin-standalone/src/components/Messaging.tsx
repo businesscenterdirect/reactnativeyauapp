@@ -9,6 +9,8 @@ import { Select } from './ui/Select';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { GRADE_BANDS, SPORTS, isGradeMatch } from '../lib/constants';
+// import ReactQuill from 'react-quill'; // Incompatible with React 19
+// import 'react-quill/dist/quill.snow.css';
 
 import toast from 'react-hot-toast';
 
@@ -80,15 +82,15 @@ const Messaging: React.FC = () => {
     const unsubHistory = onSnapshot(qHistory, (snap) => {
       const msgs = snap.docs.map(doc => {
         const data = doc.data();
-        return { 
-          id: doc.id, 
+        return {
+          id: doc.id,
           ...data,
           // Fallback fields for robust display
           title: data.title || data.subject || 'Direct Message / Untitled',
           description: data.description || data.content || data.message || '(No preview)',
         } as SentMessage;
       });
-      
+
       // Resilient sorting by any available timestamp field
       const getMillis = (ts: any) => {
         if (!ts) return 0;
@@ -118,7 +120,7 @@ const Messaging: React.FC = () => {
       }
     );
     // Reset unread count for admin when opening
-    updateDoc(doc(db, 'admin_posts', selectedPost.id), { adminUnreadCount: 0 }).catch(() => {});
+    updateDoc(doc(db, 'admin_posts', selectedPost.id), { adminUnreadCount: 0 }).catch(() => { });
     return () => unsubReplies();
   }, [selectedPost]);
 
@@ -131,6 +133,20 @@ const Messaging: React.FC = () => {
       });
     }
   }, [replies, selectedPost]);
+  
+  // ── Notification for replies ──────────────────────────────────────────────
+  const prevUnreadRef = useRef<number>(0);
+  useEffect(() => {
+    const totalUnread = history.reduce((acc, msg) => acc + (msg.adminUnreadCount || 0), 0);
+    if (totalUnread > prevUnreadRef.current) {
+      toast.success('New reply received!', {
+        icon: '💬',
+        duration: 5000,
+        position: 'top-right',
+      });
+    }
+    prevUnreadRef.current = totalUnread;
+  }, [history]);
 
   const addGroup = () => {
     if (targetGroups.some(g => g.school === currentSchool && g.gradeBand === currentGradeBand && g.sport === currentSport)) {
@@ -149,24 +165,27 @@ const Messaging: React.FC = () => {
         const normalize = (str: any) => String(str || '').toLowerCase().trim().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "_");
         let isTargeted = false;
         for (const g of groups) {
-          const matchesSchool = g.school === 'all' || (data.students || []).some((s: any) => 
+          const matchesSchool = g.school === 'all' || (data.students || []).some((s: any) =>
             normalize(s.school_name) === normalize(g.school)
           );
-          const matchesGrade = g.gradeBand === 'all' || (data.students || []).some((s: any) => 
-            isGradeMatch(s.grade_band, g.gradeBand) || 
+          const matchesGrade = g.gradeBand === 'all' || (data.students || []).some((s: any) =>
+            isGradeMatch(s.grade_band, g.gradeBand) ||
             isGradeMatch(s.ageGroup, g.gradeBand) ||
             isGradeMatch(s.grade, g.gradeBand)
           );
 
-          const matchesSport = g.sport === 'all' || 
-            normalize(data.sport) === normalize(g.sport) || 
+          const matchesSport = g.sport === 'all' ||
+            normalize(data.sport) === normalize(g.sport) ||
             (data.students || []).some((s: any) => normalize(s.sport) === normalize(g.sport));
-            
+
           if (matchesSchool && matchesGrade && matchesSport) { isTargeted = true; break; }
         }
         if (isTargeted) tokens.push(...data.expoPushTokens);
       });
-      return [...new Set(tokens)];
+      
+      const uniqueTokens = [...new Set(tokens)];
+      console.log(`[Messaging] Audience Audit: Targeted ${uniqueTokens.length} unique tokens across ${groups.length} groups.`);
+      return uniqueTokens;
     } catch (error) {
       console.error('Error fetching tokens:', error);
       return [];
@@ -260,7 +279,7 @@ const Messaging: React.FC = () => {
             console.log(`[Messaging] No tokens found for direct reply target`);
           }
         } else {
-          console.log(`[Messaging] No targetId found for direct reply`);
+          console.warn(`[Messaging] No targetId found for direct reply in post: ${selectedPost.id}`);
         }
       }
       setReplyText('');
@@ -288,10 +307,18 @@ const Messaging: React.FC = () => {
     if (!window.confirm(`Delete the entire conversation "${selectedPost.title}"? This cannot be undone.`)) return;
     setDeletingConversation(true);
     try {
+      // 1. Delete all replies in subcollection first
+      const repliesSnap = await getDocs(collection(db, 'admin_posts', selectedPost.id, 'replies'));
+      const deletePromises = repliesSnap.docs.map(d => deleteDoc(d.ref));
+      await Promise.all(deletePromises);
+
+      // 2. Delete the main document
       await deleteDoc(doc(db, 'admin_posts', selectedPost.id));
-      toast.success('Conversation deleted.');
+      
+      toast.success('Conversation and all replies deleted.');
       setSelectedPost(null);
     } catch (error) {
+      console.error('[Messaging] Delete error:', error);
       toast.error('Failed to delete conversation.');
     } finally {
       setDeletingConversation(false);
@@ -322,9 +349,55 @@ const Messaging: React.FC = () => {
               <Input label="Subject" placeholder="e.g. Game Rescheduled" value={title} onChange={(e) => setTitle(e.target.value)} disabled={loading} required />
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Message Body</label>
-                <textarea rows={4} className="w-full px-4 py-3 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-2xl text-sm focus:ring-4 focus:ring-indigo-600/10 outline-none transition-all resize-none dark:text-white" value={description} onChange={(e) => setDescription(e.target.value)} required />
+                <div className="bg-white dark:bg-black rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10">
+                  {/* Formatting Toolbar */}
+                  <div className="flex items-center gap-2 p-3 border-b border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const start = (document.querySelector('textarea') as HTMLTextAreaElement).selectionStart;
+                        const end = (document.querySelector('textarea') as HTMLTextAreaElement).selectionEnd;
+                        const text = description;
+                        const selectedText = text.substring(start, end);
+                        const before = text.substring(0, start);
+                        const after = text.substring(end);
+                        setDescription(`${before}<b>${selectedText}</b>${after}`);
+                      }}
+                      className="p-2 hover:bg-white dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-white/60 hover:text-indigo-600 font-bold"
+                      title="Bold"
+                    >
+                      B
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const start = (document.querySelector('textarea') as HTMLTextAreaElement).selectionStart;
+                        const end = (document.querySelector('textarea') as HTMLTextAreaElement).selectionEnd;
+                        const text = description;
+                        const selectedText = text.substring(start, end);
+                        const before = text.substring(0, start);
+                        const after = text.substring(end);
+                        setDescription(`${before}<i>${selectedText}</i>${after}`);
+                      }}
+                      className="p-2 hover:bg-white dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-white/60 hover:text-indigo-600 italic"
+                      title="Italic"
+                    >
+                      I
+                    </button>
+                    <div className="w-px h-4 bg-gray-200 dark:bg-white/10 mx-1" />
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Editor Tools</span>
+                  </div>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Compose your message here..."
+                    className="w-full h-48 p-5 bg-white dark:bg-black text-gray-900 dark:text-white outline-none resize-none font-medium leading-relaxed"
+                  />
+                </div>
               </div>
-              <Button type="submit" variant="primary" className="w-full h-14 uppercase font-black tracking-widest" loading={loading} disabled={targetGroups.length === 0} leftIcon={<Send size={18} />}>Dispatch Broadcast</Button>
+              <div className="pt-10">
+                <Button type="submit" variant="primary" className="w-full h-14 uppercase font-black tracking-widest" loading={loading} disabled={targetGroups.length === 0} leftIcon={<Send size={18} />}>Dispatch Broadcast</Button>
+              </div>
             </form>
           </Card>
 
@@ -347,7 +420,9 @@ const Messaging: React.FC = () => {
                         <h4 className="font-bold text-gray-900 dark:text-white">{msg.title}</h4>
                         <Badge variant="neutral" className="text-[10px]">{msg.createdAt?.toDate().toLocaleDateString()}</Badge>
                       </div>
-                      <p className="text-xs text-gray-500 line-clamp-1">{msg.description}</p>
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        {msg.description?.replace(/<[^>]*>/g, '')}
+                      </p>
                     </div>
                     <div className="flex items-center gap-3">
                       <Button variant="ghost" size="sm" onClick={() => setSelectedPost(msg)} className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white relative h-10 px-4 text-indigo-700 rounded-xl border-none">
@@ -421,50 +496,51 @@ const Messaging: React.FC = () => {
                   <span className="text-[10px] text-gray-400 dark:text-white/40 font-bold">{selectedPost.createdAt?.toDate().toLocaleString()}</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedPost.title}</p>
-                <p className="text-xs text-gray-600 dark:text-white/60 mt-2 leading-relaxed">{selectedPost.description}</p>
+                <div 
+                  className="text-xs text-gray-600 dark:text-white/60 mt-2 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: selectedPost.description }}
+                />
               </div>
 
               {/* Replies */}
               {replies.map(reply => {
                 const isDeletionRequest = reply.content?.toUpperCase().includes('ACCOUNT DELETION REQUEST');
                 const isSystemAdmin = reply.userRole === 'admin';
-                
+
                 return (
                   <div key={reply.id} className={`flex ${isSystemAdmin ? 'justify-end' : 'justify-start'} group`}>
-                    <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm relative ${
-                      isSystemAdmin 
-                        ? 'bg-indigo-600 text-white' 
-                        : isDeletionRequest 
-                          ? 'bg-red-600 text-white border-none shadow-lg' 
+                    <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm relative ${isSystemAdmin
+                        ? 'bg-indigo-600 text-white'
+                        : isDeletionRequest
+                          ? 'bg-red-600 text-white border-none shadow-lg'
                           : 'bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10'
-                    }`}>
+                      }`}>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className={`text-[10px] font-black uppercase tracking-widest ${
-                          isSystemAdmin 
-                            ? 'text-indigo-100' 
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${isSystemAdmin
+                            ? 'text-indigo-100'
                             : isDeletionRequest
                               ? 'text-red-100'
                               : 'text-indigo-600 dark:text-indigo-400'
-                        }`}>
+                          }`}>
                           {getRoleLabel(reply)}
                         </span>
                         <span className={`text-[8px] opacity-60 font-bold ${isDeletionRequest || isSystemAdmin ? 'text-white/60' : 'dark:text-white/40'}`}>
                           {reply.timestamp?.toDate().toLocaleTimeString()}
                         </span>
                       </div>
-                      <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
-                        (isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
-                      } ${isDeletionRequest ? 'font-medium' : ''}`}>
-                        {reply.content}
-                      </p>
-                    {/* Delete reply button — visible on hover */}
-                    <button
-                      onClick={() => handleDeleteReply(reply.id)}
-                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-red-600"
-                      title="Delete reply"
-                    >
-                      <X size={10} />
-                    </button>
+                      <div 
+                        className={`text-sm leading-relaxed whitespace-pre-wrap ${(isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
+                        } ${isDeletionRequest ? 'font-medium' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: reply.content }}
+                      />
+                      {/* Delete reply button — visible on hover */}
+                      <button
+                        onClick={() => handleDeleteReply(reply.id)}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-red-600"
+                        title="Delete reply"
+                      >
+                        <X size={10} />
+                      </button>
                     </div>
                   </div>
                 );

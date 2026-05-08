@@ -18,7 +18,7 @@ const { width, height } = Dimensions.get('window');
 
 // Common Logo Component
 const LogoHeader = ({ insets }: { insets: any }) => (
-  <View style={[styles.logoContainer, { paddingTop: insets.top + 20 }]}>
+  <View style={[styles.logoContainer, { paddingTop: insets.top + 20, zIndex: 1000 }]}>
     <Image
       source={require('../assets/images/icon.png')}
       style={styles.logoIcon}
@@ -53,7 +53,7 @@ const Pagination = ({ currentIndex, total, onSelect }: { currentIndex: number, t
 };
 
 // --- SPLASH 1 ---
-const Splash1 = ({ onNext, onSelect, insets, currentIndex }: any) => {
+const Splash1 = ({ onGetStarted, onSelect, insets, currentIndex }: any) => {
   return (
     <View style={styles.slide}>
       <View style={[styles.topSection, { zIndex: 30, overflow: 'visible' }]} pointerEvents="box-none">
@@ -88,8 +88,8 @@ const Splash1 = ({ onNext, onSelect, insets, currentIndex }: any) => {
           <Text style={styles.subtitleText}>From practice times to last-minute updates, everything your team shares stays clear</Text>
           <Pagination currentIndex={currentIndex} total={4} onSelect={onSelect} />
         </View>
-        <TouchableOpacity style={styles.getStartedButton} onPress={onNext}>
-          <Text style={styles.buttonText}>Next</Text>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onGetStarted}>
+          <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -97,7 +97,7 @@ const Splash1 = ({ onNext, onSelect, insets, currentIndex }: any) => {
 };
 
 // --- SPLASH 2 ---
-const Splash2 = ({ onNext, onSelect, insets, currentIndex }: any) => {
+const Splash2 = ({ onGetStarted, onSelect, insets, currentIndex }: any) => {
   return (
     <View style={styles.slide}>
       <View style={[styles.topSection, { zIndex: 30, overflow: 'visible' }]} pointerEvents="box-none">
@@ -127,8 +127,8 @@ const Splash2 = ({ onNext, onSelect, insets, currentIndex }: any) => {
           <Text style={styles.subtitleText}>See schedules, get team updates, and follow standings without switching between apps</Text>
           <Pagination currentIndex={currentIndex} total={4} onSelect={onSelect} />
         </View>
-        <TouchableOpacity style={styles.getStartedButton} onPress={onNext}>
-          <Text style={styles.buttonText}>Next</Text>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onGetStarted}>
+          <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -136,7 +136,7 @@ const Splash2 = ({ onNext, onSelect, insets, currentIndex }: any) => {
 };
 
 // --- SPLASH 3 ---
-const Splash3 = ({ onNext, onSelect, insets, currentIndex }: any) => {
+const Splash3 = ({ onGetStarted, onSelect, insets, currentIndex }: any) => {
   return (
     <View style={styles.slide}>
       <View style={[styles.topSection, { zIndex: 30, overflow: 'visible' }]} pointerEvents="box-none">
@@ -166,8 +166,8 @@ const Splash3 = ({ onNext, onSelect, insets, currentIndex }: any) => {
           <Text style={styles.subtitleText}>Follow game results and performance updates with clear and easy-to-understand information</Text>
           <Pagination currentIndex={currentIndex} total={4} onSelect={onSelect} />
         </View>
-        <TouchableOpacity style={styles.getStartedButton} onPress={onNext}>
-          <Text style={styles.buttonText}>Next</Text>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onGetStarted}>
+          <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -175,7 +175,7 @@ const Splash3 = ({ onNext, onSelect, insets, currentIndex }: any) => {
 };
 
 // --- SPLASH 4 ---
-const Splash4 = ({ onNext, onSelect, insets, currentIndex }: any) => {
+const Splash4 = ({ onGetStarted, onSelect, insets, currentIndex }: any) => {
   return (
     <View style={styles.slide}>
       <View style={[styles.topSection, { zIndex: 30, overflow: 'visible' }]} pointerEvents="box-none">
@@ -198,12 +198,12 @@ const Splash4 = ({ onNext, onSelect, insets, currentIndex }: any) => {
           />
           <Image
             source={require('../assets/images/onboarding/logo_thigh.png')}
-            style={styles.splash4ChestLogo}
+            style={styles.splash4ThighLogo}
             resizeMode="contain"
           />
           <Image
             source={require('../assets/images/onboarding/logo_chest.png')}
-            style={styles.splash4ThighLogo}
+            style={styles.splash4ChestLogo}
             resizeMode="contain"
           />
         </View>
@@ -215,7 +215,7 @@ const Splash4 = ({ onNext, onSelect, insets, currentIndex }: any) => {
           <Text style={styles.subtitleText}>Get real-time schedules, team messages, and track standings.</Text>
           <Pagination currentIndex={currentIndex} total={4} onSelect={onSelect} />
         </View>
-        <TouchableOpacity style={styles.getStartedButton} onPress={onNext}>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onGetStarted}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
@@ -229,20 +229,28 @@ export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % 4;
+      goToIndex(nextIndex);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [currentIndex]);
+
   const goToIndex = (index: number) => {
     if (index === currentIndex) return;
 
     // Fade out
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 200,
+      duration: 300,
       useNativeDriver: true,
     }).start(() => {
       setCurrentIndex(index);
       // Fade in
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 300,
+        duration: 400,
         useNativeDriver: true,
       }).start();
     });
@@ -273,11 +281,18 @@ export default function OnboardingScreen() {
   };
 
   const renderSplash = () => {
+    const props = {
+      onGetStarted: completeOnboarding,
+      onSelect: goToIndex,
+      insets: insets,
+      currentIndex: currentIndex
+    };
+
     switch (currentIndex) {
-      case 0: return <Splash1 onNext={handleNext} onSelect={goToIndex} insets={insets} currentIndex={0} />;
-      case 1: return <Splash2 onNext={handleNext} onSelect={goToIndex} insets={insets} currentIndex={1} />;
-      case 2: return <Splash3 onNext={handleNext} onSelect={goToIndex} insets={insets} currentIndex={2} />;
-      case 3: return <Splash4 onNext={handleNext} onSelect={goToIndex} insets={insets} currentIndex={3} />;
+      case 0: return <Splash1 {...props} />;
+      case 1: return <Splash2 {...props} />;
+      case 2: return <Splash3 {...props} />;
+      case 3: return <Splash4 {...props} />;
       default: return null;
     }
   };
@@ -325,6 +340,18 @@ const styles = StyleSheet.create({
     marginTop: 15,
     letterSpacing: 0.5,
   },
+  skipButton: {
+    position: 'absolute',
+    right: 20,
+    padding: 10,
+    zIndex: 100,
+  },
+  skipButtonText: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#E31B23',
+    letterSpacing: 1.5,
+  },
   athleteContainer: {
     position: 'absolute',
     top: height * 0.25,
@@ -338,6 +365,7 @@ const styles = StyleSheet.create({
     width: width * 1.5,
     height: height * 0.35,
     opacity: 0.8,
+    zIndex: 5, // Lower than text
   },
   // --- Splash 1 Brushes ---
   splash1Brush1: {
@@ -427,31 +455,33 @@ const styles = StyleSheet.create({
   athleteImage: {
     width: width * 3,
     height: height * 2,
-    zIndex: 8,
+    zIndex: 100,
   },
   athleteImage1: {
     width: width * 1.5,
     height: height * 0.45,
-    zIndex: 50,
+    zIndex: 100,
     bottom: -height * 0.05,
-    top: '-1%',
+    top: '-8%', // Moved up from -1%
     right: '5%',
   },
   athleteImage2: {
     width: width * 3,
-    height: height * 0.35,
-    zIndex: 50,
+    height: height * 0.42,
+    zIndex: 100,
   },
   athleteImage3: {
     width: width * 1,
-    height: height * 0.85,
-    zIndex: 50,
+    height: height * 0.65,
+    zIndex: 100,
+    top: '1%', // Move up significantly since it's a tall image
   },
   athleteImage4: {
     width: width * 1.8,
     height: height * 0.60,
     marginRight: width * 0.10,
-    zIndex: 50,
+    zIndex: 100,
+    top: '-15%', // Move up to align with logos
   },
   splash4ChestLogo: {
     position: 'absolute',
@@ -460,32 +490,33 @@ const styles = StyleSheet.create({
     transform: [{
       rotate: '27deg',
     }],
-    left: '16.5%',
-    top: '50%',
-    zIndex: 60,
+    left: '17.5%',
+    top: '37.5%',
+    zIndex: 600,
   },
   splash4ThighLogo: {
     position: 'absolute',
     width: 40,
     height: 40,
-    top: '77%',
+    top: '65%',
     left: '40.30%',
     transform: [{
       rotate: '9deg',
     }],
-    zIndex: 60,
+    zIndex: 600,
   },
   bottomSection: {
-    height: height * 0.42,
+    height: height * 0.45,
     width: '100%',
     paddingHorizontal: 25,
     justifyContent: 'flex-end',
-    backgroundColor: '#FFF',
-    zIndex: 2,
+    backgroundColor: 'transparent',
+    zIndex: 200,
   },
   textSection: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
+    zIndex: 3000, // Explicitly highest for readability
   },
   titleText: {
     fontSize: 34,
@@ -495,6 +526,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     lineHeight: 38,
     letterSpacing: -0.5,
+    zIndex: 3000, // Ensure text is above all images
   },
   highlightText: {
     fontSize: 42,
@@ -504,6 +536,7 @@ const styles = StyleSheet.create({
     lineHeight: 46,
     marginTop: -2,
     letterSpacing: -1,
+    zIndex: 3000, // Ensure text is above all images
   },
   subtitleText: {
     fontSize: 14,
@@ -513,6 +546,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: '500',
     paddingHorizontal: 10,
+    zIndex: 3000, // Ensure text is above all images
   },
   paginationRow: {
     flexDirection: 'row',
@@ -540,6 +574,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
+    zIndex: 600, // Buttons must be interactable and on top
   },
   buttonRow: {
     flexDirection: 'row',

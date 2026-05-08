@@ -18,12 +18,12 @@ import * as Location from 'expo-location';
 import { useScheduleStore } from '../../src/store/useScheduleStore';
 import { Schedule } from '../../src/services/schedule';
 
-export default function MatchDetailScreen() {
+export default function GameDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const schedules = useScheduleStore((state: any) => state.schedules);
-  const [match, setMatch] = useState<Schedule | null>(null);
+  const [game, setGame] = useState<Schedule | null>(null);
   const [loading, setLoading] = useState(true);
   const [region, setRegion] = useState({
     latitude: 37.0902,
@@ -36,16 +36,16 @@ export default function MatchDetailScreen() {
   useEffect(() => {
     const found = schedules.find((s: Schedule) => s.id === id);
     if (found) {
-      setMatch(found);
+      setGame(found);
     }
     setLoading(false);
   }, [id, schedules]);
 
   useEffect(() => {
     const geocode = async () => {
-      if (match?.location) {
+      if (game?.location) {
         try {
-          const results = await Location.geocodeAsync(match.location);
+          const results = await Location.geocodeAsync(game.location);
           if (results.length > 0) {
             const { latitude, longitude } = results[0];
             setRegion({
@@ -72,7 +72,7 @@ export default function MatchDetailScreen() {
       }
     };
     geocode();
-  }, [match?.location]);
+  }, [game?.location]);
 
   if (loading) {
     return (
@@ -82,11 +82,11 @@ export default function MatchDetailScreen() {
     );
   }
 
-  if (!match) {
+  if (!game) {
     return (
       <View style={styles.empty}>
         <MaterialIcons name="error-outline" size={60} color="#E5E7EB" />
-        <Text style={styles.emptyText}>Match not found</Text>
+        <Text style={styles.emptyText}>Game not found</Text>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backBtnText}>Go Back</Text>
         </TouchableOpacity>
@@ -113,14 +113,14 @@ export default function MatchDetailScreen() {
     return (name || '??').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
-  const matchDateNormalized = normalizeDate(match.date);
+  const gameDateNormalized = normalizeDate(game.date);
   const todayStr = new Date().toISOString().split('T')[0];
 
-  let matchState: 'Completed' | 'On Going' | 'Upcoming' = 'Upcoming';
-  if (matchDateNormalized < todayStr) matchState = 'Completed';
-  else if (matchDateNormalized === todayStr) matchState = 'On Going';
+  let gameState: 'Completed' | 'On Going' | 'Upcoming' = 'Upcoming';
+  if (gameDateNormalized < todayStr) gameState = 'Completed';
+  else if (gameDateNormalized === todayStr) gameState = 'On Going';
 
-  const formattedDate = new Date(matchDateNormalized + 'T12:00:00').toLocaleDateString('en-US', {
+  const formattedDate = new Date(gameDateNormalized + 'T12:00:00').toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
   });
 
@@ -140,15 +140,15 @@ export default function MatchDetailScreen() {
             <MaterialIcons name="chevron-left" size={28} color="#FFF" />
           </TouchableOpacity>
           <View style={styles.headerTitleContainer}>
-            <Text style={styles.headerTitle}>MATCH DETAILS</Text>
+            <Text style={styles.headerTitle}>GAME DETAILS</Text>
           </View>
           <View style={{ width: 40 }} />
         </View>
 
         {/* League and Location Info */}
         <View style={styles.leagueInfoContainer}>
-          <Text style={styles.leagueText}>{match.sport || 'Sports League'}</Text>
-          <Text style={styles.locationText}>{match.location || 'Location TBA'}</Text>
+          <Text style={styles.leagueText}>{game.sport || 'Sports League'}</Text>
+          <Text style={styles.locationText}>{game.location || 'Location TBA'}</Text>
         </View>
 
         {/* Teams and Score/Time */}
@@ -156,19 +156,19 @@ export default function MatchDetailScreen() {
           {/* Team 1 */}
           <View style={styles.teamHeroColumn}>
             <View style={styles.teamHeroCircle}>
-              <Text style={styles.teamHeroInit}>{getInitials(match.team1Name)}</Text>
+              <Text style={styles.teamHeroInit}>{getInitials(game.team1Name)}</Text>
             </View>
-            <Text style={styles.teamHeroName} numberOfLines={2}>{match.team1Name}</Text>
+            <Text style={styles.teamHeroName} numberOfLines={2}>{game.team1Name}</Text>
           </View>
 
           {/* Center Info */}
           <View style={styles.heroCenterInfo}>
-            {matchState === 'Upcoming' ? (
-              <Text style={styles.upcomingTimeHero}>{match.time}</Text>
+            {gameState === 'Upcoming' ? (
+              <Text style={styles.upcomingTimeHero}>{game.time}</Text>
             ) : (
               <>
                 <Text style={styles.scoreTextHero}>2 - 1</Text>
-                {matchState === 'Completed' ? (
+                {gameState === 'Completed' ? (
                   <Text style={styles.fullTimeText}>FULL-TIME</Text>
                 ) : (
                   <View style={styles.ongoingTag}>
@@ -182,37 +182,37 @@ export default function MatchDetailScreen() {
           {/* Team 2 */}
           <View style={styles.teamHeroColumn}>
             <View style={styles.teamHeroCircle}>
-              <Text style={styles.teamHeroInit}>{getInitials(match.team2Name)}</Text>
+              <Text style={styles.teamHeroInit}>{getInitials(game.team2Name)}</Text>
             </View>
-            <Text style={styles.teamHeroName} numberOfLines={2}>{match.team2Name}</Text>
+            <Text style={styles.teamHeroName} numberOfLines={2}>{game.team2Name}</Text>
           </View>
         </View>
         
         {/* Sport Tag */}
         <View style={styles.sportPillContainer}>
             <View style={styles.sportPill}>
-                <Text style={styles.sportPillText}>{match.sport?.toUpperCase() || 'SPORTS'}</Text>
+                <Text style={styles.sportPillText}>{game.sport?.toUpperCase() || 'SPORTS'}</Text>
             </View>
         </View>
       </ImageBackground>
 
       <ScrollView contentContainerStyle={styles.contentScroll} showsVerticalScrollIndicator={false}>
         
-        {/* Match Details Section */}
+        {/* Game Details Section */}
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Match Details</Text>
+          <Text style={styles.sectionTitle}>Game Details</Text>
           
           <View style={styles.listContainer}>
-            {match.grade_band && (
+            {game.grade_band && (
               <View style={styles.listRow}>
                 <Text style={styles.listLabel}>Grade Bands</Text>
-                <Text style={styles.listValue}>{match.grade_band}</Text>
+                <Text style={styles.listValue}>{game.grade_band}</Text>
               </View>
             )}
-            {match.ageGroup && (
+            {game.ageGroup && (
                <View style={styles.listRow}>
                  <Text style={styles.listLabel}>Age Group</Text>
-                 <Text style={styles.listValue}>{match.ageGroup}</Text>
+                 <Text style={styles.listValue}>{game.ageGroup}</Text>
                </View>
             )}
             <View style={styles.listRow}>
@@ -221,11 +221,11 @@ export default function MatchDetailScreen() {
             </View>
             <View style={styles.listRow}>
               <Text style={styles.listLabel}>Time</Text>
-              <Text style={styles.listValue}>{match.time || 'TBA'}</Text>
+              <Text style={styles.listValue}>{game.time || 'TBA'}</Text>
             </View>
             <View style={[styles.listRow, { borderBottomWidth: 0 }]}>
               <Text style={styles.listLabel}>Team Names</Text>
-              <Text style={styles.listValue} numberOfLines={1}>{match.team1Name} vs {match.team2Name}</Text>
+              <Text style={styles.listValue} numberOfLines={1}>{game.team1Name} vs {game.team2Name}</Text>
             </View>
           </View>
         </View>
@@ -243,7 +243,7 @@ export default function MatchDetailScreen() {
               zoomEnabled={true}
             >
               {markerCoord && (
-                <Marker coordinate={markerCoord} title={match.location} />
+                <Marker coordinate={markerCoord} title={game.location} />
               )}
             </MapView>
           </View>
@@ -251,12 +251,12 @@ export default function MatchDetailScreen() {
           <View style={styles.listContainer}>
             <View style={styles.listRow}>
               <Text style={styles.listLabel}>Location</Text>
-              <Text style={styles.listValue}>{match.location || 'TBA'}</Text>
+              <Text style={styles.listValue}>{game.location || 'TBA'}</Text>
             </View>
-            {match.coachName && (
+            {game.coachName && (
                <View style={[styles.listRow, { borderBottomWidth: 0 }]}>
                  <Text style={styles.listLabel}>Coach</Text>
-                 <Text style={styles.listValue}>{match.coachName}</Text>
+                 <Text style={styles.listValue}>{game.coachName}</Text>
                </View>
             )}
           </View>

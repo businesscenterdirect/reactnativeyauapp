@@ -14,11 +14,16 @@ export const GRADE_BANDS: string[] = [
  */
 export function isGradeMatch(storedGrade: string | undefined, filterGrade: string): boolean {
   if (!storedGrade) return false;
-  if (storedGrade === filterGrade) return true;
+  
+  const normalize = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+  const nStored = normalize(storedGrade);
+  const nFilter = normalize(filterGrade);
 
-  // Safe Exact Mappings
-  if (filterGrade === 'Kindergarten – 1st Grade' && storedGrade === 'K - 1st Grade') return true;
-  if (filterGrade === 'Middle School (6th, 7th & 8th Grade)' && (storedGrade === '7th - 8th Grade' || storedGrade === 'Middle School')) return true;
+  if (nStored === nFilter) return true;
+
+  // Safe Exact Mappings for legacy variations
+  if (nFilter === normalize('Kindergarten – 1st Grade') && nStored === normalize('K - 1st Grade')) return true;
+  if (nFilter === normalize('Middle School (6th, 7th & 8th Grade)') && (nStored === normalize('7th - 8th Grade') || nStored === normalize('Middle School'))) return true;
 
   return false;
 }

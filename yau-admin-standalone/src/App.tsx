@@ -125,11 +125,21 @@ function AppLayout() {
         total += (data.adminUnreadCount || 0);
         posts.push({ id: doc.id, ...data });
       });
+
+      // Show alert if new messages arrived
+      if (total > unreadCount) {
+        toast.success(`You have ${total - unreadCount} new reply${(total - unreadCount) > 1 ? 'ies' : ''}!`, {
+          icon: '💬',
+          duration: 4000,
+          position: 'top-right',
+        });
+      }
+
       setUnreadCount(total);
       setUnreadPosts(posts);
     });
     return () => unsubscribe();
-  }, []);
+  }, [unreadCount]);
 
   useEffect(() => {
     if (darkMode) {
@@ -294,7 +304,7 @@ function AppLayout() {
   );
 }
 
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 
 import SupportPage from './components/SupportPage';
 
