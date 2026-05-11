@@ -7,15 +7,15 @@ const SupportPage: React.FC = () => {
   const faqs = [
     {
       question: "I can't log into my account. What should I do?",
-      answer: "Ensure you are using the correct email address registered with your institution. If you've forgotten your password, use the 'Forgot Password' link on the mobile app login screen. Check your internet connection and ensure your app is updated to the latest version."
+      answer: "Ensure you are using the correct email address registered with your program/team. If you've forgotten your password, use the 'Forgot Password' link on the mobile app login screen. Check your internet connection and ensure your app is updated to the latest version."
     },
     {
       question: "Registration is not accepting my validation code.",
-      answer: "Validation codes are case-sensitive and valid for a limited time. If your code isn't working, request a new one from the registration screen. Ensure you have selected the correct institution/program before entering the code."
+      answer: "Validation codes are case-sensitive and valid for a limited time. If your code isn't working, request a new one from the registration screen. Ensure you have selected the correct program/team before entering the code."
     },
     {
-      question: "Why do I need to select an institution and program?",
-      answer: "YAU APP is customized for specific athletic programs. Selecting your institution ensures you receive the correct schedules, messaging, and standings relevant to your team or organization."
+      question: "Why do I need to select a program/team?",
+      answer: "YAU APP is customized for specific athletic programs. Selecting your program/team ensures you receive the correct schedules, messaging, and standings relevant to your organization."
     },
     {
       question: "Data is not loading or showing 'No Connection'.",

@@ -38,6 +38,7 @@ export default function MessageDetailScreen() {
   const [replyText, setReplyText] = useState('');
   const [sendingReply, setSendingReply] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [bodyCollapsed, setBodyCollapsed] = useState(true);
 
   useEffect(() => {
     const loadMessage = async () => {
@@ -92,8 +93,9 @@ export default function MessageDetailScreen() {
   return (
     <KeyboardAvoidingView 
       style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={0}
+      behavior="padding"
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 25}
+      enabled={keyboardVisible}
     >
       <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={styles.headerTop}>
@@ -109,11 +111,24 @@ export default function MessageDetailScreen() {
         <View style={styles.postCard}>
           <View style={styles.tag}><Text style={styles.tagText}>OFFICIAL POST</Text></View>
           <Text style={styles.postTitle}>{message?.title}</Text>
-          <RenderHTML 
-            contentWidth={width - 80} 
-            source={{ html: message?.description || '' }} 
-            baseStyle={styles.postBody}
-          />
+          
+          <View style={bodyCollapsed ? styles.collapsedBody : null}>
+            <RenderHTML 
+              contentWidth={width - 80} 
+              source={{ html: message?.description || '' }} 
+              baseStyle={styles.postBody}
+            />
+          </View>
+          
+          <TouchableOpacity 
+            onPress={() => setBodyCollapsed(!bodyCollapsed)}
+            style={styles.seeMoreBtn}
+          >
+            <Text style={styles.seeMoreText}>
+              {bodyCollapsed ? '▼ SEE MORE' : '▲ SEE LESS'}
+            </Text>
+          </TouchableOpacity>
+
           <Text style={styles.postDate}>{formatMessageTimestamp(message?.createdAt || message?.timestamp)}</Text>
         </View>
 
@@ -142,7 +157,7 @@ export default function MessageDetailScreen() {
         </View>
       </ScrollView>
 
-      <View style={[styles.inputBar, { paddingBottom: keyboardVisible ? 10 : insets.bottom + 10 }]}>
+      <View style={[styles.inputBar, { paddingBottom: keyboardVisible ? 8 : Math.max(insets.bottom + 5, 15) }]}>
         <TextInput 
           style={styles.input} 
           placeholder="Write a message..." 
@@ -183,4 +198,7 @@ const styles = StyleSheet.create({
   inputBar: { flexDirection: 'row', alignItems: 'center', padding: 15, borderTopWidth: 1.5, borderTopColor: '#F3F4F6', gap: 12, backgroundColor: '#FFF' },
   input: { flex: 1, backgroundColor: '#F3F4F6', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, maxHeight: 100 },
   sendBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#002C61', alignItems: 'center', justifyContent: 'center' },
+  collapsedBody: { maxHeight: 100, overflow: 'hidden' },
+  seeMoreBtn: { marginTop: 4, marginBottom: 12, paddingVertical: 4 },
+  seeMoreText: { color: '#E31B23', fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
 });

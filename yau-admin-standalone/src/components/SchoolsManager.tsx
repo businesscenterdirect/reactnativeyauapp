@@ -56,7 +56,7 @@ const SchoolsManager: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error('Institution name is required.');
+      toast.error('Program or team name is required.');
       return;
     }
 
@@ -82,7 +82,7 @@ const SchoolsManager: React.FC = () => {
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
-      toast.error('Failed to save institution.');
+      toast.error('Failed to save record.');
     } finally {
       setSaving(false);
     }
@@ -112,7 +112,7 @@ const SchoolsManager: React.FC = () => {
         });
       });
       await batch.commit();
-      toast.success(`${selectedIds.length} institutions archived.`);
+      toast.success(`${selectedIds.length} records archived.`);
       setSelectedIds([]);
       setIsBulkArchiveOpen(false);
     } catch (error) {
@@ -287,7 +287,7 @@ const SchoolsManager: React.FC = () => {
           <Card className="w-full max-w-sm p-8 text-center border-none shadow-2xl">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500 mx-auto mb-6"><AlertTriangle size={32} /></div>
             <h3 className="text-2xl font-black text-gray-900 mb-2 uppercase tracking-tight">Archive Confirmation</h3>
-            <p className="text-sm text-gray-500 font-medium mb-8">Confirm archiving <strong className="text-gray-900">{selectedIds.length}</strong> institutions. They will be hidden from registration lists.</p>
+            <p className="text-sm text-gray-500 font-medium mb-8">Confirm archiving <strong className="text-gray-900">{selectedIds.length}</strong> selections. They will be hidden from registration lists.</p>
             <div className="flex flex-col gap-3">
               <Button variant="danger" className="h-12 uppercase font-black tracking-widest text-white bg-red-600" onClick={handleBulkArchive} loading={saving}>Confirm Archive</Button>
               <Button variant="ghost" className="font-bold text-gray-400" onClick={() => setIsBulkArchiveOpen(false)}>Abort</Button>

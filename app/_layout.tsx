@@ -1,9 +1,10 @@
 import '../src/services/firebase'; // IMPORTANT: Initialize Firebase before anything else
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import '../global.css';
 
@@ -27,12 +28,32 @@ export const unstable_settings = {
 function NavigationContent() {
   const { user, loading } = useUser();
   const colorScheme = useColorScheme();
+  const router = useRouter();
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    if (!loading) {
+    const checkOnboarding = async () => {
+      try {
+        const seen = await AsyncStorage.getItem('HAS_SEEN_ONBOARDING');
+        setShowOnboarding(seen !== 'true');
+      } catch {
+        setShowOnboarding(false);
+      } finally {
+        setOnboardingChecked(true);
+      }
+    };
+    checkOnboarding();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && onboardingChecked) {
       SplashScreen.hideAsync();
+      if (showOnboarding && !user) {
+        router.replace('/onboarding' as any);
+      }
     }
-  }, [loading]);
+  }, [loading, onboardingChecked, showOnboarding]);
 
   // IMPORTANT: Do not render the navigation stack while we are still 
   // determining the initial authentication state. If we render the stack 
@@ -40,7 +61,7 @@ function NavigationContent() {
   // will then immediately trigger a redirect to /auth/login if no user 
   // is found. This "double mount" is the primary cause of unclickable 
   // tab bars and "ghost" screens overlapping the UI.
-  if (loading) {
+  if (loading || !onboardingChecked) {
     return (
       <View style={{ flex: 1, backgroundColor: '#002C61', justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#FFFFFF" />
@@ -57,6 +78,7 @@ function NavigationContent() {
     <View style={{ flex: 1 }} key={user?.id || 'guest'}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="onboarding" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="auth/register" />
           <Stack.Screen name="auth/login" />

@@ -25,6 +25,7 @@ import { GRADE_BANDS, isGradeMatch } from '../../src/services/registration';
 
 import { useUser } from '../../src/context/UserContext';
 import { useRouter } from 'expo-router';
+import { GradeBandPicker } from '../../src/components/GradeBandPicker';
 
 export default function StandingsScreen() {
   const router = useRouter();
@@ -96,7 +97,21 @@ export default function StandingsScreen() {
   );
 
   const renderItem = ({ item, index }: { item: Standing; index: number }) => (
-    <View style={styles.row}>
+    <TouchableOpacity 
+      style={styles.row}
+      onPress={() => router.push({
+        pathname: '/team/[name]' as any,
+        params: { 
+          name: item.teamName,
+          gradeBand: item.gradeBand,
+          sport: item.sport,
+          wins: item.wins,
+          draws: item.draws,
+          losses: item.losses,
+          points: item.points
+        }
+      })}
+    >
       <Text style={styles.rankText}>{index + 1}</Text>
 
       <View style={styles.clubCol}>
@@ -111,7 +126,7 @@ export default function StandingsScreen() {
       <Text style={styles.drawText}>{item.draws}</Text>
       <Text style={styles.lossText}>{item.losses}</Text>
       <Text style={styles.pointsText}>{item.points}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -152,38 +167,12 @@ export default function StandingsScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Grade Band Selection Modal */}
-      <Modal
+      <GradeBandPicker 
         visible={isDropdownOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsDropdownOpen(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setIsDropdownOpen(false)}
-        >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Choose Grade Band</Text>
-            {GRADE_BANDS.map((band) => (
-              <TouchableOpacity
-                key={band.value}
-                style={[styles.modalItem, selectedBand === band.value && styles.modalItemActive]}
-                onPress={() => {
-                  setSelectedBand(band.value);
-                  setIsDropdownOpen(false);
-                }}
-              >
-                <Text style={[styles.modalItemText, selectedBand === band.value && styles.modalItemTextActive]}>
-                  {band.label}
-                </Text>
-                {selectedBand === band.value && <MaterialIcons name="check" size={20} color="#002C61" />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </TouchableOpacity>
-      </Modal>
+        onClose={() => setIsDropdownOpen(false)}
+        selectedBand={selectedBand}
+        onSelect={setSelectedBand}
+      />
 
       {loading ? (
         <View style={styles.center}><ActivityIndicator size="large" color="#002C61" /></View>

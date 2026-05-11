@@ -5,6 +5,7 @@ import {
   signOut
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { removeFCMToken } from '../lib/fcmService';
 
 interface AuthContextType {
   user: User | null;
@@ -28,6 +29,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const logout = async () => {
+    // Clean up FCM token before signing out so stale tokens don't trigger notifications
+    if (user) {
+      await removeFCMToken(user.uid);
+    }
     await signOut(auth);
   };
 

@@ -1,17 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-  StatusBar,
-  Animated,
-  SafeAreaView,
-} from 'react-native';
-import { useRouter, Stack } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Stack, useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  Dimensions,
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
@@ -243,7 +242,7 @@ export default function OnboardingScreen() {
     // Fade out
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 300,
+      duration: 400,
       useNativeDriver: true,
     }).start(() => {
       setCurrentIndex(index);
@@ -439,7 +438,7 @@ const styles = StyleSheet.create({
     width: width * 1.5,
     height: height * 0.35,
     opacity: 0.8,
-    top: '30%',
+    top: '20%',
     left: '10%',
     transform: [{ rotate: '10deg' }, { scale: 0.4 }]
   },
@@ -448,8 +447,8 @@ const styles = StyleSheet.create({
     width: width * 1.5,
     height: height * 0.35,
     opacity: 0.8,
-    bottom: '30%',
-    right: '-20%',
+    bottom: '45%',
+    right: '-25%',
     transform: [{ rotate: '-10deg' }, { scale: 0.35 }]
   },
   athleteImage: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, updateDoc, increment, getDocs, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { broadcastPushNotification } from '../lib/push';
@@ -67,6 +67,33 @@ const Messaging: React.FC = () => {
   const [sendingReply, setSendingReply] = useState(false);
   const [deletingConversation, setDeletingConversation] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  // ── Rich-text editor helpers ───────────────────────────────────────────────
+  const execCmd = useCallback((command: string, value?: string) => {
+    document.execCommand(command, false, value);
+    editorRef.current?.focus();
+  }, []);
+
+  const insertLink = useCallback(() => {
+    const url = window.prompt('Enter URL:', 'https://');
+    if (url) execCmd('createLink', url);
+  }, [execCmd]);
+
+  // Sync editorRef contentEditable → description state on every input
+  const handleEditorInput = useCallback(() => {
+    setDescription(editorRef.current?.innerHTML ?? '');
+  }, []);
+
+  // Keep editor in sync if description is reset (e.g. after send)
+  useEffect(() => {
+    if (editorRef.current && description === '' && editorRef.current.innerHTML !== '') {
+      editorRef.current.innerHTML = '';
+    }
+  }, [description]);
+
+  // collapsed state for broadcast body in the reply modal
+  // const [bodyCollapsed, setBodyCollapsed] = useState(true);
 
   useEffect(() => {
     const qSchools = query(collection(db, 'app_schools'), orderBy('name', 'asc'));
@@ -325,11 +352,29 @@ const Messaging: React.FC = () => {
     }
   };
 
-  // ── Role display label ────────────────────────────────────────────────────
   const getRoleLabel = (reply: MessageReply) => {
     if (reply.userRole === 'admin') return 'YAU Admin';
     if (reply.userRole === 'coach') return 'From Coach';
     return reply.userName;
+  };
+
+  const CollapsibleContent: React.FC<{ html: string, className?: string, initialClamp?: string }> = ({ html, className, initialClamp = "line-clamp-3" }) => {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    return (
+      <div>
+        <div 
+          className={`${className} overflow-hidden transition-all duration-300 ${isCollapsed ? initialClamp : ''}`}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        <button
+          type="button"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="mt-1 text-[9px] font-black text-indigo-500 hover:text-indigo-700 uppercase tracking-widest transition-colors"
+        >
+          {isCollapsed ? '▼ See More' : '▲ See Less'}
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -349,49 +394,69 @@ const Messaging: React.FC = () => {
               <Input label="Subject" placeholder="e.g. Game Rescheduled" value={title} onChange={(e) => setTitle(e.target.value)} disabled={loading} required />
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Message Body</label>
-                <div className="bg-white dark:bg-black rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10">
-                  {/* Formatting Toolbar */}
-                  <div className="flex items-center gap-2 p-3 border-b border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const start = (document.querySelector('textarea') as HTMLTextAreaElement).selectionStart;
-                        const end = (document.querySelector('textarea') as HTMLTextAreaElement).selectionEnd;
-                        const text = description;
-                        const selectedText = text.substring(start, end);
-                        const before = text.substring(0, start);
-                        const after = text.substring(end);
-                        setDescription(`${before}<b>${selectedText}</b>${after}`);
-                      }}
-                      className="p-2 hover:bg-white dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-white/60 hover:text-indigo-600 font-bold"
-                      title="Bold"
-                    >
-                      B
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const start = (document.querySelector('textarea') as HTMLTextAreaElement).selectionStart;
-                        const end = (document.querySelector('textarea') as HTMLTextAreaElement).selectionEnd;
-                        const text = description;
-                        const selectedText = text.substring(start, end);
-                        const before = text.substring(0, start);
-                        const after = text.substring(end);
-                        setDescription(`${before}<i>${selectedText}</i>${after}`);
-                      }}
-                      className="p-2 hover:bg-white dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-white/60 hover:text-indigo-600 italic"
-                      title="Italic"
-                    >
-                      I
-                    </button>
-                    <div className="w-px h-4 bg-gray-200 dark:bg-white/10 mx-1" />
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Editor Tools</span>
+                <div className="bg-white dark:bg-black rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 transition-all">
+
+                  {/* ── Rich Text Toolbar ── */}
+                  <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5">
+                    {/* Text Style */}
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('bold'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 font-black text-sm transition-colors" title="Bold (Ctrl+B)">B</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('italic'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 italic font-bold text-sm transition-colors" title="Italic (Ctrl+I)">I</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('underline'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 underline font-bold text-sm transition-colors" title="Underline (Ctrl+U)">U</button>
+
+                    <div className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-1" />
+
+                    {/* Headings */}
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('formatBlock', 'h2'); }}
+                      className="px-2 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 font-black text-xs transition-colors" title="Heading">H2</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('formatBlock', 'h3'); }}
+                      className="px-2 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 font-black text-xs transition-colors" title="Subheading">H3</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('formatBlock', 'p'); }}
+                      className="px-2 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 font-bold text-xs transition-colors" title="Paragraph">¶</button>
+
+                    <div className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-1" />
+
+                    {/* Lists */}
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('insertUnorderedList'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 transition-colors text-sm" title="Bullet List">•≡</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('insertOrderedList'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 transition-colors text-sm" title="Numbered List">1≡</button>
+
+                    <div className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-1" />
+
+                    {/* Alignment */}
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('justifyLeft'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 transition-colors text-sm" title="Align Left">⬅</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('justifyCenter'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 transition-colors text-sm" title="Center">⬛</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('justifyRight'); }}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 transition-colors text-sm" title="Align Right">➡</button>
+
+                    <div className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-1" />
+
+                    {/* Link + Clear */}
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); insertLink(); }}
+                      className="px-2 h-8 flex items-center justify-center rounded-lg hover:bg-indigo-50 dark:hover:bg-white/10 text-gray-700 dark:text-white/70 hover:text-indigo-600 font-bold text-xs transition-colors" title="Insert Link">🔗</button>
+                    <button type="button" onMouseDown={(e) => { e.preventDefault(); execCmd('removeFormat'); }}
+                      className="px-2 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-400 hover:text-red-500 font-bold text-xs transition-colors" title="Clear Formatting">✕</button>
                   </div>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Compose your message here..."
-                    className="w-full h-48 p-5 bg-white dark:bg-black text-gray-900 dark:text-white outline-none resize-none font-medium leading-relaxed"
+
+                  {/* ── contentEditable Editor Surface ── */}
+                  <div
+                    ref={editorRef}
+                    contentEditable
+                    suppressContentEditableWarning
+                    onInput={handleEditorInput}
+                    data-placeholder="Compose your message here..."
+                    className="w-full min-h-[160px] p-5 bg-white dark:bg-black text-gray-900 dark:text-white outline-none leading-relaxed text-sm
+                      [&_b]:font-bold [&_strong]:font-bold [&_i]:italic [&_em]:italic [&_u]:underline
+                      [&_h2]:text-lg [&_h2]:font-black [&_h2]:mt-2 [&_h2]:mb-1
+                      [&_h3]:text-base [&_h3]:font-bold [&_h3]:mt-2 [&_h3]:mb-1
+                      [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5
+                      [&_a]:text-indigo-600 [&_a]:underline
+                      empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:dark:text-white/30"
                   />
                 </div>
               </div>
@@ -465,7 +530,7 @@ const Messaging: React.FC = () => {
 
       {/* ── Reply Modal ── */}
       {selectedPost && (
-        <div className="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-[200] p-4">
+        <div className="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-[200] p-4" onClick={(e) => { if (e.target === e.currentTarget) { setSelectedPost(null); } }}>
           <Card
             className="w-full max-w-2xl h-[85vh] flex flex-col shadow-2xl overflow-hidden border-none p-0"
             contentClassName="flex-1 flex flex-col min-h-0"
@@ -495,12 +560,16 @@ const Messaging: React.FC = () => {
                   <Badge variant="primary" className="uppercase text-[9px]">Original Broadcast</Badge>
                   <span className="text-[10px] text-gray-400 dark:text-white/40 font-bold">{selectedPost.createdAt?.toDate().toLocaleString()}</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedPost.title}</p>
-                <div 
-                  className="text-xs text-gray-600 dark:text-white/60 mt-2 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: selectedPost.description }}
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-2">{selectedPost.title}</p>
+
+                {/* Collapsible body */}
+                <CollapsibleContent 
+                  html={selectedPost.description} 
+                  className="text-xs text-gray-600 dark:text-white/60 leading-relaxed"
+                  initialClamp="line-clamp-2"
                 />
               </div>
+
 
               {/* Replies */}
               {replies.map(reply => {
@@ -528,11 +597,15 @@ const Messaging: React.FC = () => {
                           {reply.timestamp?.toDate().toLocaleTimeString()}
                         </span>
                       </div>
-                      <div 
-                        className={`text-sm leading-relaxed whitespace-pre-wrap ${(isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
+                      
+                      <CollapsibleContent 
+                        html={reply.content}
+                        className={`text-sm leading-relaxed whitespace-pre-wrap ${
+                          (isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
                         } ${isDeletionRequest ? 'font-medium' : ''}`}
-                        dangerouslySetInnerHTML={{ __html: reply.content }}
+                        initialClamp="line-clamp-4"
                       />
+
                       {/* Delete reply button — visible on hover */}
                       <button
                         onClick={() => handleDeleteReply(reply.id)}

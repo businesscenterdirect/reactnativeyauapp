@@ -1,14 +1,17 @@
 import { MaterialIcons } from '@expo/vector-icons';
 // import { LinearGradient } from 'expo-linear-gradient';
-import { router, Link } from 'expo-router';
-import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Animated,
+  Dimensions,
   Image,
   ImageBackground,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -17,9 +20,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Dimensions,
-  Animated,
-  Keyboard,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
@@ -364,7 +364,7 @@ export default function LoginScreen() {
                 <Text style={styles.signupBtnText}>Sign Up</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={[styles.signupBtn, { marginTop: 15 }]}
                 onPress={() => {
                   router.push('/onboarding');
@@ -372,7 +372,7 @@ export default function LoginScreen() {
               >
                 <Text style={styles.noAccountText}>New to YAU?</Text>
                 <Text style={[styles.signupBtnText, { color: '#E31B23' }]}>View Intro</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ScrollView>

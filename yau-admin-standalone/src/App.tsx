@@ -13,6 +13,7 @@ import StandingsManager from './components/StandingsManager';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from './lib/firebase';
+import { updateAppBadge, clearAppBadge, listenForForegroundMessages } from './lib/fcmService';
 
 function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItemClick?: () => void }) {
   const location = useLocation();
@@ -137,9 +138,35 @@ function AppLayout() {
 
       setUnreadCount(total);
       setUnreadPosts(posts);
+
+      // Update App Badge whenever unread count changes
+      updateAppBadge(total);
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      clearAppBadge();
+    };
   }, [unreadCount]);
+
+  // Foreground FCM message listener — fires when app is open in browser
+  useEffect(() => {
+    const unsubFCM = listenForForegroundMessages((payload) => {
+      const title = payload.notification?.title || 'New Reply';
+      const body = payload.notification?.body || 'You have a new message.';
+      toast.success(`${title}: ${body}`, {
+        icon: '🔔',
+        duration: 5000,
+        position: 'top-right',
+      });
+      // Play a subtle notification sound if the browser allows it
+      try {
+        const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+        audio.volume = 0.4;
+        audio.play().catch(() => {}); // Silently fail if autoplay is blocked
+      } catch (_) {}
+    });
+    return () => unsubFCM();
+  }, []);
 
   useEffect(() => {
     if (darkMode) {

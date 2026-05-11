@@ -6,7 +6,7 @@ import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card } from './ui/Card';
-
+import { requestNotificationPermission } from '../lib/fcmService';
 import toast from 'react-hot-toast';
 
 const Login: React.FC = () => {
@@ -31,6 +31,13 @@ const Login: React.FC = () => {
       await signInWithEmailAndPassword(auth, email.trim(), password);
       toast.success('Successfully logged in!');
       navigate('/');
+      // Fire permission request non-blocking — must happen after navigation
+      // to avoid the browser treating it as a background request
+      setTimeout(() => {
+        if (auth.currentUser) {
+          requestNotificationPermission(auth.currentUser.uid);
+        }
+      }, 1500);
     } catch (err: any) {
       console.error('Login error:', err);
       let message = 'Invalid email or password. Please try again.';

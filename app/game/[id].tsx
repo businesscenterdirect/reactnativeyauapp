@@ -127,17 +127,15 @@ export default function GameDetailScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
-      {/* Hero Header Area */}
-      <ImageBackground 
-        source={require('../../assets/images/background.png')}
+      {/* Hero Header Area with Gradient */}
+      <LinearGradient 
+        colors={['#001A3D', '#002C61']} 
         style={[styles.headerHero, { paddingTop: insets.top + 10 }]}
-        imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
       >
-        <View style={styles.overlay} />
         {/* Top Navigation */}
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backIcon}>
-            <MaterialIcons name="chevron-left" size={28} color="#FFF" />
+            <MaterialIcons name="keyboard-arrow-left" size={32} color="#FFF" />
           </TouchableOpacity>
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>GAME DETAILS</Text>
@@ -145,13 +143,15 @@ export default function GameDetailScreen() {
           <View style={{ width: 40 }} />
         </View>
 
-        {/* League and Location Info */}
+        {/* League and sport Info */}
         <View style={styles.leagueInfoContainer}>
           <Text style={styles.leagueText}>{game.sport || 'Sports League'}</Text>
-          <Text style={styles.locationText}>{game.location || 'Location TBA'}</Text>
+          <View style={styles.sportPill}>
+            <Text style={styles.sportPillText}>{game.sport?.toUpperCase() || 'SPORTS'}</Text>
+          </View>
         </View>
 
-        {/* Teams and Score/Time */}
+        {/* Teams Row - Large Premium Layout */}
         <View style={styles.teamsHeroRow}>
           {/* Team 1 */}
           <View style={styles.teamHeroColumn}>
@@ -161,21 +161,20 @@ export default function GameDetailScreen() {
             <Text style={styles.teamHeroName} numberOfLines={2}>{game.team1Name}</Text>
           </View>
 
-          {/* Center Info */}
+          {/* Center Score/Time Info */}
           <View style={styles.heroCenterInfo}>
             {gameState === 'Upcoming' ? (
-              <Text style={styles.upcomingTimeHero}>{game.time}</Text>
+              <View style={styles.upcomingBadge}>
+                <Text style={styles.kickoffLabel}>KICK-OFF</Text>
+                <Text style={styles.upcomingTimeHero}>{game.time}</Text>
+              </View>
             ) : (
-              <>
-                <Text style={styles.scoreTextHero}>2 - 1</Text>
-                {gameState === 'Completed' ? (
-                  <Text style={styles.fullTimeText}>FULL-TIME</Text>
-                ) : (
-                  <View style={styles.ongoingTag}>
-                    <Text style={styles.ongoingTagText}>90 + 7'</Text>
-                  </View>
-                )}
-              </>
+              <View style={styles.scoreBadge}>
+                <Text style={styles.scoreTextHero}>3 - 1</Text>
+                <View style={styles.statusBadge}>
+                   <Text style={styles.statusBadgeText}>{gameState === 'Completed' ? 'FULL-TIME' : 'LIVE'}</Text>
+                </View>
+              </View>
             )}
           </View>
 
@@ -187,14 +186,7 @@ export default function GameDetailScreen() {
             <Text style={styles.teamHeroName} numberOfLines={2}>{game.team2Name}</Text>
           </View>
         </View>
-        
-        {/* Sport Tag */}
-        <View style={styles.sportPillContainer}>
-            <View style={styles.sportPill}>
-                <Text style={styles.sportPillText}>{game.sport?.toUpperCase() || 'SPORTS'}</Text>
-            </View>
-        </View>
-      </ImageBackground>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.contentScroll} showsVerticalScrollIndicator={false}>
         
@@ -277,14 +269,9 @@ const styles = StyleSheet.create({
   
   // Hero Header
   headerHero: { 
-    backgroundColor: '#001A3D', 
-    paddingBottom: 25, 
-    borderBottomLeftRadius: 0, 
-    borderBottomRightRadius: 0 
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 26, 61, 0.85)',
+    paddingBottom: 40, 
+    borderBottomLeftRadius: 30, 
+    borderBottomRightRadius: 30 
   },
   headerTop: { 
     flexDirection: 'row', 
@@ -316,13 +303,23 @@ const styles = StyleSheet.create({
   },
   leagueText: {
     color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: 8,
   },
-  locationText: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 13,
-    marginTop: 4,
+  sportPill: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  sportPillText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1,
   },
 
   teamsHeroRow: {
@@ -333,27 +330,32 @@ const styles = StyleSheet.create({
   },
   teamHeroColumn: {
     alignItems: 'center',
-    width: 90,
+    width: 100,
   },
   teamHeroCircle: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#E0E7FF',
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
   },
   teamHeroInit: {
-    color: '#001A3D',
-    fontSize: 22,
+    color: '#002C61',
+    fontSize: 28,
     fontWeight: '900',
   },
   teamHeroName: {
     color: '#FFF',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     textAlign: 'center',
+    opacity: 0.9,
   },
 
   heroCenterInfo: {
@@ -361,53 +363,47 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
+  upcomingBadge: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    padding: 15,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  kickoffLabel: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 2,
+    marginBottom: 4,
+  },
   upcomingTimeHero: {
     color: '#FFF',
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '900',
-    letterSpacing: 1,
+  },
+  scoreBadge: {
+    alignItems: 'center',
   },
   scoreTextHero: {
     color: '#FFF',
-    fontSize: 34,
+    fontSize: 42,
     fontWeight: '900',
-    letterSpacing: 3,
+    letterSpacing: 4,
   },
-  fullTimeText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '700',
-    marginTop: 5,
-    letterSpacing: 1,
-  },
-  ongoingTag: {
-    backgroundColor: '#2ECC71',
+  statusBadge: {
+    backgroundColor: '#E31B23',
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: 8,
     marginTop: 8,
   },
-  ongoingTagText: {
+  statusBadgeText: {
     color: '#FFF',
-    fontSize: 13,
-    fontWeight: '800',
-  },
-
-  sportPillContainer: {
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  sportPill: {
-    backgroundColor: '#FFF',
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  sportPillText: {
-    color: '#000',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1,
   },
 
   // Content

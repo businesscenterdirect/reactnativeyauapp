@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Image,
   SectionList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,45 +14,23 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { Schedule } from '../../src/services/schedule';
-import { isGradeMatch } from '../../src/services/registration';
-
-
-const SPORT_ICONS: Record<string, string> = {
-  soccer: '⚽',
-  basketball: '🏀',
-  football: '🏈',
-  cheer: '📣',
-  volleyball: '🏐',
-};
-
-function getSportIcon(sport: string) {
-  const key = sport?.toLowerCase() || '';
-  for (const s of Object.keys(SPORT_ICONS)) {
-    if (key.includes(s)) return SPORT_ICONS[s];
-  }
-  return '🏆';
-}
+import { useRouter } from 'expo-router';
+import { useScheduleStore } from '../../src/store/useScheduleStore';
+import { GRADE_BANDS, SPORTS, isGradeMatch } from '../../src/services/registration';
+import { GradeBandPicker } from '../../src/components/GradeBandPicker';
 
 function getInitials(name: string) {
   return (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
-
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-function formatSectionDate(dateStr: string) {
-  const d = new Date(dateStr);
-  return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
-}
-
-import { useRouter } from 'expo-router';
-import { useScheduleStore } from '../../src/store/useScheduleStore';
 
 export default function ScheduleScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [selectedSport, setSelectedSport] = useState('All');
+  const [selectedGrade, setSelectedGrade] = useState('All');
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
 
   const schedules = useScheduleStore((state: any) => state.schedules);
   const loading = useScheduleStore((state: any) => state.loading);
@@ -59,7 +38,11 @@ export default function ScheduleScreen() {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
-  const filteredSchedules = schedules;
+  const filteredSchedules = schedules.filter((s: Schedule) => {
+    const sportMatch = selectedSport === 'All' || s.sport.toLowerCase().includes(selectedSport.toLowerCase());
+    const gradeMatch = selectedGrade === 'All' || isGradeMatch(s.grade_band || s.ageGroup, selectedGrade);
+    return sportMatch && gradeMatch;
+  });
 
   // Games on "Today" should remain in Upcoming until the day is over
   const realUpcoming = filteredSchedules.filter((s: Schedule) => s.date >= todayStr);
@@ -116,7 +99,38 @@ export default function ScheduleScreen() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Filters */}
+        <View style={styles.filtersRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sportsScroll}>
+            {['All', ...SPORTS].map((sport) => (
+              <TouchableOpacity
+                key={sport}
+                onPress={() => setSelectedSport(sport)}
+                style={[styles.sportChip, selectedSport === sport && styles.sportChipActive]}
+              >
+                <Text style={[styles.sportChipText, selectedSport === sport && styles.sportChipTextActive]}>
+                  {sport.toUpperCase()}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          <TouchableOpacity style={styles.gradeFilterBtn} onPress={() => setIsPickerVisible(true)}>
+             <MaterialIcons name="tune" size={18} color="#FFF" />
+             <Text style={styles.gradeFilterText} numberOfLines={1}>
+                {selectedGrade === 'All' ? 'ANY GRADE' : selectedGrade.split(' ')[0].toUpperCase()}
+              </Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
+
+      <GradeBandPicker 
+        visible={isPickerVisible}
+        onClose={() => setIsPickerVisible(false)}
+        selectedBand={selectedGrade}
+        onSelect={setSelectedGrade}
+      />
 
       {loading ? (
         <View style={styles.loading}><ActivityIndicator size="large" color="#002C61" /></View>
@@ -227,4 +241,12 @@ const styles = StyleSheet.create({
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 120, paddingHorizontal: 40 },
   emptyTitle: { fontSize: 18, fontWeight: '900', color: '#1E293B', marginTop: 20, marginBottom: 8 },
   emptyText: { color: '#94A3B8', fontSize: 14, fontWeight: '600', textAlign: 'center', lineHeight: 20 },
+  filtersRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginTop: 15 },
+  sportsScroll: { flex: 1, marginRight: 10 },
+  sportChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.1)', marginRight: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
+  sportChipActive: { backgroundColor: '#E31B23', borderColor: '#E31B23' },
+  sportChipText: { color: 'rgba(255,255,255,0.8)', fontSize: 10, fontWeight: '800' },
+  sportChipTextActive: { color: '#FFF', fontWeight: '900' },
+  gradeFilterBtn: { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10, flexDirection: 'row', alignItems: 'center', gap: 4 },
+  gradeFilterText: { color: '#FFF', fontSize: 9, fontWeight: '900' },
 });

@@ -1,21 +1,27 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { Schedule } from '../../src/services/schedule';
-import { isGradeMatch } from '../../src/services/registration';
-
+import { GRADE_BANDS, SPORTS, isGradeMatch } from '../../src/services/registration';
 
 const { width } = Dimensions.get('window');
 
 import { useMessageStore } from '../../src/store/useMessageStore';
 import { useScheduleStore } from '../../src/store/useScheduleStore';
+import { GradeBandPicker } from '../../src/components/GradeBandPicker';
 
 export default function HomeScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  const [selectedSport, setSelectedSport] = useState('All');
+  const [selectedGrade, setSelectedGrade] = useState('All');
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
 
   // Use centralized state
   const schedules = useScheduleStore((state: any) => state.schedules);
@@ -68,8 +74,12 @@ export default function HomeScreen() {
 
   const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
 
-  // Same filter logic as the schedule screen — checks grade_band, all students, school & grade
-  const filteredSchedules = schedules;
+  // Filtering logic
+  const filteredSchedules = schedules.filter((s: Schedule) => {
+    const sportMatch = selectedSport === 'All' || s.sport.toLowerCase().includes(selectedSport.toLowerCase());
+    const gradeMatch = selectedGrade === 'All' || isGradeMatch(s.grade_band || s.ageGroup, selectedGrade);
+    return sportMatch && gradeMatch;
+  });
 
   const upcomingSchedules = filteredSchedules
     .filter((s: Schedule) => s.date > todayStr)
@@ -89,10 +99,50 @@ export default function HomeScreen() {
           <View style={styles.rightPlaceholder} />
         </View>
         <View style={styles.welcomeSection}>
-          <Text style={styles.greetingText}>Good Evening 👋</Text>
-          <Text style={styles.userNameText}>{fullName}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <View>
+              <Text style={styles.greetingText}>Good Evening 👋</Text>
+              <Text style={styles.userNameText}>{fullName}</Text>
+            </View>
+            <TouchableOpacity 
+              style={styles.gradeFilterBtn} 
+              onPress={() => setIsPickerVisible(true)}
+            >
+              <MaterialIcons name="tune" size={20} color="#FFF" />
+              <Text style={styles.gradeFilterText} numberOfLines={1}>
+                {selectedGrade === 'All' ? 'ANY GRADE' : selectedGrade.split(' ')[0].toUpperCase()}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Sports Quick Filter */}
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false} 
+          style={styles.sportsScroll}
+          contentContainerStyle={styles.sportsScrollContent}
+        >
+          {['All', ...SPORTS].map((sport) => (
+            <TouchableOpacity
+              key={sport}
+              onPress={() => setSelectedSport(sport)}
+              style={[styles.sportChip, selectedSport === sport && styles.sportChipActive]}
+            >
+              <Text style={[styles.sportChipText, selectedSport === sport && styles.sportChipTextActive]}>
+                {sport.toUpperCase()}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </LinearGradient>
+
+      <GradeBandPicker 
+        visible={isPickerVisible}
+        onClose={() => setIsPickerVisible(false)}
+        selectedBand={selectedGrade}
+        onSelect={setSelectedGrade}
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.tilesGrid}>
@@ -276,5 +326,49 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     lineHeight: 18
+  },
+  gradeFilterBtn: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    maxWidth: 120
+  },
+  gradeFilterText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '900',
+  },
+  sportsScroll: {
+    marginTop: 20,
+    marginHorizontal: -20,
+  },
+  sportsScrollContent: {
+    paddingHorizontal: 20,
+    gap: 8,
+  },
+  sportChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  sportChipActive: {
+    backgroundColor: '#E31B23',
+    borderColor: '#E31B23',
+  },
+  sportChipText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  sportChipTextActive: {
+    color: '#FFF',
+    fontWeight: '900',
   },
 });
