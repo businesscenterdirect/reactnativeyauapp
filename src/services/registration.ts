@@ -4,10 +4,10 @@ import { apiService } from './api';
 
 // ─── Canonical Grade Bands ── MUST match Admin Panel exactly ──────────────────
 export const GRADE_BANDS = [
-  { label: 'Kindergarten – 1st Grade',          value: 'Kindergarten – 1st Grade',          band: 'Band 1' },
-  { label: '2nd – 3rd Grade',                   value: '2nd – 3rd Grade',                   band: 'Band 2' },
-  { label: '4th – 5th Grade',                   value: '4th – 5th Grade',                   band: 'Band 3' },
-  { label: 'Middle School (6th, 7th & 8th Grade)', value: 'Middle School (6th, 7th & 8th Grade)', band: 'Band 4' },
+  { label: 'Kindergarten – 1st Grade', value: 'Kindergarten – 1st Grade', band: 'Kindergarten – 1st Grade' },
+  { label: '2nd – 3rd Grade', value: '2nd – 3rd Grade', band: '2nd – 3rd Grade' },
+  { label: '4th – 5th Grade', value: '4th – 5th Grade', band: '4th – 5th Grade' },
+  { label: 'Middle School (6th, 7th & 8th Grade)', value: 'Middle School (6th, 7th & 8th Grade)', band: 'Middle School (6th, 7th & 8th Grade)' },
 ];
 
 // Canonical sports
