@@ -329,8 +329,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoIcon: {
-    width: 80,
-    height: 80,
+    width: 65,
+    height: 65,
   },
   yauText: {
     fontSize: 22,

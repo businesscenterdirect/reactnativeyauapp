@@ -12,6 +12,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { UserProvider } from '../src/context/UserContext';
 import { setupNotificationListeners } from '../src/services/notifications';
 import { SyncManager } from '../src/components/SyncManager';
+import { useSchoolStore } from '../src/store/useSchoolStore';
 
 import { useUser } from '../src/context/UserContext';
 
@@ -99,13 +100,14 @@ function NavigationContent() {
 }
 
 export default function RootLayout() {
-  // Setup notification listeners
+  // Setup notification listeners & schools
   useEffect(() => {
-    const subscription = setupNotificationListeners();
+    const unsubNotifications = setupNotificationListeners();
+    const unsubSchools = useSchoolStore.getState().fetchSchools();
+    
     return () => {
-      if (subscription) {
-        subscription.remove();
-      }
+      if (unsubNotifications) unsubNotifications.remove();
+      unsubSchools();
     };
   }, []);
 

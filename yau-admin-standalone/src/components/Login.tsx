@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
@@ -8,6 +8,18 @@ import { Input } from './ui/Input';
 import { Card } from './ui/Card';
 import { requestNotificationPermission } from '../lib/fcmService';
 import toast from 'react-hot-toast';
+
+import { 
+  doc, 
+  getDoc, 
+  setDoc, 
+  deleteDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs 
+} from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -28,11 +40,60 @@ const Login: React.FC = () => {
     setError(null);
 
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      const uid = userCredential.user.uid;
+
+      // ── Lazy Migration Layer ──────────────────────────────────────────
+      // Standardizes the architecture by remapping legacy random-ID or 
+      // newly provisioned documents to the core admins/{uid} format.
+      let adminDoc = await getDoc(doc(db, 'admins', uid));
+
+      if (!adminDoc.exists()) {
+        const q = query(collection(db, 'admins'), where('email', '==', email.trim()));
+        const querySnap = await getDocs(q);
+
+        if (!querySnap.empty) {
+          const legacyDoc = querySnap.docs[0];
+          const legacyData = legacyDoc.data();
+
+          // Safe clone to UID-protected document
+          await setDoc(doc(db, 'admins', uid), {
+            ...legacyData,
+            migratedFrom: legacyDoc.id,
+            migratedAt: new Date(),
+            authLinked: true
+          }, { merge: true });
+
+          // Safely remove legacy document ONLY after UID write success
+          await deleteDoc(legacyDoc.ref);
+          console.log('[Login] Standardized admin profile during login:', uid);
+          
+          // Re-fetch newly standardized document
+          adminDoc = await getDoc(doc(db, 'admins', uid));
+        }
+      }
+
+      if (!adminDoc.exists()) {
+        const msg = 'Security Alert: No administrator profile associated with this account.';
+        setError(msg);
+        toast.error(msg);
+        await signOut(auth);
+        return;
+      }
+
+      const role = (adminDoc.data()?.role || '').toLowerCase();
+      if (role !== 'admin' && role !== 'manager' && role !== 'viewer') {
+        const msg = 'Security Alert: Invalid role clearance. Access denied.';
+        setError(msg);
+        toast.error(msg);
+        await signOut(auth);
+        return;
+      }
+
       toast.success('Successfully logged in!');
       navigate('/');
+      
       // Fire permission request non-blocking — must happen after navigation
-      // to avoid the browser treating it as a background request
       setTimeout(() => {
         if (auth.currentUser) {
           requestNotificationPermission(auth.currentUser.uid);

@@ -140,8 +140,20 @@ export default function LoginScreen() {
           return;
         }
 
-        if (member.role && member.role !== 'parent' && member.role !== 'member' && member.role !== 'user') {
-          Alert.alert('Unauthorized', "Only registered members and parents can access the mobile app.");
+        // ── Hard-lock Entrance Gate: App Access Check ──────────────────────
+        if (member.app_access === false) {
+          Alert.alert('Access Revoked', "Your mobile app access has been disabled. Please contact YAU support.");
+          await auth.signOut();
+          setLoading(false);
+          return;
+        }
+
+        // ── Hard-lock Entrance Gate: Role Validation ───────────────────────
+        const role = (member.user_type || member.role || '').toLowerCase();
+        const allowedRoles = ['parent', 'coach', 'student', 'member', 'user'];
+        
+        if (!allowedRoles.includes(role)) {
+          Alert.alert('Unauthorized Access', "Only registered members and parents can access the mobile app. Administrative accounts must use the YAU Admin Panel.");
           await auth.signOut();
           setLoading(false);
           return;
@@ -249,7 +261,7 @@ export default function LoginScreen() {
             style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]}
             resizeMode="contain"
           />
-          <Text style={[styles.yauText, keyboardVisible && { fontSize: 12, marginBottom: 5 }]}>YAU SPORTS</Text>
+          <Text style={[styles.yauText, keyboardVisible && { fontSize: 10, marginBottom: 5 }]}>YOUTH ATHLETE UNIVERSITY</Text>
 
           <Animated.View style={[styles.welcomeContainer, { opacity: headerOpacity }]}>
             {!keyboardVisible && slides.map((slide, index) => (
@@ -404,7 +416,7 @@ const styles = StyleSheet.create({
   },
   yauText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
     letterSpacing: 1.5,
     marginBottom: 20,

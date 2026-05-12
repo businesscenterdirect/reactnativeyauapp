@@ -1,29 +1,38 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { ActivityIndicator, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
+import { matchesGrade, matchesSelection, matchesTeamHomeAway, SPORTS } from '../../src/services/registration';
 import { Schedule } from '../../src/services/schedule';
-import { GRADE_BANDS, SPORTS, isGradeMatch } from '../../src/services/registration';
 
 const { width } = Dimensions.get('window');
 
+import { GradeBandPicker } from '../../src/components/GradeBandPicker';
+import { SportPicker } from '../../src/components/SportPicker';
+import { TeamPicker } from '../../src/components/TeamPicker';
+import { useFilterStore } from '../../src/store/useFilterStore';
 import { useMessageStore } from '../../src/store/useMessageStore';
 import { useScheduleStore } from '../../src/store/useScheduleStore';
-import { GradeBandPicker } from '../../src/components/GradeBandPicker';
+import { useSchoolStore } from '../../src/store/useSchoolStore';
 
 export default function HomeScreen() {
   const { user } = useUser();
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
-  const [selectedSport, setSelectedSport] = useState('All');
-  const [selectedGrade, setSelectedGrade] = useState('All');
-  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const {
+    selectedSport, setSport,
+    selectedGrade, setGrade,
+    selectedTeam, setTeam
+  } = useFilterStore();
 
-  // Use centralized state
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [isTeamPickerVisible, setIsTeamPickerVisible] = useState(false);
+  const [isSportPickerVisible, setIsSportPickerVisible] = useState(false);
+
   const schedules = useScheduleStore((state: any) => state.schedules);
   const loading = useScheduleStore((state: any) => state.loading);
   const totalUnread = useMessageStore((state: any) => state.totalUnread);
@@ -38,337 +47,303 @@ export default function HomeScreen() {
   const formatDate = (dateStr: string) => {
     if (!dateStr) return '';
     try {
-      // Handle "MM-DD-YYYY" or "YYYY-MM-DD" or "DD-MM-YYYY"
-      // Assuming common separator is '-' or '/'
       const parts = dateStr.split(/[-/]/);
       let date: Date;
-
       if (parts.length === 3) {
-        if (parts[0].length === 4) {
-          // YYYY-MM-DD
-          date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-        } else if (parseInt(parts[0]) > 12) {
-          // DD-MM-YYYY
-          date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-        } else {
-          // MM-DD-YYYY
-          date = new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
-        }
-      } else {
-        date = new Date(dateStr);
-      }
-
+        if (parts[0].length === 4) date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        else if (parseInt(parts[0]) > 12) date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+        else date = new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
+      } else date = new Date(dateStr);
       if (isNaN(date.getTime())) return dateStr.toUpperCase();
-
-      const options: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      };
-      return date.toLocaleDateString('en-US', options).toUpperCase();
-    } catch (e) {
-      return dateStr.toUpperCase();
-    }
+      return date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+    } catch (e) { return dateStr.toUpperCase(); }
   };
 
-  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
+  const todayStr = new Date().toLocaleDateString('en-CA');
 
-  // Filtering logic
-  const filteredSchedules = schedules.filter((s: Schedule) => {
-    const sportMatch = selectedSport === 'All' || s.sport.toLowerCase().includes(selectedSport.toLowerCase());
-    const gradeMatch = selectedGrade === 'All' || isGradeMatch(s.grade_band || s.ageGroup, selectedGrade);
-    return sportMatch && gradeMatch;
-  });
+  const filteredSchedules = useMemo(() => {
+    return schedules.filter((s: Schedule) => {
+      const sportMatch = matchesSelection(s.sport, selectedSport);
+      const gradeMatch = matchesGrade(s.grade_band || s.ageGroup, selectedGrade);
+      const teamMatch = matchesTeamHomeAway(s.team1Name, s.team2Name, selectedTeam);
+      return sportMatch && gradeMatch && teamMatch;
+    });
+  }, [schedules, selectedSport, selectedGrade, selectedTeam]);
 
-  const upcomingSchedules = filteredSchedules
-    .filter((s: Schedule) => s.date > todayStr)
-    .sort((a: Schedule, b: Schedule) => a.date.localeCompare(b.date))
-    .slice(0, 3);
+  const schools = useSchoolStore((state: any) => state.schools);
+  const schoolNames = useMemo(() => schools.map((s: any) => s.name), [schools]);
+
+  const upcomingSchedules = useMemo(() => {
+    return filteredSchedules
+      .filter((s: Schedule) => s.date >= todayStr)
+      .sort((a: Schedule, b: Schedule) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''))
+      .slice(0, 10);
+  }, [filteredSchedules, todayStr]);
+
+  const renderMatchCard = ({ item }: { item: Schedule }) => (
+    <TouchableOpacity
+      key={item.id}
+      style={styles.matchCard}
+      onPress={() => router.push({ pathname: '/game/[id]' as any, params: { id: item.id } })}
+    >
+      <View style={styles.cardHeader}>
+        <Text style={styles.cardHeaderDate}>{formatDate(item.date)}</Text>
+      </View>
+      <View style={styles.cardBody}>
+        <Text style={styles.cardLeagueTitle}>{item.grade_band || item.ageGroup} {item.sport}</Text>
+        <Text style={styles.cardLeagueSub}>{item.sport}</Text>
+        <View style={styles.teamsRow}>
+          <View style={styles.team}>
+            <View style={styles.teamCircle}><Text style={styles.teamInit}>{getInitials(item.team1Name)}</Text></View>
+            <Text style={styles.teamLabel} numberOfLines={1}>{item.team1Name}</Text>
+          </View>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.timeText}>{item.time}</Text>
+            <Text style={styles.statusLabel}>PM</Text>
+          </View>
+          <View style={styles.team}>
+            <View style={styles.teamCircle}><Text style={styles.teamInit}>{getInitials(item.team2Name)}</Text></View>
+            <Text style={styles.teamLabel} numberOfLines={1}>{item.team2Name}</Text>
+          </View>
+        </View>
+        <View style={styles.cardFooter}>
+          <Text style={styles.locationMain}>{item.location}</Text>
+          <Text style={styles.locationSub}>1907 Park Dr NE, Issaquah, WA 98029</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#001A3D', '#002C61']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
-        <View style={styles.headerTop}>
-          <View style={styles.logoContainer}>
-            <Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" />
-          </View>
-          <View style={styles.titleContainer}>
-            <Text style={styles.headerBrand}>YAU SPORTS</Text>
-          </View>
-          <View style={styles.rightPlaceholder} />
-        </View>
-        <View style={styles.welcomeSection}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <View>
-              <Text style={styles.greetingText}>Good Evening 👋</Text>
-              <Text style={styles.userNameText}>{fullName}</Text>
+      {/* FIXED STICKY DASHBOARD */}
+      <View style={styles.stickyDashboard}>
+        <View style={styles.blueDashboardTop}>
+          <LinearGradient colors={['rgba(16, 42, 77, 0.95)', 'rgba(0, 26, 61, 0.95)']} style={[styles.header, { paddingTop: insets.top + 10 }]}>
+            <View style={styles.headerTop}>
+              <View style={styles.logoContainer}><Image source={require('../../assets/favicon.png')} style={styles.logo} resizeMode="contain" /></View>
+              <View style={styles.titleContainer}><Text style={styles.headerBrand}>YOUTH ATHLETE UNIVERSITY</Text></View>
+              <View style={styles.rightPlaceholder} />
             </View>
-            <TouchableOpacity 
-              style={styles.gradeFilterBtn} 
-              onPress={() => setIsPickerVisible(true)}
-            >
-              <MaterialIcons name="tune" size={20} color="#FFF" />
-              <Text style={styles.gradeFilterText} numberOfLines={1}>
-                {selectedGrade === 'All' ? 'ANY GRADE' : selectedGrade.split(' ')[0].toUpperCase()}
-              </Text>
-            </TouchableOpacity>
+          </LinearGradient>
+          <View style={styles.blueWelcomeArea}>
+            <Text style={styles.greetingText}>Good Evening 👋</Text>
+            <Text style={styles.userNameText}>{fullName}</Text>
           </View>
         </View>
 
-        {/* Sports Quick Filter */}
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={styles.sportsScroll}
-          contentContainerStyle={styles.sportsScrollContent}
-        >
-          {['All', ...SPORTS].map((sport) => (
-            <TouchableOpacity
-              key={sport}
-              onPress={() => setSelectedSport(sport)}
-              style={[styles.sportChip, selectedSport === sport && styles.sportChipActive]}
-            >
-              <Text style={[styles.sportChipText, selectedSport === sport && styles.sportChipTextActive]}>
-                {sport.toUpperCase()}
-              </Text>
+        <View style={styles.fixedTilesGrid}>
+          {[
+            { title: 'Messages', sub: totalUnread > 0 ? `${totalUnread} New` : 'All Caught Up', icon: 'chat-bubble', path: '/(tabs)/messages', badge: totalUnread },
+            { title: 'Schedule', sub: 'Upcoming Games', icon: 'event', path: '/(tabs)/schedule' },
+            { title: 'Standings', sub: 'Team Ranking', icon: 'emoji-events', path: '/(tabs)/standings' }
+          ].map((tile, idx) => (
+            <TouchableOpacity key={idx} style={styles.tile} onPress={() => router.push(tile.path as any)}>
+              <View style={styles.tileIconContainer}>
+                <MaterialIcons name={tile.icon as any} size={22} color="#FFF" />
+                {!!tile.badge && <View style={styles.badge}><Text style={styles.badgeText}>{tile.badge}</Text></View>}
+              </View>
+              <Text style={styles.tileTitle}>{tile.title}</Text>
+              <Text style={styles.tileSubtext}>{tile.sub}</Text>
             </TouchableOpacity>
           ))}
-        </ScrollView>
-      </LinearGradient>
+        </View>
+      </View>
 
-      <GradeBandPicker 
-        visible={isPickerVisible}
-        onClose={() => setIsPickerVisible(false)}
-        selectedBand={selectedGrade}
-        onSelect={setSelectedGrade}
+      <FlatList
+        data={upcomingSchedules}
+        renderItem={renderMatchCard}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollableContent}
+        ListHeaderComponent={
+          <>
+            <View style={styles.feedHeader}>
+              <Text style={styles.feedTitle}>Upcoming Match</Text>
+              <TouchableOpacity onPress={() => router.push('/(tabs)/schedule' as any)}><Text style={styles.viewAll}>View All</Text></TouchableOpacity>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mainSportsScroll} contentContainerStyle={styles.mainSportsScrollContent}>
+              {['All', ...SPORTS].map((sport) => (
+                <TouchableOpacity key={sport} onPress={() => setSport(selectedSport === sport ? 'All' : sport)} style={[styles.mainSportChip, selectedSport === sport && styles.mainSportChipActive]}>
+                  <Text style={[styles.mainSportChipText, selectedSport === sport && styles.mainSportChipTextActive]}>{sport.toUpperCase()}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <View style={styles.mainFilterRow}>
+              {[{ label: 'Select School', val: selectedTeam, open: () => setIsTeamPickerVisible(true) }, { label: 'Select Grade', val: selectedGrade, open: () => setIsPickerVisible(true) }].map((f, i) => (
+                <View key={i} style={styles.filterCol}>
+                  <Text style={styles.filterLabel}>{f.label}</Text>
+                  <TouchableOpacity style={styles.mainFilterBtn} onPress={f.open}>
+                    <Text style={styles.mainFilterBtnText} numberOfLines={1}>
+                      {f.label === 'Select School'
+                        ? (selectedTeam === 'All' ? 'ALL SCHOOLS' : selectedTeam.toUpperCase())
+                        : (selectedGrade === 'All' ? 'ANY GRADE' : selectedGrade.toUpperCase())
+                      }
+                    </Text>
+                    <MaterialIcons name="keyboard-arrow-down" size={18} color="#64748B" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </>
+        }
+        ListEmptyComponent={
+          loading ? <ActivityIndicator color="#002C61" size="large" style={{ marginTop: 40 }} /> : (
+            <View style={styles.emptyContainer}>
+              <MaterialIcons name="event-busy" size={60} color="#E2E8F0" />
+              <Text style={styles.emptyTitle}>NO GAMES FOUND</Text>
+              <Text style={styles.emptyText}>Adjust your filters to see more games.</Text>
+            </View>
+          )
+        }
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.tilesGrid}>
-          <TouchableOpacity style={styles.tile} onPress={() => router.push('/(tabs)/messages' as any)}>
-            <View style={styles.tileIconBg}>
-              <MaterialIcons name="chat-bubble" size={24} color="#FFFFFF" />
-              {totalUnread > 0 && (
-                <View style={styles.badge}><Text style={styles.badgeText}>{totalUnread}</Text></View>
-              )}
-            </View>
-            <Text style={styles.tileTitle}>Messages</Text>
-            <Text style={styles.tileSubtext}>{totalUnread > 0 ? `${totalUnread} New Messages` : 'All Caught Up'}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.tile} onPress={() => router.push('/(tabs)/schedule' as any)}>
-            <View style={styles.tileIconBg}>
-              <MaterialIcons name="event" size={24} color="#FFFFFF" />
-            </View>
-            <Text style={styles.tileTitle}>Schedule</Text>
-            <Text style={styles.tileSubtext}>Upcoming Games</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.tile} onPress={() => router.push('/(tabs)/standings' as any)}>
-            <View style={styles.tileIconBg}>
-              <MaterialIcons name="emoji-events" size={24} color="#FFFFFF" />
-            </View>
-            <Text style={styles.tileTitle}>Standings</Text>
-            <Text style={styles.tileSubtext}>Team Ranking</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.feedHeader}>
-          <Text style={styles.feedTitle}>Upcoming Game</Text>
-          <TouchableOpacity onPress={() => router.push('/(tabs)/schedule' as any)}>
-            <Text style={styles.viewAll}>View All</Text>
-          </TouchableOpacity>
-        </View>
-
-        {loading ? (
-          <ActivityIndicator color="#0047AB" size="large" style={{ marginTop: 20 }} />
-        ) : upcomingSchedules.length > 0 ? (
-          upcomingSchedules.map((item: Schedule) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.matchCard}
-              onPress={() => router.push({ pathname: '/game/[id]' as any, params: { id: item.id } })}
-            >
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardHeaderDate}>{formatDate(item.date)}</Text>
-              </View>
-
-              <View style={styles.cardBody}>
-                <Text style={styles.leagueName}>{item.sport}</Text>
-                <Text style={styles.locationSubtext}>{item.location}</Text>
-
-                <View style={styles.teamsRow}>
-                  <View style={styles.team}>
-                    <View style={styles.teamCircle}>
-                      <Text style={styles.teamInit}>{getInitials(item.team1Name)}</Text>
-                    </View>
-                    <Text style={styles.teamLabel} numberOfLines={1}>{item.team1Name}</Text>
-                  </View>
-
-                  <View style={styles.scoreContainer}>
-                    <Text style={styles.statusLabel}>KICK-OFF</Text>
-                    <Text style={styles.timeText}>{item.time}</Text>
-                  </View>
-
-                  <View style={styles.team}>
-                    <View style={styles.teamCircle}>
-                      <Text style={styles.teamInit}>{getInitials(item.team2Name)}</Text>
-                    </View>
-                    <Text style={styles.teamLabel} numberOfLines={1}>{item.team2Name}</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <View style={styles.emptyContainer}>
-            <MaterialIcons name="event-busy" size={80} color="#E2E8F0" />
-            <Text style={styles.emptyTitle}>NO UPCOMING GAMES</Text>
-            <Text style={styles.emptyText}>You're all caught up! New games will appear here once they are scheduled.</Text>
-          </View>
-        )}
-      </ScrollView>
+      <GradeBandPicker visible={isPickerVisible} onClose={() => setIsPickerVisible(false)} selectedBand={selectedGrade} onSelect={setGrade} />
+      <TeamPicker visible={isTeamPickerVisible} onClose={() => setIsTeamPickerVisible(false)} teams={schoolNames} selectedTeam={selectedTeam} onSelect={setTeam} />
+      <SportPicker visible={isSportPickerVisible} onClose={() => setIsSportPickerVisible(false)} selectedSport={selectedSport} onSelect={setSport} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFC' },
-  header: { paddingHorizontal: 20, paddingBottom: 35 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  stickyDashboard: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  // New wrapping view for the top part to have the blue background
+  blueDashboardTop: {
+    backgroundColor: 'rgba(2, 28, 59, 1)',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    paddingBottom: 40, // Space for the top half of tiles
+  },
+  header: { paddingHorizontal: 20, paddingBottom: 10 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', marginBottom: 0 },
   logoContainer: { flex: 1, alignItems: 'flex-start' },
-  logo: { width: 40, height: 40 },
-  titleContainer: { flex: 2, alignItems: 'center' },
+  logo: { width: 35, height: 35 },
+  titleContainer: { flex: 4, alignItems: 'center' },
   rightPlaceholder: { flex: 1 },
-  headerBrand: { color: '#FFF', fontSize: 18, fontWeight: '900', letterSpacing: 1.5 },
-  welcomeSection: { marginTop: 10 },
-  greetingText: { color: '#FFF', fontSize: 16, opacity: 0.9 },
-  userNameText: { color: '#FFF', fontSize: 28, fontWeight: '900', marginTop: 4 },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 40 },
-  tilesGrid: { flexDirection: 'row', gap: 12, marginBottom: 30 },
+  headerBrand: { color: '#FFF', fontSize: 15, fontWeight: '900', letterSpacing: 0.5 },
+  blueWelcomeArea: { paddingHorizontal: 20, paddingTop: 5, paddingBottom: 15 },
+  greetingText: { color: 'rgba(255,255,255,0.8)', fontSize: 13, fontWeight: '600' },
+  userNameText: { color: '#FFF', fontSize: 26, fontWeight: '900', marginTop: 0 },
+  scrollableContent: { paddingTop: 280, paddingBottom: 100 },
+  fixedTilesGrid: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingHorizontal: 20,
+    marginTop: -40, // Restore bridge effect
+    paddingBottom: 0,
+  },
   tile: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 12,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
     borderWidth: 1,
-    borderColor: '#F1F5F9'
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  tileIconBg: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
+  tileIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#002C61',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
-    position: 'relative'
+    marginBottom: 8,
+    position: 'relative',
   },
-  tileTitle: { color: '#1E293B', fontSize: 13, fontWeight: '800' },
-  tileSubtext: { color: '#64748B', fontSize: 10, marginTop: 2, fontWeight: '500' },
+  tileTitle: { color: '#1E293B', fontSize: 11, fontWeight: '800' },
+  tileSubtext: { color: '#64748B', fontSize: 9, marginTop: 2, fontWeight: '600' },
   badge: {
     position: 'absolute',
-    top: -5,
-    right: -5,
+    top: -4,
+    right: -4,
     backgroundColor: '#E31B23',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    paddingHorizontal: 4,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#FFF'
+    borderColor: '#FFFFFF'
   },
-  badgeText: { color: '#FFF', fontSize: 9, fontWeight: '900' },
-  feedHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 },
-  feedTitle: { fontSize: 18, fontWeight: '900', color: '#1E293B' },
-  viewAll: { fontSize: 13, fontWeight: '700', color: '#0047AB' },
-  matchCard: { backgroundColor: '#FFF', borderRadius: 12, marginBottom: 20, overflow: 'hidden', elevation: 3, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10, borderWidth: 1, borderColor: '#F1F5F9' },
-  cardHeader: { backgroundColor: '#F1F5F9', paddingVertical: 10, alignItems: 'center' },
-  cardHeaderDate: { color: '#1E293B', fontSize: 13, fontWeight: '800', letterSpacing: 0.5 },
+  badgeText: { color: '#FFF', fontSize: 8, fontWeight: '900' },
+  feedHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5, paddingHorizontal: 20 },
+  feedTitle: { fontSize: 20, fontWeight: '900', color: '#0F172A' },
+  viewAll: { fontSize: 14, fontWeight: '700', color: '#2563EB' },
+  matchCard: { backgroundColor: '#FFF', borderRadius: 16, marginBottom: 20, marginHorizontal: 20, overflow: 'hidden', borderWidth: 1, borderColor: '#F1F5F9', shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 10, elevation: 3 },
+  cardHeader: { backgroundColor: 'rgba(241, 245, 249, 0.5)', paddingVertical: 10, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
+  cardHeaderDate: { color: '#0F172A', fontSize: 12, fontWeight: '800', letterSpacing: 0.5 },
   cardBody: { padding: 15, alignItems: 'center' },
-  leagueName: { fontSize: 14, fontWeight: '800', color: '#1E293B', marginBottom: 2 },
-  locationSubtext: { fontSize: 11, color: '#94A3B8', marginBottom: 15 },
-  teamsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' },
-  team: { alignItems: 'center', width: 80 },
-  teamCircle: { width: 48, height: 48, borderRadius: 24, backgroundColor: '#E0E7FF', alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-  teamInit: { color: '#0047AB', fontSize: 16, fontWeight: '900' },
-  teamLabel: { fontSize: 11, fontWeight: '700', color: '#1E293B', textAlign: 'center' },
+  cardLeagueTitle: { fontSize: 14, fontWeight: '900', color: '#1E293B', marginBottom: 2 },
+  cardLeagueSub: { fontSize: 11, color: '#94A3B8', fontWeight: '800', marginBottom: 15 },
+  teamsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 20 },
+  team: { alignItems: 'center', width: 85 },
+  teamCircle: { width: 56, height: 56, borderRadius: 28, backgroundColor: '#EFF6FF', alignItems: 'center', justifyContent: 'center', marginBottom: 8, borderWidth: 1, borderColor: '#DBEAFE' },
+  teamInit: { color: '#2563EB', fontSize: 18, fontWeight: '900' },
+  teamLabel: { fontSize: 11, fontWeight: '800', color: '#1E293B', textAlign: 'center' },
   scoreContainer: { alignItems: 'center', flex: 1 },
-  statusLabel: { fontSize: 10, fontWeight: '800', color: '#64748B', marginBottom: 5, letterSpacing: 0.5 },
   timeText: { fontSize: 16, fontWeight: '900', color: '#0F172A' },
+  statusLabel: { fontSize: 11, fontWeight: '900', color: '#0F172A' },
+  cardFooter: { borderTopWidth: 1, borderTopColor: '#F1F5F9', width: '100%', paddingTop: 12, alignItems: 'center' },
+  locationMain: { fontSize: 11, fontWeight: '800', color: '#64748B' },
+  locationSub: { fontSize: 10, color: '#94A3B8', fontWeight: '500' },
+  mainFilterRow: { flexDirection: 'row', gap: 10, marginBottom: 10, paddingHorizontal: 20 },
+  filterCol: { flex: 1 },
+  filterLabel: { fontSize: 10, fontWeight: '800', color: '#94A3B8', marginBottom: 6, letterSpacing: 0.5 },
+  mainFilterBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  mainFilterBtnText: { fontSize: 12, fontWeight: '700', color: '#64748B' },
   emptyContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 40,
+    borderRadius: 20,
+    padding: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: '#F1F5F9',
-    marginTop: 10,
-    marginHorizontal: 10
+    marginHorizontal: 20,
+    borderWidth: 1,
+    borderColor: '#F1F5F9'
   },
-  emptyTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: '#1E293B',
-    marginTop: 15,
-    marginBottom: 5
-  },
-  emptyText: {
-    color: '#94A3B8',
-    fontSize: 13,
-    fontWeight: '600',
-    textAlign: 'center',
-    lineHeight: 18
-  },
-  gradeFilterBtn: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+  emptyTitle: { fontSize: 15, fontWeight: '900', color: '#1E293B', marginTop: 10, marginBottom: 4 },
+  emptyText: { color: '#94A3B8', fontSize: 12, fontWeight: '600', textAlign: 'center' },
+  mainSportsScroll: { marginBottom: 5 },
+  mainSportsScrollContent: { paddingHorizontal: 20, gap: 8 },
+  mainSportChip: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    maxWidth: 120
-  },
-  gradeFilterText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '900',
-  },
-  sportsScroll: {
-    marginTop: 20,
-    marginHorizontal: -20,
-  },
-  sportsScrollContent: {
-    paddingHorizontal: 20,
-    gap: 8,
-  },
-  sportChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: '#F1F5F9',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderColor: '#E2E8F0',
   },
-  sportChipActive: {
+  mainSportChipActive: {
     backgroundColor: '#E31B23',
     borderColor: '#E31B23',
   },
-  sportChipText: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 11,
-    fontWeight: '800',
-  },
-  sportChipTextActive: {
-    color: '#FFF',
-    fontWeight: '900',
-  },
+  mainSportChipText: { color: '#64748B', fontSize: 11, fontWeight: '800' },
+  mainSportChipTextActive: { color: '#FFF', fontWeight: '900' },
 });

@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUser } from '../../src/context/UserContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../src/services/firebase';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { TextInput } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
@@ -138,6 +138,28 @@ export default function ProfileScreen() {
   }
 
   const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`.toUpperCase();
+  
+  const groupedAthletes = useMemo(() => {
+    if (!user?.students) return [];
+    const groups: Record<string, any> = {};
+    
+    user.students.forEach(student => {
+      const key = `${student.firstName}_${student.lastName}_${student.school_name}_${student.grade}`.toLowerCase();
+      
+      if (!groups[key]) {
+        groups[key] = {
+          ...student,
+          sports: [student.sport].filter(Boolean) as string[]
+        };
+      } else {
+        if (student.sport && !groups[key].sports.includes(student.sport)) {
+          groups[key].sports.push(student.sport);
+        }
+      }
+    });
+    
+    return Object.values(groups);
+  }, [user?.students]);
 
   const PickerModal = ({ visible, onClose, options, onSelect, title }: any) => (
     <Modal visible={visible} transparent animationType="fade">
@@ -279,31 +301,48 @@ export default function ProfileScreen() {
         )}
 
         <Text style={styles.sectionTitle}>MY ATHLETES</Text>
-        {user?.students?.length ? (
-          user.students.map((student, i) => (
+        {groupedAthletes.length ? (
+          groupedAthletes.map((athlete: any, i: number) => (
             <View key={i} style={styles.athleteCard}>
               <View style={styles.athleteIcon}><MaterialIcons name="person" size={24} color="#002C61" /></View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.athleteName}>{student.firstName} {student.lastName}</Text>
-                <Text style={styles.athleteDetails}>{student.school_name} • {student.grade}</Text>
+                <Text style={styles.athleteName}>{athlete.firstName} {athlete.lastName}</Text>
+                <Text style={styles.athleteDetails}>{athlete.school_name} • {athlete.grade}</Text>
+                
+                <View style={styles.sportsWrapper}>
+                  {athlete.sports.map((sport: string, idx: number) => (
+                    <View key={idx} style={styles.sportTag}>
+                      <Text style={styles.sportTagText}>{sport}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
-              <View style={{ alignItems: 'flex-end', gap: 8 }}>
-                <View style={styles.sportTag}><Text style={styles.sportTagText}>{student.sport}</Text></View>
+              <View style={{ justifyContent: 'center' }}>
                 <TouchableOpacity
                   onPress={() => {
-                    Alert.alert('Delete Athlete', `Are you sure?`, [
+                    Alert.alert('Delete Athlete', `Are you sure you want to remove ${athlete.firstName}? This will delete all their sport registrations.`, [
                       { text: 'Cancel', style: 'cancel' },
                       {
                         text: 'Delete',
                         style: 'destructive',
                         onPress: async () => {
                           if (!user?.id) return;
-                          const updatedStudents = user.students?.filter((_, idx) => idx !== i) || [];
+                          
+                          // Remove all students that match this identity
+                          const updatedStudents = user.students?.filter(s => {
+                            const isMatch = s.firstName === athlete.firstName &&
+                                          s.lastName === athlete.lastName &&
+                                          s.school_name === athlete.school_name &&
+                                          s.grade === athlete.grade;
+                            return !isMatch;
+                          }) || [];
+
                           try {
                             const memberRef = doc(db, 'members', user.id);
                             await updateDoc(memberRef, { students: updatedStudents });
-                            // No manual setUser needed
-                          } catch (e) { Alert.alert('Error', 'Failed to delete.'); }
+                          } catch (e) { 
+                            Alert.alert('Error', 'Failed to delete athlete measurements.'); 
+                          }
                         }
                       }
                     ]);
@@ -418,8 +457,9 @@ const styles = StyleSheet.create({
   athleteCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', borderRadius: 20, padding: 15, marginBottom: 12, borderWidth: 1.5, borderColor: '#F3F4F6' },
   athleteIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center', marginRight: 15 },
   athleteName: { fontSize: 14, fontWeight: '900', color: '#111827', marginBottom: 2 },
-  athleteDetails: { fontSize: 12, color: '#6B7280', fontWeight: '600' },
-  sportTag: { backgroundColor: '#EFF6FF', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  athleteDetails: { fontSize: 12, color: '#6B7280', fontWeight: '600', marginBottom: 8 },
+  sportsWrapper: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  sportTag: { backgroundColor: '#EFF6FF', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, borderWidth: 1, borderColor: '#DBEAFE' },
   sportTagText: { color: '#0047AB', fontSize: 10, fontWeight: '900' },
   emptyCard: { padding: 20, alignItems: 'center', backgroundColor: '#F9FAFB', borderRadius: 20 },
   emptyText: { color: '#9CA3AF', fontSize: 13, fontWeight: '700' },

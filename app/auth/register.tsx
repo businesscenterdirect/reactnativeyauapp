@@ -288,7 +288,7 @@ export default function RegisterScreen() {
       >
         <View style={[styles.headerSection, { paddingTop: insets.top + (keyboardVisible ? 10 : 40) }]}>
           <Image source={require('../../assets/favicon.png')} style={[styles.logoIcon, keyboardVisible && { width: 40, height: 40, marginBottom: 5 }]} resizeMode="contain" />
-          <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 12 }]}>YAU SPORTS</Text>
+          <Text style={[styles.yauHeaderText, keyboardVisible && { fontSize: 10 }]}>YOUTH ATHLETE UNIVERSITY</Text>
           <Animated.View style={{ opacity: headerOpacity, alignItems: 'center' }}>
             {!keyboardVisible && <Text style={styles.mainTitle}>Create Your Account</Text>}
             {!keyboardVisible && <Text style={styles.subTitle}>Let’s get started with your information</Text>}
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   },
   headerSection: { alignItems: 'center', paddingHorizontal: 30 },
   logoIcon: { width: 55, height: 55, marginBottom: 10 },
-  yauHeaderText: { color: '#FFF', fontSize: 14, fontWeight: '800', letterSpacing: 1.5 },
+  yauHeaderText: { color: '#FFF', fontSize: 13, fontWeight: '800', letterSpacing: 1.5 },
   mainTitle: { color: '#FFF', fontSize: 32, fontWeight: '900', marginTop: 12, textAlign: 'center' },
   subTitle: { color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 6, textAlign: 'center' },
   cardContainer: {

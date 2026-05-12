@@ -25,6 +25,11 @@ export interface Member {
   expoPushTokens?: string[]; // Support multiple devices
   role?: 'coach' | 'parent' | 'admin';
   smsConsent?: boolean;
+  // Metadata for App Architecture
+  signup_source?: "mobile_app" | "website" | "admin";
+  environment?: "test" | "production";
+  user_type?: "parent" | "coach" | "admin" | "student";
+  app_access?: boolean;
 }
 
 export interface User {

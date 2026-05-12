@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, updateDoc, increment, getDocs, deleteDoc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { ChevronDown, ChevronUp, History, MessageSquare, Plus, Send, Target, Trash2, X } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { GRADE_BANDS, SPORTS, isGradeMatch } from '../lib/constants';
 import { db } from '../lib/firebase';
 import { broadcastPushNotification } from '../lib/push';
-import { Send, Target, Plus, Trash2, History, ChevronDown, ChevronUp, MessageSquare, X } from 'lucide-react';
+import { Badge } from './ui/Badge';
+import { Button } from './ui/Button';
 import { Card } from './ui/Card';
 import { Input } from './ui/Input';
 import { Select } from './ui/Select';
-import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
-import { GRADE_BANDS, SPORTS, isGradeMatch } from '../lib/constants';
 // import ReactQuill from 'react-quill'; // Incompatible with React 19
 // import 'react-quill/dist/quill.snow.css';
 
@@ -160,7 +160,7 @@ const Messaging: React.FC = () => {
       });
     }
   }, [replies, selectedPost]);
-  
+
   // ── Notification for replies ──────────────────────────────────────────────
   const prevUnreadRef = useRef<number>(0);
   useEffect(() => {
@@ -209,7 +209,7 @@ const Messaging: React.FC = () => {
         }
         if (isTargeted) tokens.push(...data.expoPushTokens);
       });
-      
+
       const uniqueTokens = [...new Set(tokens)];
       console.log(`[Messaging] Audience Audit: Targeted ${uniqueTokens.length} unique tokens across ${groups.length} groups.`);
       return uniqueTokens;
@@ -341,7 +341,7 @@ const Messaging: React.FC = () => {
 
       // 2. Delete the main document
       await deleteDoc(doc(db, 'admin_posts', selectedPost.id));
-      
+
       toast.success('Conversation and all replies deleted.');
       setSelectedPost(null);
     } catch (error) {
@@ -358,21 +358,35 @@ const Messaging: React.FC = () => {
     return reply.userName;
   };
 
-  const CollapsibleContent: React.FC<{ html: string, className?: string, initialClamp?: string }> = ({ html, className, initialClamp = "line-clamp-3" }) => {
+  const CHAR_THRESHOLD = 150;
+
+  const CollapsibleContent: React.FC<{ html: string, className?: string, initialClamp?: string, btnVariant?: 'default' | 'onDark' }> = ({ html, className, initialClamp = "line-clamp-3", btnVariant = 'default' }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
+
+    // Strip HTML tags to get plain-text length
+    const plainText = html?.replace(/<[^>]*>/g, '') ?? '';
+    const isLong = plainText.length >= CHAR_THRESHOLD;
+
+    // Button color: visible on both light/dark neutral backgrounds OR on dark indigo/red bubbles
+    const btnClass = btnVariant === 'onDark'
+      ? 'text-white/70 hover:text-white'
+      : 'text-gray-500 dark:text-white/50 hover:text-gray-800 dark:hover:text-white';
+
     return (
       <div>
-        <div 
-          className={`${className} overflow-hidden transition-all duration-300 ${isCollapsed ? initialClamp : ''}`}
+        <div
+          className={`${className} overflow-hidden transition-all duration-300 ${isLong && isCollapsed ? initialClamp : ''}`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
-        <button
-          type="button"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="mt-1 text-[9px] font-black text-indigo-500 hover:text-indigo-700 uppercase tracking-widest transition-colors"
-        >
-          {isCollapsed ? '▼ See More' : '▲ See Less'}
-        </button>
+        {isLong && (
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={`mt-1 text-[9px] font-black uppercase tracking-widest transition-colors ${btnClass}`}
+          >
+            {isCollapsed ? '▼ See More' : '▲ See Less'}
+          </button>
+        )}
       </div>
     );
   };
@@ -563,8 +577,8 @@ const Messaging: React.FC = () => {
                 <p className="text-sm font-bold text-gray-900 dark:text-white mb-2">{selectedPost.title}</p>
 
                 {/* Collapsible body */}
-                <CollapsibleContent 
-                  html={selectedPost.description} 
+                <CollapsibleContent
+                  html={selectedPost.description}
                   className="text-xs text-gray-600 dark:text-white/60 leading-relaxed"
                   initialClamp="line-clamp-2"
                 />
@@ -579,17 +593,17 @@ const Messaging: React.FC = () => {
                 return (
                   <div key={reply.id} className={`flex ${isSystemAdmin ? 'justify-end' : 'justify-start'} group`}>
                     <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm relative ${isSystemAdmin
-                        ? 'bg-indigo-600 text-white'
-                        : isDeletionRequest
-                          ? 'bg-red-600 text-white border-none shadow-lg'
-                          : 'bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10'
+                      ? 'bg-indigo-600 text-white'
+                      : isDeletionRequest
+                        ? 'bg-red-600 text-white border-none shadow-lg'
+                        : 'bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10'
                       }`}>
                       <div className="flex items-center gap-2 mb-1">
                         <span className={`text-[10px] font-black uppercase tracking-widest ${isSystemAdmin
-                            ? 'text-indigo-100'
-                            : isDeletionRequest
-                              ? 'text-red-100'
-                              : 'text-indigo-600 dark:text-indigo-400'
+                          ? 'text-indigo-100'
+                          : isDeletionRequest
+                            ? 'text-red-100'
+                            : 'text-indigo-600 dark:text-indigo-400'
                           }`}>
                           {getRoleLabel(reply)}
                         </span>
@@ -597,13 +611,13 @@ const Messaging: React.FC = () => {
                           {reply.timestamp?.toDate().toLocaleTimeString()}
                         </span>
                       </div>
-                      
-                      <CollapsibleContent 
+
+                      <CollapsibleContent
                         html={reply.content}
-                        className={`text-sm leading-relaxed whitespace-pre-wrap ${
-                          (isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
-                        } ${isDeletionRequest ? 'font-medium' : ''}`}
+                        className={`text-sm leading-relaxed whitespace-pre-wrap ${(isSystemAdmin || isDeletionRequest) ? 'text-white' : 'text-gray-900 dark:text-white'
+                          } ${isDeletionRequest ? 'font-medium' : ''}`}
                         initialClamp="line-clamp-4"
+                        btnVariant={isSystemAdmin || isDeletionRequest ? 'onDark' : 'default'}
                       />
 
                       {/* Delete reply button — visible on hover */}

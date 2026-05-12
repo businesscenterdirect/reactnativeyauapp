@@ -43,6 +43,70 @@ export function isGradeMatch(storedGrade: string | undefined, filterGrade: strin
   return false;
 }
 
+/**
+ * Robust string normalization: lowercase, trim, remove internal extra spaces.
+ */
+export function normalizeStr(s: string | null | undefined): string {
+  if (!s) return '';
+  return s.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Checks if a filter selection is "Empty" (All/Any/null).
+ */
+export function isAnyFilter(selection: string | null | undefined): boolean {
+  if (!selection) return true;
+  const s = selection.toLowerCase().trim();
+  return s === 'all' || s === 'any' || s === '';
+}
+
+/**
+ * Checks if a value matches a filter selection, considering "Any" logic.
+ */
+export function matchesSelection(value: string | undefined, selection: string): boolean {
+  if (isAnyFilter(selection)) return true;
+  if (!value) return false;
+  return normalizeStr(value) === normalizeStr(selection);
+}
+
+/**
+ * Checks if a stored grade matches a filter grade band.
+ */
+export function matchesGrade(storedGrade: string | undefined, filterGrade: string): boolean {
+  if (isAnyFilter(filterGrade)) return true;
+  return isGradeMatch(storedGrade, filterGrade);
+}
+
+/**
+ * Team Matching for Games: Checks if filter matches EITHER home or away team.
+ */
+export function matchesTeamHomeAway(
+  team1: string | undefined, 
+  team2: string | undefined, 
+  filterTeam: string
+): boolean {
+  if (isAnyFilter(filterTeam)) return true;
+  const normalizedFilter = normalizeStr(filterTeam);
+  return normalizeStr(team1).includes(normalizedFilter) || 
+         normalizeStr(team2).includes(normalizedFilter);
+}
+
+/**
+ * Extracts unique, sorted team names from an array of objects that have team name fields.
+ */
+export function extractUniqueTeams(data: any[], fields: string[]): string[] {
+  const teams = new Set<string>();
+  data.forEach(item => {
+    fields.forEach(field => {
+      const val = item[field];
+      if (val && typeof val === 'string' && val.trim()) {
+        teams.add(val.trim());
+      }
+    });
+  });
+  return Array.from(teams).sort((a, b) => a.localeCompare(b));
+}
+
 export interface RegistrationData {
   parentFirstName: string;
   parentLastName: string;
@@ -139,6 +203,10 @@ export async function registerMember(data: RegistrationData): Promise<{ success:
       registrationSource: 'mobile',
       students,
       smsConsent: data.smsConsent ?? false,
+      signup_source: 'mobile_app',
+      environment: __DEV__ ? 'test' : 'production',
+      user_type: 'parent',
+      app_access: true,
     };
 
     if (data.expoPushTokens && data.expoPushTokens.length > 0) {

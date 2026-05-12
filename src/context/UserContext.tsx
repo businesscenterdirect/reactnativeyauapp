@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -38,12 +38,48 @@ export function UserProvider({ children }: { children: ReactNode }) {
       memberRef,
       (snap) => {
         if (snap.exists()) {
-          const freshUser: Member = { id: snap.id, ...(snap.data() as Omit<Member, 'id'>) };
+          const snapData = snap.data();
+          
+          // ── Security Check: App Access Revocation ──────────────────────
+          if (snapData.app_access === false) {
+            if (__DEV__) console.log('[UserContext] Access revoked for user:', snap.id);
+            signOut(auth);
+            return;
+          }
+
+          // ── Security Check: Role Authorization ──────────────────────────
+          const role = (snapData.user_type || snapData.role || '').toLowerCase();
+          const allowedRoles = ['parent', 'coach', 'student', 'member', 'user'];
+          if (!allowedRoles.includes(role)) {
+            if (__DEV__) console.log('[UserContext] Unauthorized role for mobile app:', role);
+            signOut(auth);
+            return;
+          }
+
+          const freshUser: Member = { id: snap.id, ...(snapData as Omit<Member, 'id'>) };
           setUserState(freshUser);
+
+          // ── Metadata Backfill ──────────────────────────────────────────
+          // Safely add missing architecture tags without over-writing existing data
+          const updates: any = {};
+          if (!snapData.signup_source) updates.signup_source = 'mobile_app';
+          if (!snapData.environment) updates.environment = __DEV__ ? 'test' : 'production';
+          if (!snapData.user_type) updates.user_type = 'parent';
+          if (snapData.app_access === undefined) updates.app_access = true;
+
+          if (Object.keys(updates).length > 0) {
+            if (__DEV__) console.log('[UserContext] Backfilling missing metadata for user:', snap.id, updates);
+            updateDoc(memberRef, updates).catch(err => {
+               if (__DEV__) console.warn('[UserContext] Metadata backfill failed (permissions?):', err);
+            });
+          }
+
           // Mirror to AsyncStorage so cold-start hydration has latest data
           AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(freshUser)).catch(() => {});
         } else {
-          // Document deleted — clear session
+          // Document deleted or missing — full sign out
+          if (__DEV__) console.log('[UserContext] Member profile missing for UID:', snap.id);
+          signOut(auth);
           clearUser();
         }
       },
