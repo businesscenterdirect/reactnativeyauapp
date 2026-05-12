@@ -1,19 +1,20 @@
-import { Bell, Calendar, LayoutDashboard, LogOut, Menu, MessageSquare, Moon, School, Sun, Trophy, User as UserIcon, Users, X } from 'lucide-react';
+import { Bell, Calendar, LayoutDashboard, LogOut, Menu, MessageSquare, Moon, School, Settings, Sun, Trophy, User as UserIcon, Users, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Navigate, Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
+import CoachManager from './components/CoachManager';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import MembersList from './components/MembersList';
 import Messaging from './components/Messaging';
 import ScheduleManager from './components/ScheduleManager';
 import SchoolsManager from './components/SchoolsManager';
-import CoachManager from './components/CoachManager';
 
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import PlatformSettings from './components/PlatformSettings';
 import StandingsManager from './components/StandingsManager';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { clearAppBadge, listenForForegroundMessages, updateAppBadge } from './lib/fcmService';
 import { db } from './lib/firebase';
-import { updateAppBadge, clearAppBadge, listenForForegroundMessages } from './lib/fcmService';
 
 function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItemClick?: () => void }) {
   const location = useLocation();
@@ -26,6 +27,7 @@ function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItem
     { path: '/schedules', label: 'Schedules', icon: Calendar },
     { path: '/schools', label: 'Schools', icon: School },
     { path: '/standings', label: 'Standings', icon: Trophy },
+    { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
   return (
@@ -83,7 +85,7 @@ function SidebarContent({ collapsed, onItemClick }: { collapsed: boolean; onItem
 }
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { user, adminData, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -94,7 +96,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user) {
+  // ── Hard Authorization Gate ──────────────────────────────────────────
+  // Prevents "Parent/Coach" accounts from ever entering the Admin Shell
+  if (!user || !adminData) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -162,8 +166,8 @@ function AppLayout() {
       try {
         const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
         audio.volume = 0.4;
-        audio.play().catch(() => {}); // Silently fail if autoplay is blocked
-      } catch (_) {}
+        audio.play().catch(() => { }); // Silently fail if autoplay is blocked
+      } catch (_) { }
     });
     return () => unsubFCM();
   }, []);
@@ -258,7 +262,7 @@ function AppLayout() {
             </button>
 
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setIsNotifOpen(!isNotifOpen)}
                 className="p-2 text-gray-400 dark:text-indigo-400 hover:text-indigo-600 dark:hover:text-white relative transition-colors"
               >
@@ -280,9 +284,9 @@ function AppLayout() {
                       <div className="p-6 text-center text-xs text-gray-500 font-bold">No new messages.</div>
                     ) : (
                       unreadPosts.map(post => (
-                        <Link 
-                          key={post.id} 
-                          to="/messaging" 
+                        <Link
+                          key={post.id}
+                          to="/messaging"
                           onClick={() => setIsNotifOpen(false)}
                           className="block p-3 border-b border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                         >
@@ -323,6 +327,7 @@ function AppLayout() {
               <Route path="/schedules" element={<ScheduleManager />} />
               <Route path="/schools" element={<SchoolsManager />} />
               <Route path="/standings" element={<StandingsManager />} />
+              <Route path="/settings" element={<PlatformSettings />} />
             </Routes>
           </div>
         </main>
